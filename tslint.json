@@ -1,8 +1,5 @@
 {
     "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
-    ],
     "jsRules": true,
     "rules": {
         "ban-ts-ignore": true,
@@ -30,10 +27,7 @@
             }
         ],
         "no-internal-module": true,
-        "no-magic-numbers": true,
-        "no-non-null-assertion": true,
         "no-var-requires": true,
-        "only-arrow-functions": true,
         "await-promise": true,
         "curly": true,
         "function-constructor": true,
@@ -77,7 +71,6 @@
         "object-literal-key-quotes": [true, "consistent-as-needed"],
         "prefer-function-over-method": [true, "allow-public", "allow-protected"],
         "prefer-method-signature": true,
-        "space-before-function-paren": true,
         "type-literal-delimiter": true,
         "unnecessary-bind": true,
         "unnecessary-else": true,

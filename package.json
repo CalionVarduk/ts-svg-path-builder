@@ -1,27 +1,31 @@
 {
   "name": "svg-path-builder",
   "version": "1.0.0",
-  "description": "An svg path builder",
+  "description": "SVG path builder",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
     "lib/**/*"
   ],
   "scripts": {
-    "test": "jest --config jestconfig.json",
+    "test": "jest --config jestconfig.json --coverage",
     "build": "tsc",
     "lint": "tslint -p tsconfig.json",
-    "prepare" : "npm run build",
-    "prepublishOnly" : "npm test && npm run lint",
-    "preversion" : "npm run lint",
-    "version" : "git add -A src",
-    "postversion" : "git push && git push --tags"
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CalionVarduk/svg-path-builder.git"
   },
-  "keywords": ["svg", "path", "builder"],
+  "keywords": [
+    "svg",
+    "path",
+    "builder"
+  ],
   "author": "CalionVarduk",
   "license": "MIT",
   "bugs": {
@@ -31,6 +35,7 @@
   "devDependencies": {
     "@types/jest": "^24.0.13",
     "jest": "^24.8.0",
+    "jest-each": "^24.8.0",
     "ts-jest": "^24.0.2",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5"
