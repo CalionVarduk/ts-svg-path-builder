@@ -91,7 +91,7 @@ each([
 test('bezier point getter should return correct x and y',
     () => {
         const sut = createDefault(createStart());
-        expect(sut.bezierPoint).toStrictEqual({ x: sut.x, y: sut.y });
+        expect(sut.bezierPoint).toStrictEqual({ x: sut.bezierX, y: sut.bezierY });
     }
 );
 
