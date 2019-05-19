@@ -1,6 +1,6 @@
 import { Vector2 } from './vector';
-import { Nullable } from '../nullable';
-import { Const } from '../const';
+import { Nullable } from '../utils/nullable';
+import { Const } from '../utils/const';
 
 /** 2D square matrix literal type alias. */
 export type SqMatrix2 = {

@@ -1,4 +1,4 @@
-import { Const } from '../const';
+import { Const } from '../utils/const';
 
 /** 2D vector literal type alias. */
 export type Vector2 = {

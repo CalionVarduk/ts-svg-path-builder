@@ -1,6 +1,6 @@
 import { Vector2, Vector } from './vector';
-import { Nullable } from '../nullable';
-import { Const } from '../const';
+import { Nullable } from '../utils/nullable';
+import { Const } from '../utils/const';
 
 /** 2D line literal type alias. */
 export type Line2 = {
