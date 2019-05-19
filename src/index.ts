@@ -11,3 +11,5 @@ export * from './core/svg-path-offset';
 export * from './core/svg-path-close';
 export * from './core/svg-path-quadratic-curve';
 export * from './core/svg-path-cubic-curve';
+export * from './core/svg-path-arc-style';
+export * from './core/svg-path-arc';

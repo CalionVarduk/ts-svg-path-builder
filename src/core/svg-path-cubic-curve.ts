@@ -89,7 +89,7 @@ export class SvgPathCubicCurve extends SvgPathNode {
     private _y: number;
 
     /**
-     * Creates new svg path quadratic curve node.
+     * Creates new svg path cubic curve node.
      * @param x x coordinate
      * @param y y coordinate
      * @param bezierX1 first bezier point's x coordinate
