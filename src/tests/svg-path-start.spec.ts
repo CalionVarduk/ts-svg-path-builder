@@ -58,6 +58,7 @@ each([
         expect(result).toBeDefined();
         expect(result).not.toBeNull();
         expect(result).not.toBe(sut);
+        expect(result instanceof SvgPathStart).toBe(true);
         expect(result.x).toBe(sut.x);
         expect(result.y).toBe(sut.y);
         expect(result.angleInDegrees).toBe(sut.angleInDegrees);
@@ -80,6 +81,7 @@ each([
         expect(result).toBeDefined();
         expect(result).not.toBeNull();
         expect(result).not.toBe(sut);
+        expect(result instanceof SvgPathStart).toBe(true);
         expect(result.x).toBeCloseTo(expected.x, 8);
         expect(result.y).toBeCloseTo(expected.y, 8);
         expect(result.angleInDegrees).toBe(sut.angleInDegrees);
@@ -92,7 +94,7 @@ each([
     [1, -1.7, 1, 'M 1.0 -1.7'],
     [-0.5678, 5.1234, 2, 'M -0.57 5.12'],
     [12.77, -3.33456, 3, 'M 12.770 -3.335'],
-    [1, -0.0005543, 4, 'M 1.0000 -0.0006'],
+    [1, -0.0005543, 4, 'M 1.0000 -0.0006']
 ])
 .test('create svg command should return correct result (%#): x: %f, y: %f, precision: %f, expected: %s',
     (x, y, precision, expected) => {
