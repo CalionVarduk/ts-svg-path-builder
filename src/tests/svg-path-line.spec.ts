@@ -2,10 +2,9 @@ import { SvgPathNode } from '../core/svg-path-node';
 import { SvgPathStart } from '../core/svg-path-start';
 import { SvgPathLine } from '../core/svg-path-line';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
-import { Nullable } from '../core/utils/nullable';
 import each from 'jest-each';
 
-function createDefault(prev: Nullable<SvgPathNode> = null): SvgPathLine {
+function createDefault(prev: SvgPathNode): SvgPathLine {
     return new SvgPathLine(0, 0, prev);
 }
 
@@ -14,11 +13,9 @@ function createStart(x: number = 0, y: number = 0): SvgPathStart {
 }
 
 each([
-    [10, 20, null],
     [-101, -90, createStart()],
-    [0, 0, createDefault()],
-    [null, null, null],
-    [null, 5, createDefault(createStart())]
+    [0, 0, createDefault(createStart())],
+    [null, null, createDefault(createStart())]
 ])
 .test('ctor should create with provided parameters (%#): x: %f, y: %f, prev: %o',
     (x, y, prev) => {
@@ -29,9 +26,16 @@ each([
     }
 );
 
+test('ctor should throw when prev is not defined',
+    () => {
+        const action = () => new SvgPathLine(0, 0, null as any);
+        expect(action).toThrowError();
+    }
+);
+
 test('type getter should return line',
     () => {
-        const sut = createDefault();
+        const sut = createDefault(createStart());
         expect(sut.type).toBe(SvgPathNodeType.Line);
     }
 );
@@ -100,7 +104,7 @@ each([
 ])
 .test('x and y setters should set correct values (%#): x: %f, y: %f',
     (x, y) => {
-        const sut = createDefault();
+        const sut = createDefault(createStart());
         sut.x = x;
         sut.y = y;
         expect(sut.x).toBe(x || 0);
@@ -109,7 +113,7 @@ each([
 );
 
 each([
-    [0, 0, null],
+    [0, 0, createStart()],
     [10, -50, createStart()]
 ])
 .test('copy should return new valid object (%#): x: %f, y: %f, prev: %o',
@@ -127,12 +131,12 @@ each([
 );
 
 each([
-    [0, 0, { x: 0, y: 0 }, 0, null, { x: 0, y: 0 }],
-    [10, -20, { x: 5, y: -5 }, 0, createDefault(), { x: 5, y: -5 }],
-    [-5, -1, { x: 0, y: 0 }, 1, null, { x: -5, y: -1 }],
+    [0, 0, { x: 0, y: 0 }, 0, createStart(), { x: 0, y: 0 }],
+    [10, -20, { x: 5, y: -5 }, 0, createDefault(createStart()), { x: 5, y: -5 }],
+    [-5, -1, { x: 0, y: 0 }, 1, createStart(), { x: -5, y: -1 }],
     [12.5, -0.5, { x: 5, y: -5 }, 1, createDefault(createStart()), { x: 12.5, y: -0.5 }],
-    [7.7, 0, { x: 0, y: 0 }, 2, null, { x: 15.4, y: 0 }],
-    [3.3, 22.87, { x: 12.1, y: 3.5 }, 2.8, null, { x: -12.54, y: 57.736 }]
+    [7.7, 0, { x: 0, y: 0 }, 2, createStart(), { x: 15.4, y: 0 }],
+    [3.3, 22.87, { x: 12.1, y: 3.5 }, 2.8, createStart(), { x: -12.54, y: 57.736 }]
 ])
 .test('scale should return new valid object (%#): x: %f, y: %f, origin: %o, scale: %f, prev: %o, expected point: %o',
     (x, y, origin, scale, prev, expected) => {

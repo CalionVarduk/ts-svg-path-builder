@@ -2,26 +2,32 @@ import { SvgPathNode } from './svg-path-node';
 import { SvgPathNodeType } from './svg-path-node-type';
 import { Vector } from './primitives/vector';
 
-/** Specifies an svg path line node. */
-export class SvgPathLine extends SvgPathNode {
+/** Specifies an svg path offset node. */
+export class SvgPathOffset extends SvgPathNode {
 
     public get type(): SvgPathNodeType {
-        return SvgPathNodeType.Line;
+        return SvgPathNodeType.Offset;
     }
     public get angleInDegrees(): number {
         return Vector.getAngle({ x: this.dx, y: this.dy });
     }
 
-    /** Returns line node's length. */
+    /** Returns offset node's length. */
     public get length(): number {
         return Vector.magnitude({ x: this.dx, y: this.dy });
     }
 
-    /** Returns line node's length vector's x coordinate. */
+    /** Specifies offset node's x offset. */
+    public set dx(value: number) {
+        this.x = this.prev!.x + (value || 0);
+    }
     public get dx(): number {
         return this.x - this.prev!.x;
     }
-    /** Returns line node's length vector's y coordinate. */
+    /** Specifies offset node's y offset. */
+    public set dy(value: number) {
+        this.y = this.prev!.y + (value || 0);
+    }
     public get dy(): number {
         return this.y - this.prev!.y;
     }
@@ -43,18 +49,18 @@ export class SvgPathLine extends SvgPathNode {
     private _y: number;
 
     /**
-     * Creates new svg path line node.
-     * @param x x coordinate
-     * @param y y coordinate
+     * Creates new svg path offset node.
+     * @param dx x offset
+     * @param dy y offset
      * @param prev node's predecessor
      * */
-    public constructor(x: number, y: number, prev: SvgPathNode) {
+    public constructor(dx: number, dy: number, prev: SvgPathNode) {
         super(prev);
         if (!prev) {
-            throw new Error('svg path line node lacks predecessor node');
+            throw new Error('svg path offset node lacks predecessor node');
         }
-        this._x = x || 0;
-        this._y = y || 0;
+        this._x = this.prev!.x + (dx || 0);
+        this._y = this.prev!.y + (dy || 0);
     }
 
     /**
@@ -63,20 +69,20 @@ export class SvgPathLine extends SvgPathNode {
      * @returns a copy of this node
      * */
     public copy(prev: SvgPathNode): SvgPathNode {
-        return new SvgPathLine(this.x, this.y, prev);
+        return new SvgPathOffset(this.dx, this.dy, prev);
     }
     /**
      * Creates a scaled copy of this node.
-     * @param originX x coordinate of the scaling origin point
-     * @param originY y coordinate of the scaling origin point
+     * @param _originX x coordinate of the scaling origin point (unused)
+     * @param _originY y coordinate of the scaling origin point (unused)
      * @param value scale value
      * @param prev predecessor node
      * @returns a scaled copy of this node
      * */
-    public scale(originX: number, originY: number, value: number, prev: SvgPathNode): SvgPathNode {
-        return new SvgPathLine(
-            (this.x - originX) * value + originX,
-            (this.y - originY) * value + originY,
+    public scale(_originX: number, _originY: number, value: number, prev: SvgPathNode): SvgPathNode {
+        return new SvgPathOffset(
+            this.dx * value,
+            this.dy * value,
             prev);
     }
     /**
@@ -88,10 +94,8 @@ export class SvgPathLine extends SvgPathNode {
         const zero = (0).toFixed(precision);
         const dx = this.dx.toFixed(precision);
         const dy = this.dy.toFixed(precision);
-        const x = this.x.toFixed(precision);
-        const y = this.y.toFixed(precision);
         return dx === zero ?
-            (dy === zero ? '' : `V ${y}`) :
-            (dy === zero ? `H ${x}` : `L ${x} ${y}`);
+            (dy === zero ? '' : `v ${dy}`) :
+            (dy === zero ? `h ${dx}` : `l ${dx} ${dy}`);
     }
 }

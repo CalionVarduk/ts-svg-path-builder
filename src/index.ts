@@ -6,3 +6,5 @@ export * from './core/utils/const';
 export * from './core/svg-path-node-type';
 export * from './core/svg-path-node';
 export * from './core/svg-path-start';
+export * from './core/svg-path-line';
+export * from './core/svg-path-offset';

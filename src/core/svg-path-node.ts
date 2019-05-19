@@ -29,6 +29,10 @@ export abstract class SvgPathNode {
         return { x: this.x, y: this.y };
     }
 
+    /**
+     * Creates new svg path node.
+     * @param prev node's predecessor
+     * */
     protected constructor(
         /** Specifies node's predecessor. */
         public readonly prev: Nullable<SvgPathNode>) { }

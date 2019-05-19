@@ -29,6 +29,13 @@ export class SvgPathStart extends SvgPathNode {
     private _x: number;
     private _y: number;
 
+    /**
+     * Creates new svg path start node.
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param angleInDegrees starting angle in degrees
+     * @param prev node's predecessor
+     * */
     public constructor(x: number, y: number, angleInDegrees: number, prev: Nullable<SvgPathNode>) {
         super(prev);
         this._x = x || 0;
