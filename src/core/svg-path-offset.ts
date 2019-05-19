@@ -68,7 +68,7 @@ export class SvgPathOffset extends SvgPathNode {
      * @param prev predecessor node
      * @returns a copy of this node
      * */
-    public copy(prev: SvgPathNode): SvgPathNode {
+    public copy(prev: SvgPathNode): SvgPathOffset {
         return new SvgPathOffset(this.dx, this.dy, prev);
     }
     /**
@@ -79,7 +79,7 @@ export class SvgPathOffset extends SvgPathNode {
      * @param prev predecessor node
      * @returns a scaled copy of this node
      * */
-    public scale(_originX: number, _originY: number, value: number, prev: SvgPathNode): SvgPathNode {
+    public scale(_originX: number, _originY: number, value: number, prev: SvgPathNode): SvgPathOffset {
         return new SvgPathOffset(
             this.dx * value,
             this.dy * value,

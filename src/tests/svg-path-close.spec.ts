@@ -139,7 +139,7 @@ each([
         expect(result.x).toBe(sut.x);
         expect(result.y).toBe(sut.y);
         expect(result.prev).toBe(prev);
-        expect((result as SvgPathClose).start).toBe(prev);
+        expect(result.start).toBe(prev);
     }
 );
 
@@ -165,7 +165,7 @@ each([
         expect(result).not.toBe(sut);
         expect(result instanceof SvgPathClose).toBe(true);
         expect(result.prev).toBe(prev);
-        expect((result as SvgPathClose).start).toBe(prev.prev);
+        expect(result.start).toBe(prev.prev);
     }
 );
 

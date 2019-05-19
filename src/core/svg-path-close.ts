@@ -52,6 +52,11 @@ export class SvgPathClose extends SvgPathNode {
         return this.start.y;
     }
 
+    /**
+     * Creates new svg path close node.
+     * @param start path's starting node
+     * @param prev node's predecessor
+     * */
     public constructor(
         /** Specifies close node's starting node. */
         public readonly start: SvgPathStart,
@@ -70,7 +75,7 @@ export class SvgPathClose extends SvgPathNode {
      * @param prev predecessor node
      * @returns a copy of this node
      * */
-    public copy(prev: SvgPathNode): SvgPathNode {
+    public copy(prev: SvgPathNode): SvgPathClose {
         return new SvgPathClose(findStart(prev), prev);
     }
     /**
@@ -81,7 +86,7 @@ export class SvgPathClose extends SvgPathNode {
      * @param prev predecessor node
      * @returns a scaled copy of this node
      * */
-    public scale(_originX: number, _originY: number, _value: number, prev: SvgPathNode): SvgPathNode {
+    public scale(_originX: number, _originY: number, _value: number, prev: SvgPathNode): SvgPathClose {
         return new SvgPathClose(
             findStart(prev),
             prev);

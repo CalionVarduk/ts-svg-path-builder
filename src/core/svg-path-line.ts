@@ -62,7 +62,7 @@ export class SvgPathLine extends SvgPathNode {
      * @param prev predecessor node
      * @returns a copy of this node
      * */
-    public copy(prev: SvgPathNode): SvgPathNode {
+    public copy(prev: SvgPathNode): SvgPathLine {
         return new SvgPathLine(this.x, this.y, prev);
     }
     /**
@@ -73,7 +73,7 @@ export class SvgPathLine extends SvgPathNode {
      * @param prev predecessor node
      * @returns a scaled copy of this node
      * */
-    public scale(originX: number, originY: number, value: number, prev: SvgPathNode): SvgPathNode {
+    public scale(originX: number, originY: number, value: number, prev: SvgPathNode): SvgPathLine {
         return new SvgPathLine(
             (this.x - originX) * value + originX,
             (this.y - originY) * value + originY,

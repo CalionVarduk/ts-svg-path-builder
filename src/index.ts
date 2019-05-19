@@ -9,3 +9,4 @@ export * from './core/svg-path-start';
 export * from './core/svg-path-line';
 export * from './core/svg-path-offset';
 export * from './core/svg-path-close';
+export * from './core/svg-path-quadratic-curve';
