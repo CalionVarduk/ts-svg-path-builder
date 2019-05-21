@@ -77,7 +77,7 @@
         "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
         "eofline": true,
         "indent": [true, "spaces", 2],
-        "max-line-length": [true, { "limit": 140, "ignore-pattern": "^import [^,]+ from" }],
+        "max-line-length": [true, { "limit": 140, "ignore-pattern": "^import .+ from .+" }],
         "new-parens": true,
         "no-consecutive-blank-lines": true,
         "no-trailing-whitespace": true,

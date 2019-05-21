@@ -1,11 +1,11 @@
 import { SvgPathNode } from '../core/svg-path-node';
 import { SvgPathStart } from '../core/svg-path-start';
-import { SvgPathOffset } from '../core/svg-path-offset';
+import { SvgPathLineOffset } from '../core/svg-path-line-offset';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
 import each from 'jest-each';
 
-function createDefault(prev: SvgPathNode): SvgPathOffset {
-    return new SvgPathOffset(0, 0, prev);
+function createDefault(prev: SvgPathNode): SvgPathLineOffset {
+    return new SvgPathLineOffset(0, 0, prev);
 }
 
 function createStart(x: number = 0, y: number = 0): SvgPathStart {
@@ -19,7 +19,7 @@ each([
 ])
 .test('ctor should create with provided parameters (%#): dx: %f, dy: %f, prev: %o',
     (dx, dy, prev) => {
-        const sut = new SvgPathOffset(dx, dy, prev);
+        const sut = new SvgPathLineOffset(dx, dy, prev);
         expect(sut.dx).toBe(dx || 0);
         expect(sut.dy).toBe(dy || 0);
         expect(sut.prev).toBe(prev);
@@ -28,15 +28,15 @@ each([
 
 test('ctor should throw when prev is not defined',
     () => {
-        const action = () => new SvgPathOffset(0, 0, null as any);
+        const action = () => new SvgPathLineOffset(0, 0, null as any);
         expect(action).toThrowError();
     }
 );
 
-test('type getter should return offset',
+test('type getter should return line offset',
     () => {
         const sut = createDefault(createStart());
-        expect(sut.type).toBe(SvgPathNodeType.Offset);
+        expect(sut.type).toBe(SvgPathNodeType.LineOffset);
     }
 );
 
@@ -49,7 +49,7 @@ each([
 ])
 .test('angle in degrees getter should return correct value (%#): dx: %f, dy: %f, prev x: %f, prev y: %f, expected: %f',
     (dx, dy, prevX, prevY, expected) => {
-        const sut = new SvgPathOffset(dx, dy, createStart(prevX, prevY));
+        const sut = new SvgPathLineOffset(dx, dy, createStart(prevX, prevY));
         expect(sut.angleInDegrees).toBeCloseTo(expected, 8);
     }
 );
@@ -63,7 +63,7 @@ each([
 ])
 .test('length getter should return correct value (%#): dx: %f, dy: %f, prev x: %f, prev y: %f, expected: %f',
     (dx, dy, prevX, prevY, expected) => {
-        const sut = new SvgPathOffset(dx, dy, createStart(prevX, prevY));
+        const sut = new SvgPathLineOffset(dx, dy, createStart(prevX, prevY));
         expect(sut.length).toBeCloseTo(expected, 8);
     }
 );
@@ -77,7 +77,7 @@ each([
 ])
 .test('dx getter should return correct value (%#): dx: %f, prev x: %f',
     (dx, prevX) => {
-        const sut = new SvgPathOffset(dx, 0, createStart(prevX));
+        const sut = new SvgPathLineOffset(dx, 0, createStart(prevX));
         expect(sut.dx).toBeCloseTo(dx, 8);
     }
 );
@@ -91,7 +91,7 @@ each([
 ])
 .test('dx setter should set correct x (%#): dx: %f, prev x: %f, expected x: %f',
     (dx, prevX, expectedX) => {
-        const sut = new SvgPathOffset(0, 0, createStart(prevX));
+        const sut = new SvgPathLineOffset(0, 0, createStart(prevX));
         sut.dx = dx;
         expect(sut.dx).toBeCloseTo(dx || 0, 8);
         expect(sut.x).toBeCloseTo(expectedX, 8);
@@ -107,7 +107,7 @@ each([
 ])
 .test('dy getter should return correct value (%#): dy: %f, prev y: %f',
     (dy, prevY) => {
-        const sut = new SvgPathOffset(0, dy, createStart(0, prevY));
+        const sut = new SvgPathLineOffset(0, dy, createStart(0, prevY));
         expect(sut.dy).toBeCloseTo(dy, 8);
     }
 );
@@ -121,7 +121,7 @@ each([
 ])
 .test('dy setter should set correct y (%#): dy: %f, prev y: %f, expected y: %f',
     (dy, prevY, expectedY) => {
-        const sut = new SvgPathOffset(0, 0, createStart(0, prevY));
+        const sut = new SvgPathLineOffset(0, 0, createStart(0, prevY));
         sut.dy = dy;
         expect(sut.dy).toBeCloseTo(dy || 0, 8);
         expect(sut.y).toBeCloseTo(expectedY, 8);
@@ -137,7 +137,7 @@ each([
 ])
 .test('x setter should set correct dx (%#): x: %f, prev x: %f, expected dx: %f',
     (x, prevX, expectedDx) => {
-        const sut = new SvgPathOffset(0, 0, createStart(prevX));
+        const sut = new SvgPathLineOffset(0, 0, createStart(prevX));
         sut.x = x;
         expect(sut.x).toBe(x || 0);
         expect(sut.dx).toBeCloseTo(expectedDx, 8);
@@ -153,7 +153,7 @@ each([
 ])
 .test('y setter should set correct dy (%#): y: %f, prev y: %f, expected dy: %f',
     (y, prevY, expectedDy) => {
-        const sut = new SvgPathOffset(0, 0, createStart(0, prevY));
+        const sut = new SvgPathLineOffset(0, 0, createStart(0, prevY));
         sut.y = y;
         expect(sut.y).toBe(y || 0);
         expect(sut.dy).toBeCloseTo(expectedDy, 8);
@@ -166,12 +166,12 @@ each([
 ])
 .test('copy should return new valid object (%#): dx: %f, dy: %f, prev: %o',
     (dx, dy, prev) => {
-        const sut = new SvgPathOffset(dx, dy, createStart());
+        const sut = new SvgPathLineOffset(dx, dy, createStart());
         const result = sut.copy(prev);
         expect(result).toBeDefined();
         expect(result).not.toBeNull();
         expect(result).not.toBe(sut);
-        expect(result instanceof SvgPathOffset).toBe(true);
+        expect(result instanceof SvgPathLineOffset).toBe(true);
         expect(result.x).toBe(sut.x);
         expect(result.y).toBe(sut.y);
         expect(result.prev).toBe(prev);
@@ -188,12 +188,12 @@ each([
 ])
 .test('scale should return new valid object (%#): dx: %f, dy: %f, origin: %o, scale: %f, prev: %o, expected point: %o',
     (dx, dy, origin, scale, prev, expected) => {
-        const sut = new SvgPathOffset(dx, dy, createStart());
+        const sut = new SvgPathLineOffset(dx, dy, createStart());
         const result = sut.scale(origin.x, origin.y, scale, prev);
         expect(result).toBeDefined();
         expect(result).not.toBeNull();
         expect(result).not.toBe(sut);
-        expect(result instanceof SvgPathOffset).toBe(true);
+        expect(result instanceof SvgPathLineOffset).toBe(true);
         expect(result.x).toBeCloseTo(expected.x, 8);
         expect(result.y).toBeCloseTo(expected.y, 8);
         expect(result.prev).toBe(prev);
@@ -212,7 +212,7 @@ each([
 ])
 .test('create svg command should return correct result (%#): dx: %f, dy: %f, prev x: %f, prev y: %f, precision: %f, expected: %s',
     (dx, dy, prevX, prevY, precision, expected) => {
-        const sut = new SvgPathOffset(dx, dy, createStart(prevX, prevY));
+        const sut = new SvgPathLineOffset(dx, dy, createStart(prevX, prevY));
         expect(sut.createSvgCommand(precision)).toBe(expected);
     }
 );

@@ -2,11 +2,11 @@ import { SvgPathNode } from './svg-path-node';
 import { SvgPathNodeType } from './svg-path-node-type';
 import { Vector } from './primitives/vector';
 
-/** Specifies an svg path offset node. */
-export class SvgPathOffset extends SvgPathNode {
+/** Specifies an svg path line offset node. */
+export class SvgPathLineOffset extends SvgPathNode {
 
     public get type(): SvgPathNodeType {
-        return SvgPathNodeType.Offset;
+        return SvgPathNodeType.LineOffset;
     }
     public get angleInDegrees(): number {
         return Vector.getAngle({ x: this.dx, y: this.dy });
@@ -49,7 +49,7 @@ export class SvgPathOffset extends SvgPathNode {
     private _y: number;
 
     /**
-     * Creates new svg path offset node.
+     * Creates new svg path line offset node.
      * @param dx x offset
      * @param dy y offset
      * @param prev node's predecessor
@@ -57,7 +57,7 @@ export class SvgPathOffset extends SvgPathNode {
     public constructor(dx: number, dy: number, prev: SvgPathNode) {
         super(prev);
         if (!prev) {
-            throw new Error('svg path offset node lacks predecessor node');
+            throw new Error('svg path line offset node lacks predecessor node');
         }
         this._x = this.prev!.x + (dx || 0);
         this._y = this.prev!.y + (dy || 0);
@@ -68,8 +68,8 @@ export class SvgPathOffset extends SvgPathNode {
      * @param prev predecessor node
      * @returns a copy of this node
      * */
-    public copy(prev: SvgPathNode): SvgPathOffset {
-        return new SvgPathOffset(this.dx, this.dy, prev);
+    public copy(prev: SvgPathNode): SvgPathLineOffset {
+        return new SvgPathLineOffset(this.dx, this.dy, prev);
     }
     /**
      * Creates a scaled copy of this node.
@@ -79,8 +79,8 @@ export class SvgPathOffset extends SvgPathNode {
      * @param prev predecessor node
      * @returns a scaled copy of this node
      * */
-    public scale(_originX: number, _originY: number, value: number, prev: SvgPathNode): SvgPathOffset {
-        return new SvgPathOffset(
+    public scale(_originX: number, _originY: number, value: number, prev: SvgPathNode): SvgPathLineOffset {
+        return new SvgPathLineOffset(
             this.dx * value,
             this.dy * value,
             prev);
