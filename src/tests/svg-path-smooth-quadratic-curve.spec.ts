@@ -58,7 +58,7 @@ each([
 ])
 .test('angle in degrees getter should return correct value (%#): x: %f, y: %f, prev: %o, expected: %f',
     (x, y, prev, expected) => {
-        const sut = new SvgPathSmoothQuadraticCurve(x, y, prev);
+        const sut = create(x, y, prev);
         expect(sut.angleInDegrees).toBeCloseTo(expected, 8);
     }
 );
@@ -90,8 +90,8 @@ each([
         const sut = createDefault(prev);
         sut.bezierX = x;
         sut.bezierY = y;
-        expect(sut.bezierX).toBe(x || 0);
-        expect(sut.bezierY).toBe(y || 0);
+        expect(sut.bezierX).toBeCloseTo(x || 0, 8);
+        expect(sut.bezierY).toBeCloseTo(y || 0, 8);
     }
 );
 
@@ -112,7 +112,10 @@ each([
     (value, prev) => {
         const sut = createDefault(prev);
         sut.bezierPoint = value;
-        expect(sut.bezierPoint).toStrictEqual(value || { x: 0, y: 0 });
+        const point = sut.bezierPoint;
+        value = value || { x: 0, y: 0 };
+        expect(point.x).toBeCloseTo(value.x, 8);
+        expect(point.y).toBeCloseTo(value.y, 8);
     }
 );
 
@@ -122,7 +125,7 @@ each([
 ])
 .test('copy should return new valid object (%#): x: %f, y: %f, prev: %o',
     (x, y, prev) => {
-        const sut = new SvgPathSmoothQuadraticCurve(x, y, createStart());
+        const sut = create(x, y, createStart());
         const result = sut.copy(prev);
         expect(result).toBeDefined();
         expect(result).not.toBeNull();
@@ -144,7 +147,7 @@ each([
 ])
 .test(`scale should return new valid object (%#): x: %f, y: %f, origin: %o, scale: %f, prev: %o, expected point: %o`,
     (x, y, origin, scale, prev, expected) => {
-        const sut = new SvgPathSmoothQuadraticCurve(x, y, createStart());
+        const sut = create(x, y, createStart());
         const result = sut.scale(origin.x, origin.y, scale, prev);
         expect(result).toBeDefined();
         expect(result).not.toBeNull();
@@ -168,7 +171,7 @@ each([
 ])
 .test('create svg command should return correct result (%#): x: %f, y: %f, precision: %f, expected: %s',
     (x, y, precision, expected) => {
-        const sut = new SvgPathSmoothQuadraticCurve(x, y, createStart());
+        const sut = create(x, y, createStart());
         expect(sut.createSvgCommand(precision)).toBe(expected);
     }
 );

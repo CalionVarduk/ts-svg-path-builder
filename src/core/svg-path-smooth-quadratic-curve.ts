@@ -2,7 +2,6 @@ import { SvgPathNode } from './svg-path-node';
 import { SvgPathNodeType } from './svg-path-node-type';
 import { Vector, Vector2 } from './primitives/vector';
 import { SvgPathQuadraticCurve } from './svg-path-quadratic-curve';
-import { Nullable } from './utils/nullable';
 
 /** Specifies an svg path smooth quadratic curve node. */
 export class SvgPathSmoothQuadraticCurve extends SvgPathNode {
