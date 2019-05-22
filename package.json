@@ -1,5 +1,5 @@
 {
-  "name": "calionv-svg-path-builder",
+  "name": "frlluc-svg-path-builder",
   "version": "0.0.1",
   "description": "SVG path builder",
   "main": "lib/index.js",
