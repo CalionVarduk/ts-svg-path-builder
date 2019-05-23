@@ -8,9 +8,8 @@
     "lib/**/*"
   ],
   "scripts": {
-    "test:normal": "jest --config jestconfig.json",
+    "test": "jest --config jestconfig.json",
     "test:coverage": "jest --config jestconfig.json --coverage",
-    "test": "jest --config jestconfig.json --coverage --coverageReporters=text-lcov | coveralls",
     "build": "tsc",
     "lint": "tslint -p tsconfig.json",
     "prepare": "npm run build",
