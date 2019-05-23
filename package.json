@@ -8,7 +8,8 @@
     "lib/**/*"
   ],
   "scripts": {
-    "test": "jest --config jestconfig.json --coverage",
+    "test": "jest --config jestconfig.json",
+    "test:coverage": "jest --config jestconfig.json --coverage",
     "build": "tsc",
     "lint": "tslint -p tsconfig.json",
     "prepare": "npm run build",
@@ -34,6 +35,7 @@
   "homepage": "https://github.com/CalionVarduk/svg-path-builder#readme",
   "devDependencies": {
     "@types/jest": "^24.0.13",
+    "coveralls": "^3.0.3",
     "jest": "^24.8.0",
     "jest-each": "^24.8.0",
     "ts-jest": "^24.0.2",
