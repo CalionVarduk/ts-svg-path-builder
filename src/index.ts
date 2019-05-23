@@ -15,3 +15,4 @@ export * from './core/svg-path-arc-style';
 export * from './core/svg-path-arc';
 export * from './core/svg-path-smooth-quadratic-curve';
 export * from './core/svg-path-smooth-cubic-curve';
+export * from './core/svg-path-builder';

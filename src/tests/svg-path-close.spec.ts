@@ -1,8 +1,8 @@
 import { SvgPathStart } from '../core/svg-path-start';
 import { SvgPathClose } from '../core/svg-path-close';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
-import each from 'jest-each';
 import { SvgPathLine } from '../core/svg-path-line';
+import each from 'jest-each';
 
 function createStart(x: number = 0, y: number = 0): SvgPathStart {
     return new SvgPathStart(x, y, 0, null);

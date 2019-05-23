@@ -1,5 +1,6 @@
-import { Vector } from './primitives/vector';
+import { Vector, Vector2 } from './primitives/vector';
 import { Line } from './primitives/line';
+import { Nullable } from './utils/nullable';
 import { SvgPathNode } from './svg-path-node';
 import { SvgPathStart } from './svg-path-start';
 import { SvgPathLine } from './svg-path-line';
@@ -10,18 +11,26 @@ import { SvgPathCubicCurve } from './svg-path-cubic-curve';
 import { SvgPathClose } from './svg-path-close';
 import { SvgPathArcStyle } from './svg-path-arc-style';
 import { SvgPathArc } from './svg-path-arc';
-import { Nullable } from './utils/nullable';
+import { SvgPathSmoothQuadraticCurve } from './svg-path-smooth-quadratic-curve';
+import { SvgPathSmoothCubicCurve } from './svg-path-smooth-cubic-curve';
 
 /** Instances of this class are created by the `SvgPathBuilder` after the `addRoundedCornerTo` method call. */
 export class SvgPathAfterCornerBuilder {
+
+    private readonly _builder: SvgPathBuilder;
 
     /**
      * Creates new after corner builder.
      * @param builder underlying builder
      * */
-    public constructor(
-        /** Specifies the underlying `SvgPathBuilder`. */
-        public readonly builder: SvgPathBuilder) { }
+    public constructor(builder: SvgPathBuilder) {
+        this._builder = builder;
+    }
+
+    /** Returns the underlying svg path builder. */
+    public builder(): SvgPathBuilder {
+        return this._builder;
+    }
 
     /**
      * Adds a new line node that starts from the current point `p` with the provided `length`
@@ -30,7 +39,7 @@ export class SvgPathAfterCornerBuilder {
      * @returns `builder`
      * */
     public addLine(length: number): SvgPathBuilder {
-        return this.builder.addLine(length, this.builder.last!.angleInDegrees);
+        return this._builder.addLine(length, this._builder.last!.angleInDegrees);
     }
 
     /**
@@ -40,7 +49,7 @@ export class SvgPathAfterCornerBuilder {
      * @returns `builder`
      * */
     public lineToX(x: number): SvgPathBuilder {
-        return this.builder.angledLineToX(x, this.builder.last!.angleInDegrees);
+        return this._builder.angledLineToX(x, this._builder.last!.angleInDegrees);
     }
 
     /**
@@ -50,7 +59,7 @@ export class SvgPathAfterCornerBuilder {
      * @returns `builder`
      * */
     public lineToY(y: number): SvgPathBuilder {
-        return this.builder.angledLineToY(y, this.builder.last!.angleInDegrees);
+        return this._builder.angledLineToY(y, this._builder.last!.angleInDegrees);
     }
 
     /**
@@ -62,7 +71,19 @@ export class SvgPathAfterCornerBuilder {
      * @returns new `SvgPathAfterCornerBuilder` instance
      * */
     public addRoundedCornerTo(x: number, y: number, nextNodeAngleInDegrees: number): SvgPathAfterCornerBuilder {
-        return this.builder.addRoundedCornerTo(x, y, nextNodeAngleInDegrees);
+        return this._builder.addRoundedCornerTo(x, y, nextNodeAngleInDegrees);
+    }
+
+    /**
+     * Adds a new quadratic curve node representing a rounded corner that starts from the current point `p`
+     * and ends at the `(p.x + dx, p.y + dy)` point where that corner's shape is defined by the `nextNodeAngleInDegrees` hint.
+     * @param dx x coordinate offset
+     * @param dy y coordinate offset
+     * @param nextNodeAngleInDegrees angle hint for the next svg node created after this corner
+     * @returns new `SvgPathAfterCornerBuilder` instance
+     * */
+    public addRoundedCornerBy(dx: number, dy: number, nextNodeAngleInDegrees: number): SvgPathAfterCornerBuilder {
+        return this._builder.addRoundedCornerBy(dx, dy, nextNodeAngleInDegrees);
     }
 
     /**
@@ -70,7 +91,7 @@ export class SvgPathAfterCornerBuilder {
      * @returns `builder`
      * */
     public close(): SvgPathBuilder {
-        return this.builder.close();
+        return this._builder.close();
     }
 
     /**
@@ -78,7 +99,7 @@ export class SvgPathAfterCornerBuilder {
      * @returns built svg path command
      * */
     public build(): string {
-        return this.builder.build();
+        return this._builder.build();
     }
 }
 
@@ -116,6 +137,18 @@ export class SvgPathBuilder {
     public get isClosed(): boolean {
         return this._lastStartIndex === -1;
     }
+    /** Returns the current point. */
+    public get currentPoint(): Vector2 {
+        if (this.isEmpty) {
+            return { x: 0, y: 0 };
+        }
+        const last = this._nodes[this._nodes.length - 1];
+        return { x: last.x, y: last.y };
+    }
+    /** Returns the current angle. */
+    public get currentAngleInDegrees(): number {
+        return !this.isEmpty ? this._nodes[this._nodes.length - 1].angleInDegrees : 0;
+    }
 
     /** Specifies fixed precision of svg path node's coordinates. */
     public readonly precision: number;
@@ -128,7 +161,7 @@ export class SvgPathBuilder {
      * @param precision optional svg path node coordinates precision used during the svg command building process
      */
     public constructor(precision: Nullable<number> = null) {
-        this.precision = Math.min(Math.max(0, precision || SvgPathBuilder.DEFAULT_PRECISION), 20);
+        this.precision = Math.round(Math.min(Math.max(0, precision !== null ? precision : SvgPathBuilder.DEFAULT_PRECISION), 20));
     }
 
     /**
@@ -220,6 +253,8 @@ export class SvgPathBuilder {
 
     /**
      * Adds a new horizontal line node that starts from the current point `p` and ends at the point equal to `(x, p.y)`.
+     * @param x x coordinate to line to
+     * @returns `this`
      * */
     public lineToX(x: number): SvgPathBuilder {
         this._validatePathStart();
@@ -230,6 +265,8 @@ export class SvgPathBuilder {
 
     /**
      * Adds a new vertical line node that starts from the current point `p` and ends at the point equal to `(p.x, y)`.
+     * @param y y coordinate to line to
+     * @returns `this`
      * */
     public lineToY(y: number): SvgPathBuilder {
         this._validatePathStart();
@@ -240,6 +277,9 @@ export class SvgPathBuilder {
 
     /**
      * Adds a new line node that starts from the current point `p` and ends at the `(x, y)` point.
+     * @param x x coordinate to line to
+     * @param y y coordinate to line to
+     * @returns `this`
      * */
     public lineTo(x: number, y: number): SvgPathBuilder {
         this._validatePathStart();
@@ -250,6 +290,11 @@ export class SvgPathBuilder {
     /**
      * Adds a new line node that starts from the current point `p`
      * at the provided `angleInDegrees` and ends at the point with the provided `x` coordinate.
+     * The end point will be the intersection between a ray starting from `p` at `angleInDegrees` and
+     * a vertical line with the `x` coordinate.
+     * @param x x coordinate to line to
+     * @param angleInDegrees line's angle
+     * @returns `this`
      * */
     public angledLineToX(x: number, angleInDegrees: number): SvgPathBuilder {
         this._validatePathStart();
@@ -269,6 +314,11 @@ export class SvgPathBuilder {
     /**
      * Adds a new line node that starts from the current point `p`
      * at the provided `angleInDegrees` and ends at the point with the provided `y` coordinate.
+     * The end point will be the intersection between a ray starting from `p` at `angleInDegrees` and
+     * a horizontal line with the `y` coordinate.
+     * @param y y coordinate to line to
+     * @param angleInDegrees line's angle
+     * @returns `this`
      * */
     public angledLineToY(y: number, angleInDegrees: number): SvgPathBuilder {
         this._validatePathStart();
@@ -287,6 +337,9 @@ export class SvgPathBuilder {
 
     /**
      * Adds a new line node that starts from the current point `p` with the provided `length` and at the provided `angleInDegrees`.
+     * @param length line's length
+     * @param angleInDegrees line's angle
+     * @returns `this`
      * */
     public addLine(length: number, angleInDegrees: number): SvgPathBuilder {
         this._validatePathStart();
@@ -302,6 +355,13 @@ export class SvgPathBuilder {
     /**
      * Adds a new curve node that starts from the current point `p`, ends at the `(x, y)` point
      * and has its first bezier point set to `(bezierX1, bezierY1)` and an optional second bezier point set to `(bezierX2, bezierY2)`.
+     * @param x x coordinate to curve to
+     * @param y y coordinate to curve to
+     * @param bezierX1 x coordinate of the first bezier point
+     * @param bezierY1 y coordinate of the first bezier point
+     * @param bezierX2 x coordinate of the optional second bezier point
+     * @param bezierY2 y coordinate of the optional second bezier point
+     * @returns `this`
      * */
     public curveTo(x: number, y: number,
         bezierX1: number, bezierY1: number,
@@ -317,9 +377,83 @@ export class SvgPathBuilder {
     }
 
     /**
+     * Adds a new curve node that starts from the current point `p`, ends at the `(p.x + dx, p.y + dy)` point
+     * and has its first bezier point set to `(p.x + bezierDx1, p.y + bezierDy1)`
+     * and an optional second bezier point set to `(p.x + bezierDx2, p.y + bezierDy2)`.
+     * @param dx x coordinate offset
+     * @param dy y coordinate offset
+     * @param bezierDx1 x coordinate offset of the first bezier point
+     * @param bezierDy1 y coordinate offset of the first bezier point
+     * @param bezierDx2 x coordinate offset of the optional second bezier point
+     * @param bezierDy2 y coordinate offset of the optional second bezier point
+     * @returns `this`
+     * */
+    public curveBy(dx: number, dy: number,
+        bezierDx1: number, bezierDy1: number,
+        bezierDx2: Nullable<number> = null, bezierDy2: Nullable<number> = null): SvgPathBuilder {
+        this._validatePathStart();
+        const last = this.last!;
+        if (bezierDx2 !== null || bezierDy2 !== null) {
+            this._nodes.push(new SvgPathCubicCurve(last.x + dx, last.y + dy, last.x + bezierDx1, last.y + bezierDy1,
+                last.x + (bezierDx2 || 0), last.y + (bezierDy2 || 0), last));
+        } else {
+            this._nodes.push(new SvgPathQuadraticCurve(last.x + dx, last.y + dy, last.x + bezierDx1, last.y + bezierDy1, last));
+        }
+        return this;
+    }
+
+    /**
+     * Adds a new smooth curve node that starts from the current point `p`, ends at the `(x, y)` point
+     * and has an optional second bezier point set to `(bezierX2, bezierY2)`.
+     * @param x x coordinate to curve to
+     * @param y y coordinate to curve to
+     * @param bezierX2 x coordinate of the optional second bezier point
+     * @param bezierY2 y coordinate of the optional second bezier point
+     * @returns `this`
+     * */
+    public smoothCurveTo(x: number, y: number, bezierX2: Nullable<number> = null, bezierY2: Nullable<number> = null): SvgPathBuilder {
+        this._validatePathStart();
+        const last = this.last!;
+        if (bezierX2 !== null || bezierY2 !== null) {
+            this._nodes.push(new SvgPathSmoothCubicCurve(x, y, bezierX2!, bezierY2!, last));
+        } else {
+            this._nodes.push(new SvgPathSmoothQuadraticCurve(x, y, last));
+        }
+        return this;
+    }
+
+    /**
+     * Adds a new smooth curve node that starts from the current point `p`, ends at the `(p.x + dx, p.y + dy)` point
+     * and has an optional second bezier point set to `(p.x + bezierDx2, p.y + bezierDy2)`.
+     * @param dx x coordinate offset
+     * @param dy y coordinate offset
+     * @param bezierDx2 x coordinate offset of the optional second bezier point
+     * @param bezierDy2 y coordinate offset of the optional second bezier point
+     * @returns `this`
+     * */
+    public smoothCurveBy(dx: number, dy: number, bezierDx2: Nullable<number> = null, bezierDy2: Nullable<number> = null): SvgPathBuilder {
+        this._validatePathStart();
+        const last = this.last!;
+        if (bezierDx2 !== null || bezierDy2 !== null) {
+            this._nodes.push(new SvgPathSmoothCubicCurve(last.x + dx, last.y + dy,
+                last.x + (bezierDx2 || 0), last.y + (bezierDy2 || 0), last));
+        } else {
+            this._nodes.push(new SvgPathSmoothQuadraticCurve(last.x + dx, last.y + dy, last));
+        }
+        return this;
+    }
+
+    /**
      * Adds a new arc node that starts from the current point `p`, ends at the `(x, y)` point,
      * has semi x axis value equal to `rx` and semi y axis value equal to `ry`,
      * is rotated by `rotationAngleInDegrees` and has the provided `style`.
+     * @param x x coordinate to arc to
+     * @param y y coordinate to arc to
+     * @param rx arc's semi x axis
+     * @param ry arc's semi y axis
+     * @param rotationAngleInDegrees arc's rotation angle
+     * @param style arc's style (large arc flag & sweep flag)
+     * @returns `this`
      * */
     public arcTo(x: number, y: number, rx: number, ry: number, rotationAngleInDegrees: number, style: SvgPathArcStyle): SvgPathBuilder {
         this._validatePathStart();
@@ -328,8 +462,31 @@ export class SvgPathBuilder {
     }
 
     /**
-     * Adds a new curve node representing a rounded corner that starts from the current point `p`
-     * and ends at the `(x, y)` point with the next svg path node's angle set to `nextNodeAngleInDegrees`.
+     * Adds a new arc node that starts from the current point `p`, ends at the `(p.x + dx, p.y + dy)` point,
+     * has semi x axis value equal to `rx` and semi y axis value equal to `ry`,
+     * is rotated by `rotationAngleInDegrees` and has the provided `style`.
+     * @param dx x coordinate offset
+     * @param dy y coordinate offset
+     * @param rx arc's semi x axis
+     * @param ry arc's semi y axis
+     * @param rotationAngleInDegrees arc's rotation angle
+     * @param style arc's style (large arc flag & sweep flag)
+     * @returns `this`
+     * */
+    public arcBy(dx: number, dy: number, rx: number, ry: number, rotationAngleInDegrees: number, style: SvgPathArcStyle): SvgPathBuilder {
+        this._validatePathStart();
+        const last = this.last!;
+        this._nodes.push(new SvgPathArc(last.x + dx, last.y + dy, rx, ry, rotationAngleInDegrees, style, last));
+        return this;
+    }
+
+    /**
+     * Adds a new quadratic curve node representing a rounded corner that starts from the current point `p`
+     * and ends at the `(x, y)` point where that corner's shape is defined by the `nextNodeAngleInDegrees` hint.
+     * @param x corner end point's x coordinate
+     * @param y corner end point's y coordinate
+     * @param nextNodeAngleInDegrees angle hint for the next svg node created after this corner
+     * @returns new `SvgPathAfterCornerBuilder` instance
      * */
     public addRoundedCornerTo(x: number, y: number, nextNodeAngleInDegrees: number): SvgPathAfterCornerBuilder {
         this._validatePathStart();
@@ -347,7 +504,34 @@ export class SvgPathBuilder {
     }
 
     /**
+     * Adds a new quadratic curve node representing a rounded corner that starts from the current point `p`
+     * and ends at the `(p.x + dx, p.y + dy)` point where that corner's shape is defined by the `nextNodeAngleInDegrees` hint.
+     * @param dx x coordinate offset
+     * @param dy y coordinate offset
+     * @param nextNodeAngleInDegrees angle hint for the next svg node created after this corner
+     * @returns new `SvgPathAfterCornerBuilder` instance
+     * */
+    public addRoundedCornerBy(dx: number, dy: number, nextNodeAngleInDegrees: number): SvgPathAfterCornerBuilder {
+        this._validatePathStart();
+        const last = this.last!;
+        const intersection = Line.findIntersection(
+            Line.mirrorY({ p: { x: last.x, y: last.y }, angle: last.angleInDegrees }),
+            Line.mirrorY({ p: { x: last.x + dx, y: last.y + dy }, angle: nextNodeAngleInDegrees }));
+
+        if (intersection) {
+            this.curveTo(last.x + dx, last.y + dy, intersection.x, -intersection.y);
+        } else {
+            this.lineBy(dx, dy);
+        }
+        return new SvgPathAfterCornerBuilder(this);
+    }
+
+    /**
      * Scales all current svg path nodes.
+     * @param originX scaling origin point's x coordinate
+     * @param originY scaling origin point's y coordinate
+     * @param value scale value
+     * @returns `this`
      * */
     public scale(originX: number, originY: number, value: number): SvgPathBuilder {
         if (!this.isEmpty) {
@@ -362,6 +546,7 @@ export class SvgPathBuilder {
 
     /**
      * Returns a copy of this builder.
+     * @returns a new copy of `this` svg path builder
      * */
     public copy(): SvgPathBuilder {
         const result = new SvgPathBuilder(this.precision);
@@ -377,6 +562,7 @@ export class SvgPathBuilder {
 
     /**
      * Closes current svg path.
+     * @returns `this`
      * */
     public close(): SvgPathBuilder {
         this._validatePathStart();
@@ -388,6 +574,7 @@ export class SvgPathBuilder {
 
     /**
      * Builds current svg path.
+     * @returns created svg path command
      * */
     public build(): string {
         return this._nodes.map(n => n.createSvgCommand(this.precision)).join(' ');
@@ -405,9 +592,12 @@ export class SvgPathStarter {
     /** Specifies fixed precision of svg path node's coordinates. */
     public readonly precision: number;
 
-    /** */
+    /**
+     * Create new svg path starter.
+     * @param precision optional svg path node coordinates precision used during the svg command building process
+     */
     public constructor(precision: Nullable<number> = null) {
-        this.precision = Math.min(Math.max(0, precision || SvgPathBuilder.DEFAULT_PRECISION), 20);
+        this.precision = Math.round(Math.min(Math.max(0, precision !== null ? precision : SvgPathBuilder.DEFAULT_PRECISION), 20));
     }
 
     /**
@@ -420,6 +610,10 @@ export class SvgPathStarter {
 
     /**
      * Creates a new svg path builder with the provided starting point and an optional starting angle.
+     * @param x x coordinate to start at
+     * @param y y coordinate to start at
+     * @param angleInDegrees optional angle to start with
+     * @returns new svg path builder
      * */
     public startAt(x: number, y: number, angleInDegrees: Nullable<number> = null): SvgPathBuilder {
         return this.start().moveTo(x, y, angleInDegrees);
