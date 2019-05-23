@@ -1,6 +1,6 @@
 {
   "name": "frlluc-svg-path-builder",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "SVG path builder",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
