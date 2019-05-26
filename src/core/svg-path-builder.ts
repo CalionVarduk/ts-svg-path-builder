@@ -6,7 +6,6 @@ import { SvgPathStart } from './svg-path-start';
 import { SvgPathLine } from './svg-path-line';
 import { SvgPathQuadraticCurve } from './svg-path-quadratic-curve';
 import { SvgPathLineOffset } from './svg-path-line-offset';
-import { SvgPathNodeType } from './svg-path-node-type';
 import { SvgPathCubicCurve } from './svg-path-cubic-curve';
 import { SvgPathClose } from './svg-path-close';
 import { SvgPathArcStyle } from './svg-path-arc-style';
@@ -208,7 +207,7 @@ export class SvgPathBuilder {
             throw new Error('svg path node to add must be defined');
         }
         const copy = node.copy(this.last);
-        if (copy.type === SvgPathNodeType.Start) {
+        if (copy instanceof SvgPathStart) {
             this._lastStartIndex = this._nodes.length;
         } else {
             this._validatePathStart();
@@ -299,9 +298,11 @@ export class SvgPathBuilder {
     public angledLineToX(x: number, angleInDegrees: number): SvgPathBuilder {
         this._validatePathStart();
         const last = this.last!;
-        const intersection = Line.findRayIntersection(
-            Line.mirrorY({ p: { x: x, y: 0 }, angle: 90 }),
-            Line.mirrorY({ p: { x: last.x, y: last.y }, angle: angleInDegrees }));
+        const intersection = x === last.x ?
+            { x: x, y: -last.y } :
+            Line.findRayIntersection(
+                Line.mirrorY({ p: { x: x, y: 0 }, angle: 90 }),
+                Line.mirrorY({ p: { x: last.x, y: last.y }, angle: angleInDegrees }));
 
         if (!intersection) {
             throw new Error(`failed to create an angled line to \'x = ${x}\':
@@ -323,9 +324,11 @@ export class SvgPathBuilder {
     public angledLineToY(y: number, angleInDegrees: number): SvgPathBuilder {
         this._validatePathStart();
         const last = this.last!;
-        const intersection = Line.findRayIntersection(
-            Line.mirrorY({ p: { x: 0, y: y }, angle: 0 }),
-            Line.mirrorY({ p: { x: last.x, y: last.y }, angle: angleInDegrees }));
+        const intersection = y === last.y ?
+            { x: last.x, y: y } :
+            Line.findRayIntersection(
+                Line.mirrorY({ p: { x: 0, y: y }, angle: 0 }),
+                Line.mirrorY({ p: { x: last.x, y: last.y }, angle: angleInDegrees }));
 
         if (!intersection) {
             throw new Error(`failed to create an angled line to \'y = ${y}\':
@@ -345,11 +348,10 @@ export class SvgPathBuilder {
         this._validatePathStart();
         if (length < 0) {
             length = -length;
-            angleInDegrees = -angleInDegrees;
+            angleInDegrees = 180 + angleInDegrees;
         }
-        const last = this.last!;
         const v = Vector.setAngle({ x: length, y: 0 }, -angleInDegrees);
-        return this.lineTo(last.x + v.x, last.y - v.y);
+        return this.lineBy(v.x, -v.y);
     }
 
     /**
