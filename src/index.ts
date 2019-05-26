@@ -1,6 +1,7 @@
 export * from './core/primitives/vector';
 export * from './core/primitives/line';
 export * from './core/primitives/sq-matrix';
+export * from './core/primitives/normalize-angle';
 export * from './core/utils/nullable';
 export * from './core/utils/const';
 export * from './core/svg-path-node-type';
@@ -15,3 +16,4 @@ export * from './core/svg-path-arc-style';
 export * from './core/svg-path-arc';
 export * from './core/svg-path-smooth-quadratic-curve';
 export * from './core/svg-path-smooth-cubic-curve';
+export * from './core/svg-path-builder';

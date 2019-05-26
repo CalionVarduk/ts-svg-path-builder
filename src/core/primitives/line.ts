@@ -1,6 +1,7 @@
 import { Vector2, Vector } from './vector';
 import { Nullable } from '../utils/nullable';
 import { Const } from '../utils/const';
+import * as utils from './normalize-angle';
 
 /** 2D line literal type alias. */
 export type Line2 = {
@@ -106,12 +107,7 @@ export namespace Line {
      * @returns `l`
      * */
     export function normalizeAngle(l: Line2): Line2 {
-        l.angle %= 360;
-        if (l.angle === -0) {
-            l.angle = 0;
-        } else if (l.angle < 0) {
-            l.angle += 360;
-        }
+        l.angle = utils.normalizeAngle(l.angle);
         return l;
     }
     /**

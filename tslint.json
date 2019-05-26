@@ -40,7 +40,6 @@
         "no-duplicate-variable": [true, "check-parameters"],
         "no-empty": [true, "allow-empty-catch", "allow-empty-functions"],
         "no-eval": true,
-        "no-invalid-this": true,
         "no-misused-new": true,
         "no-null-undefined-union": true,
         "no-object-literal-type-assertion": true,
