@@ -152,7 +152,7 @@ export class SvgPathBuilder {
     /** Specifies fixed precision of svg path node's coordinates. */
     public readonly precision: number;
 
-    private _nodes: SvgPathNode[] = [];
+    private readonly _nodes: SvgPathNode[] = [];
     private _lastStartIndex: number = -1;
 
     /**
@@ -536,12 +536,8 @@ export class SvgPathBuilder {
      * @returns `this`
      * */
     public scale(originX: number, originY: number, value: number): SvgPathBuilder {
-        if (!this.isEmpty) {
-            const newNodes = [this.first!.scale(originX, originY, value, null)];
-            for (let i = 1; i < this._nodes.length; ++i) {
-                newNodes.push(this._nodes[i].scale(originX, originY, value, newNodes[i - 1]));
-            }
-            this._nodes = newNodes;
+        for (let i = 0; i < this._nodes.length; ++i) {
+            this._nodes[i].scale(originX, originY, value);
         }
         return this;
     }

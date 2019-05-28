@@ -178,25 +178,28 @@ each([
     }
 );
 
+test('copy should throw when prev is not defined',
+    () => {
+        const sut = new SvgPathLineOffset(0, 0, createStart());
+        const action = () => sut.copy(null as any);
+        expect(action).toThrowError();
+    }
+);
+
 each([
-    [0, 0, { x: 0, y: 0 }, 0, createStart(), { x: 0, y: 0 }],
-    [10, -20, { x: 5, y: -5 }, 0, createDefault(createStart()), { x: 0, y: 0 }],
-    [-5, -1, { x: 0, y: 0 }, 1, createStart(), { x: -5, y: -1 }],
-    [12.5, -0.5, { x: 5, y: -5 }, 1, createDefault(createStart()), { x: 12.5, y: -0.5 }],
-    [7.7, 0, { x: 0, y: 0 }, 2, createStart(), { x: 15.4, y: 0 }],
-    [3.3, 22.87, { x: 12.1, y: 3.5 }, 2.8, createStart(), { x: 9.24, y: 64.036 }]
+    [0, 0, { x: 0, y: 0 }, 0, { x: 0, y: 0 }],
+    [10, -20, { x: 5, y: -5 }, 0, { x: 0, y: 0 }],
+    [-5, -1, { x: 0, y: 0 }, 1, { x: -5, y: -1 }],
+    [12.5, -0.5, { x: 5, y: -5 }, 1, { x: 12.5, y: -0.5 }],
+    [7.7, 0, { x: 0, y: 0 }, 2, { x: 15.4, y: 0 }],
+    [3.3, 22.87, { x: 12.1, y: 3.5 }, 2.8, { x: 9.24, y: 64.036 }]
 ])
-.test('scale should return new valid object (%#): dx: %f, dy: %f, origin: %o, scale: %f, prev: %o, expected point: %o',
-    (dx, dy, origin, scale, prev, expected) => {
+.test('scale should return new valid object (%#): dx: %f, dy: %f, origin: %o, scale: %f, expected point: %o',
+    (dx, dy, origin, scale, expected) => {
         const sut = new SvgPathLineOffset(dx, dy, createStart());
-        const result = sut.scale(origin.x, origin.y, scale, prev);
-        expect(result).toBeDefined();
-        expect(result).not.toBeNull();
-        expect(result).not.toBe(sut);
-        expect(result instanceof SvgPathLineOffset).toBe(true);
-        expect(result.x).toBeCloseTo(expected.x, 8);
-        expect(result.y).toBeCloseTo(expected.y, 8);
-        expect(result.prev).toBe(prev);
+        sut.scale(origin.x, origin.y, scale);
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
     }
 );
 

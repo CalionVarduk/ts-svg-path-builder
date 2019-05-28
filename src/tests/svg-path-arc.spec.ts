@@ -193,36 +193,39 @@ each([
     }
 );
 
+test('copy should throw when prev is not defined',
+    () => {
+        const sut = new SvgPathArc(0, 0, 0, 0, 0, 0, createStart());
+        const action = () => sut.copy(null as any);
+        expect(action).toThrowError();
+    }
+);
+
 each([
-    [0, 0, 0, 0, 0, SvgPathArcStyle.CccwLt180, { x: 0, y: 0 }, 0, createStart(),
+    [0, 0, 0, 0, 0, SvgPathArcStyle.CccwLt180, { x: 0, y: 0 }, 0,
         { x: 0, y: 0 }, 0, 0],
-    [10, -20, 15, 12, 13, SvgPathArcStyle.CcwGt180, { x: 5, y: -5 }, 0, createDefault(createStart()),
+    [10, -20, 15, 12, 13, SvgPathArcStyle.CcwGt180, { x: 5, y: -5 }, 0,
         { x: 5, y: -5 }, 0, 0],
-    [-5, -1, -13, 4, -3, SvgPathArcStyle.CcwLt180, { x: 0, y: 0 }, 1, createStart(),
+    [-5, -1, -13, 4, -3, SvgPathArcStyle.CcwLt180, { x: 0, y: 0 }, 1,
         { x: -5, y: -1 }, -13, 4],
-    [12.5, -0.5, 2.55, 4, 11.1, SvgPathArcStyle.CccwGt180, { x: 5, y: -5 }, 1, createDefault(createStart()),
+    [12.5, -0.5, 2.55, 4, 11.1, SvgPathArcStyle.CccwGt180, { x: 5, y: -5 }, 1,
         { x: 12.5, y: -0.5 }, 2.55, 4],
-    [7.7, 0, 8, 0.09, 1.32, SvgPathArcStyle.CcwGt180, { x: 0, y: 0 }, 2, createStart(),
+    [7.7, 0, 8, 0.09, 1.32, SvgPathArcStyle.CcwGt180, { x: 0, y: 0 }, 2,
         { x: 15.4, y: 0 }, 16, 0.18],
-    [3.3, 22.87, 13.4, 2.231, 2.2222, SvgPathArcStyle.CcwLt180, { x: 12.1, y: 3.5 }, 2.8, createStart(),
+    [3.3, 22.87, 13.4, 2.231, 2.2222, SvgPathArcStyle.CcwLt180, { x: 12.1, y: 3.5 }, 2.8,
         { x: -12.54, y: 57.736 }, 37.52, 6.2468]
 ])
 .test(`scale should return new valid object (%#): x: %f, y: %f, rx: %f, ry: %f, angle: %f, style: %f,
-origin: %o, scale: %f, prev: %o, expected point: %o, expected rx: %o, expected ry: %o`,
-    (x, y, rx, ry, angle, style, origin, scale, prev, expected, expectedRx, expectedRy) => {
+origin: %o, scale: %f, expected point: %o, expected rx: %o, expected ry: %o`,
+    (x, y, rx, ry, angle, style, origin, scale, expected, expectedRx, expectedRy) => {
         const sut = new SvgPathArc(x, y, rx, ry, angle, style, createStart());
-        const result = sut.scale(origin.x, origin.y, scale, prev);
-        expect(result).toBeDefined();
-        expect(result).not.toBeNull();
-        expect(result).not.toBe(sut);
-        expect(result instanceof SvgPathArc).toBe(true);
-        expect(result.x).toBeCloseTo(expected.x, 8);
-        expect(result.y).toBeCloseTo(expected.y, 8);
-        expect(result.prev).toBe(prev);
-        expect(result.rx).toBeCloseTo(expectedRx, 8);
-        expect(result.ry).toBeCloseTo(expectedRy, 8);
-        expect(result.rotationAngleInDegrees).toBe(sut.rotationAngleInDegrees);
-        expect(result.style).toBe(sut.style);
+        sut.scale(origin.x, origin.y, scale);
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
+        expect(sut.rx).toBeCloseTo(expectedRx, 8);
+        expect(sut.ry).toBeCloseTo(expectedRy, 8);
+        expect(sut.rotationAngleInDegrees).toBe(sut.rotationAngleInDegrees);
+        expect(sut.style).toBe(sut.style);
     }
 );
 

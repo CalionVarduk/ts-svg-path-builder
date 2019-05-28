@@ -178,34 +178,37 @@ each([
     }
 );
 
+test('copy should throw when prev is not defined',
+    () => {
+        const sut = new SvgPathSmoothCubicCurve(0, 0, 0, 0, createStart());
+        const action = () => sut.copy(null as any);
+        expect(action).toThrowError();
+    }
+);
+
 each([
-    [0, 0, 0, 0, { x: 0, y: 0 }, 0, createStart(),
+    [0, 0, 0, 0, { x: 0, y: 0 }, 0,
         { x: 0, y: 0 }, { x: 0, y: 0 }],
-    [10, -20, 13, 21, { x: 5, y: -5 }, 0, createDefault(createStart()),
+    [10, -20, 13, 21, { x: 5, y: -5 }, 0,
         { x: 5, y: -5 }, { x: 5, y: -5 }],
-    [-5, -1, -3, -11, { x: 0, y: 0 }, 1, createStart(),
+    [-5, -1, -3, -11, { x: 0, y: 0 }, 1,
         { x: -5, y: -1 }, { x: -3, y: -11 }],
-    [12.5, -0.5, 11.1, -7.65, { x: 5, y: -5 }, 1, createDefault(createStart()),
+    [12.5, -0.5, 11.1, -7.65, { x: 5, y: -5 }, 1,
         { x: 12.5, y: -0.5 }, { x: 11.1, y: -7.65 }],
-    [7.7, 0, 1.32, -8.8, { x: 0, y: 0 }, 2, createStart(),
+    [7.7, 0, 1.32, -8.8, { x: 0, y: 0 }, 2,
         { x: 15.4, y: 0 }, { x: 2.64, y: -17.6 }],
-    [3.3, 22.87, 2.2222, -1.0987, { x: 12.1, y: 3.5 }, 2.8, createStart(),
+    [3.3, 22.87, 2.2222, -1.0987, { x: 12.1, y: 3.5 }, 2.8,
         { x: -12.54, y: 57.736 }, { x: -15.55784, y: -9.37636 }]
 ])
 .test(`scale should return new valid object (%#): x: %f, y: %f, bezier x2: %f, bezier y2: %f,
-origin: %o, scale: %f, prev: %o, expected point: %o, expected bezier point2: %o`,
-    (x, y, bx2, by2, origin, scale, prev, expected, expectedBezier2) => {
+origin: %o, scale: %f, expected point: %o, expected bezier point2: %o`,
+    (x, y, bx2, by2, origin, scale, expected, expectedBezier2) => {
         const sut = create(x, y, bx2, by2, createStart());
-        const result = sut.scale(origin.x, origin.y, scale, prev);
-        expect(result).toBeDefined();
-        expect(result).not.toBeNull();
-        expect(result).not.toBe(sut);
-        expect(result instanceof SvgPathSmoothCubicCurve).toBe(true);
-        expect(result.x).toBeCloseTo(expected.x, 8);
-        expect(result.y).toBeCloseTo(expected.y, 8);
-        expect(result.prev).toBe(prev);
-        expect(result.bezierX2).toBeCloseTo(expectedBezier2.x, 8);
-        expect(result.bezierY2).toBeCloseTo(expectedBezier2.y, 8);
+        sut.scale(origin.x, origin.y, scale);
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
+        expect(sut.bezierX2).toBeCloseTo(expectedBezier2.x, 8);
+        expect(sut.bezierY2).toBeCloseTo(expectedBezier2.y, 8);
     }
 );
 

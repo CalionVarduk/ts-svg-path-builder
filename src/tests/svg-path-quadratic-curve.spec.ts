@@ -129,28 +129,31 @@ each([
     }
 );
 
+test('copy should throw when prev is not defined',
+    () => {
+        const sut = new SvgPathQuadraticCurve(0, 0, 0, 0, createStart());
+        const action = () => sut.copy(null as any);
+        expect(action).toThrowError();
+    }
+);
+
 each([
-    [0, 0, 0, 0, { x: 0, y: 0 }, 0, createStart(), { x: 0, y: 0 }, { x: 0, y: 0 }],
-    [10, -20, 15, 12, { x: 5, y: -5 }, 0, createDefault(createStart()), { x: 5, y: -5 }, { x: 5, y: -5 }],
-    [-5, -1, -13, 4, { x: 0, y: 0 }, 1, createStart(), { x: -5, y: -1 }, { x: -13, y: 4 }],
-    [12.5, -0.5, 2.55, 4, { x: 5, y: -5 }, 1, createDefault(createStart()), { x: 12.5, y: -0.5 }, { x: 2.55, y: 4 }],
-    [7.7, 0, 8, 0.09, { x: 0, y: 0 }, 2, createStart(), { x: 15.4, y: 0 }, { x: 16, y: 0.18 }],
-    [3.3, 22.87, 13.4, 2.231, { x: 12.1, y: 3.5 }, 2.8, createStart(), { x: -12.54, y: 57.736 }, { x: 15.74, y: -0.0532 }]
+    [0, 0, 0, 0, { x: 0, y: 0 }, 0, { x: 0, y: 0 }, { x: 0, y: 0 }],
+    [10, -20, 15, 12, { x: 5, y: -5 }, 0, { x: 5, y: -5 }, { x: 5, y: -5 }],
+    [-5, -1, -13, 4, { x: 0, y: 0 }, 1, { x: -5, y: -1 }, { x: -13, y: 4 }],
+    [12.5, -0.5, 2.55, 4, { x: 5, y: -5 }, 1, { x: 12.5, y: -0.5 }, { x: 2.55, y: 4 }],
+    [7.7, 0, 8, 0.09, { x: 0, y: 0 }, 2, { x: 15.4, y: 0 }, { x: 16, y: 0.18 }],
+    [3.3, 22.87, 13.4, 2.231, { x: 12.1, y: 3.5 }, 2.8, { x: -12.54, y: 57.736 }, { x: 15.74, y: -0.0532 }]
 ])
 .test(`scale should return new valid object (%#): x: %f, y: %f, bezier x: %f, bezier y: %f,
-origin: %o, scale: %f, prev: %o, expected point: %o, expected bezier point: %o`,
-    (x, y, bx, by, origin, scale, prev, expected, expectedBezier) => {
+origin: %o, scale: %f, expected point: %o, expected bezier point: %o`,
+    (x, y, bx, by, origin, scale, expected, expectedBezier) => {
         const sut = new SvgPathQuadraticCurve(x, y, bx, by, createStart());
-        const result = sut.scale(origin.x, origin.y, scale, prev);
-        expect(result).toBeDefined();
-        expect(result).not.toBeNull();
-        expect(result).not.toBe(sut);
-        expect(result instanceof SvgPathQuadraticCurve).toBe(true);
-        expect(result.x).toBeCloseTo(expected.x, 8);
-        expect(result.y).toBeCloseTo(expected.y, 8);
-        expect(result.prev).toBe(prev);
-        expect(result.bezierX).toBeCloseTo(expectedBezier.x, 8);
-        expect(result.bezierY).toBeCloseTo(expectedBezier.y, 8);
+        sut.scale(origin.x, origin.y, scale);
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
+        expect(sut.bezierX).toBeCloseTo(expectedBezier.x, 8);
+        expect(sut.bezierY).toBeCloseTo(expectedBezier.y, 8);
     }
 );
 

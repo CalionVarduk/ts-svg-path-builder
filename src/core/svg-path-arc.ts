@@ -124,22 +124,16 @@ export class SvgPathArc extends SvgPathNode {
         return new SvgPathArc(this.x, this.y, this.rx, this.ry, this.rotationAngleInDegrees, this.style, prev);
     }
     /**
-     * Creates a scaled copy of this node.
+     * Scales this node according to the provided origin and scale value.
      * @param originX x coordinate of the scaling origin point
      * @param originY y coordinate of the scaling origin point
      * @param value scale value
-     * @param prev predecessor node
-     * @returns a scaled copy of this node
      * */
-    public scale(originX: number, originY: number, value: number, prev: SvgPathNode): SvgPathArc {
-        return new SvgPathArc(
-            (this.x - originX) * value + originX,
-            (this.y - originY) * value + originY,
-            this.rx * value,
-            this.ry * value,
-            this.rotationAngleInDegrees,
-            this.style,
-            prev);
+    public scale(originX: number, originY: number, value: number): void {
+        this.x = (this.x - originX) * value + originX;
+        this.y = (this.y - originY) * value + originY;
+        this.rx *= value;
+        this.ry *= value;
     }
     /**
      * Creates an svg command from this node.

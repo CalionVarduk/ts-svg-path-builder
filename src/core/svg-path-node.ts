@@ -44,14 +44,12 @@ export abstract class SvgPathNode {
      * */
     public abstract copy(prev: Nullable<SvgPathNode>): SvgPathNode;
     /**
-     * Creates a scaled copy of this node.
+     * Scales this node according to the provided origin and scale value.
      * @param originX x coordinate of the scaling origin point
      * @param originY y coordinate of the scaling origin point
      * @param value scale value
-     * @param prev predecessor node
-     * @returns a scaled copy of this node
      * */
-    public abstract scale(originX: number, originY: number, value: number, prev: Nullable<SvgPathNode>): SvgPathNode;
+    public abstract scale(originX: number, originY: number, value: number): void;
     /**
      * Creates an svg command from this node.
      * @param precision number of digits after the decimal point

@@ -72,18 +72,14 @@ export class SvgPathLineOffset extends SvgPathNode {
         return new SvgPathLineOffset(this.dx, this.dy, prev);
     }
     /**
-     * Creates a scaled copy of this node.
+     * Scales this node according to the provided origin and scale value.
      * @param _originX x coordinate of the scaling origin point (unused)
      * @param _originY y coordinate of the scaling origin point (unused)
      * @param value scale value
-     * @param prev predecessor node
-     * @returns a scaled copy of this node
      * */
-    public scale(_originX: number, _originY: number, value: number, prev: SvgPathNode): SvgPathLineOffset {
-        return new SvgPathLineOffset(
-            this.dx * value,
-            this.dy * value,
-            prev);
+    public scale(_originX: number, _originY: number, value: number): void {
+        this.dx *= value;
+        this.dy *= value;
     }
     /**
      * Creates an svg command from this node.

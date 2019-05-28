@@ -52,19 +52,14 @@ export class SvgPathStart extends SvgPathNode {
         return new SvgPathStart(this.x, this.y, this._angleInDegrees, prev);
     }
     /**
-     * Creates a scaled copy of this node.
+     * Scales this node according to the provided origin and scale value.
      * @param originX x coordinate of the scaling origin point
      * @param originY y coordinate of the scaling origin point
      * @param value scale value
-     * @param prev predecessor node
-     * @returns a scaled copy of this node
      * */
-    public scale(originX: number, originY: number, value: number, prev: Nullable<SvgPathNode>): SvgPathNode {
-        return new SvgPathStart(
-            (this.x - originX) * value + originX,
-            (this.y - originY) * value + originY,
-            this._angleInDegrees,
-            prev);
+    public scale(originX: number, originY: number, value: number): void {
+        this.x = (this.x - originX) * value + originX;
+        this.y = (this.y - originY) * value + originY;
     }
     /**
      * Creates an svg command from this node.

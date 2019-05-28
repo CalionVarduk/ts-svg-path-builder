@@ -120,22 +120,18 @@ export class SvgPathCubicCurve extends SvgPathNode {
         return new SvgPathCubicCurve(this.x, this.y, this.bezierX1, this.bezierY1, this.bezierX2, this.bezierY2, prev);
     }
     /**
-     * Creates a scaled copy of this node.
+     * Scales this node according to the provided origin and scale value.
      * @param originX x coordinate of the scaling origin point
      * @param originY y coordinate of the scaling origin point
      * @param value scale value
-     * @param prev predecessor node
-     * @returns a scaled copy of this node
      * */
-    public scale(originX: number, originY: number, value: number, prev: SvgPathNode): SvgPathCubicCurve {
-        return new SvgPathCubicCurve(
-            (this.x - originX) * value + originX,
-            (this.y - originY) * value + originY,
-            (this.bezierX1 - originX) * value + originX,
-            (this.bezierY1 - originY) * value + originY,
-            (this.bezierX2 - originX) * value + originX,
-            (this.bezierY2 - originY) * value + originY,
-            prev);
+    public scale(originX: number, originY: number, value: number): void {
+        this.x = (this.x - originX) * value + originX;
+        this.y = (this.y - originY) * value + originY;
+        this.bezierX1 = (this.bezierX1 - originX) * value + originX;
+        this.bezierY1 = (this.bezierY1 - originY) * value + originY;
+        this.bezierX2 = (this.bezierX2 - originX) * value + originX;
+        this.bezierY2 = (this.bezierY2 - originY) * value + originY;
     }
     /**
      * Creates an svg command from this node.

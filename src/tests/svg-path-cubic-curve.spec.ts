@@ -171,36 +171,39 @@ each([
     }
 );
 
+test('copy should throw when prev is not defined',
+    () => {
+        const sut = new SvgPathCubicCurve(0, 0, 0, 0, 0, 0, createStart());
+        const action = () => sut.copy(null as any);
+        expect(action).toThrowError();
+    }
+);
+
 each([
-    [0, 0, 0, 0, 0, 0, { x: 0, y: 0 }, 0, createStart(),
+    [0, 0, 0, 0, 0, 0, { x: 0, y: 0 }, 0,
         { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }],
-    [10, -20, 15, 12, 13, 21, { x: 5, y: -5 }, 0, createDefault(createStart()),
+    [10, -20, 15, 12, 13, 21, { x: 5, y: -5 }, 0,
         { x: 5, y: -5 }, { x: 5, y: -5 }, { x: 5, y: -5 }],
-    [-5, -1, -13, 4, -3, -11, { x: 0, y: 0 }, 1, createStart(), { x: -5, y: -1 },
-        { x: -13, y: 4 }, { x: -3, y: -11 }],
-    [12.5, -0.5, 2.55, 4, 11.1, -7.65, { x: 5, y: -5 }, 1, createDefault(createStart()),
+    [-5, -1, -13, 4, -3, -11, { x: 0, y: 0 }, 1,
+        { x: -5, y: -1 }, { x: -13, y: 4 }, { x: -3, y: -11 }],
+    [12.5, -0.5, 2.55, 4, 11.1, -7.65, { x: 5, y: -5 }, 1,
         { x: 12.5, y: -0.5 }, { x: 2.55, y: 4 }, { x: 11.1, y: -7.65 }],
-    [7.7, 0, 8, 0.09, 1.32, -8.8, { x: 0, y: 0 }, 2, createStart(), { x: 15.4, y: 0 },
-        { x: 16, y: 0.18 }, { x: 2.64, y: -17.6 }],
-    [3.3, 22.87, 13.4, 2.231, 2.2222, -1.0987, { x: 12.1, y: 3.5 }, 2.8, createStart(),
+    [7.7, 0, 8, 0.09, 1.32, -8.8, { x: 0, y: 0 }, 2,
+        { x: 15.4, y: 0 }, { x: 16, y: 0.18 }, { x: 2.64, y: -17.6 }],
+    [3.3, 22.87, 13.4, 2.231, 2.2222, -1.0987, { x: 12.1, y: 3.5 }, 2.8,
         { x: -12.54, y: 57.736 }, { x: 15.74, y: -0.0532 }, { x: -15.55784, y: -9.37636 }]
 ])
 .test(`scale should return new valid object (%#): x: %f, y: %f, bezier x1: %f, bezier y1: %f, bezier x2: %f, bezier y2: %f,
-origin: %o, scale: %f, prev: %o, expected point: %o, expected bezier point1: %o, expected bezier point2: %o`,
-    (x, y, bx1, by1, bx2, by2, origin, scale, prev, expected, expectedBezier1, expectedBezier2) => {
+origin: %o, scale: %f, expected point: %o, expected bezier point1: %o, expected bezier point2: %o`,
+    (x, y, bx1, by1, bx2, by2, origin, scale, expected, expectedBezier1, expectedBezier2) => {
         const sut = new SvgPathCubicCurve(x, y, bx1, by1, bx2, by2, createStart());
-        const result = sut.scale(origin.x, origin.y, scale, prev);
-        expect(result).toBeDefined();
-        expect(result).not.toBeNull();
-        expect(result).not.toBe(sut);
-        expect(result instanceof SvgPathCubicCurve).toBe(true);
-        expect(result.x).toBeCloseTo(expected.x, 8);
-        expect(result.y).toBeCloseTo(expected.y, 8);
-        expect(result.prev).toBe(prev);
-        expect(result.bezierX1).toBeCloseTo(expectedBezier1.x, 8);
-        expect(result.bezierY1).toBeCloseTo(expectedBezier1.y, 8);
-        expect(result.bezierX2).toBeCloseTo(expectedBezier2.x, 8);
-        expect(result.bezierY2).toBeCloseTo(expectedBezier2.y, 8);
+        sut.scale(origin.x, origin.y, scale);
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
+        expect(sut.bezierX1).toBeCloseTo(expectedBezier1.x, 8);
+        expect(sut.bezierY1).toBeCloseTo(expectedBezier1.y, 8);
+        expect(sut.bezierX2).toBeCloseTo(expectedBezier2.x, 8);
+        expect(sut.bezierY2).toBeCloseTo(expectedBezier2.y, 8);
     }
 );
 

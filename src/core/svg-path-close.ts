@@ -79,18 +79,12 @@ export class SvgPathClose extends SvgPathNode {
         return new SvgPathClose(findStart(prev), prev);
     }
     /**
-     * Creates a scaled copy of this node.
+     * Scales this node according to the provided origin and scale value.
      * @param _originX x coordinate of the scaling origin point (unused)
      * @param _originY y coordinate of the scaling origin point (unused)
      * @param _value scale value (unused)
-     * @param prev predecessor node
-     * @returns a scaled copy of this node
      * */
-    public scale(_originX: number, _originY: number, _value: number, prev: SvgPathNode): SvgPathClose {
-        return new SvgPathClose(
-            findStart(prev),
-            prev);
-    }
+    public scale(_originX: number, _originY: number, _value: number): void { }
     /**
      * Creates an svg command from this node.
      * @param _precision number of digits after the decimal point (unused)

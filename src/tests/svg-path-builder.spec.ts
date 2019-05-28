@@ -1115,7 +1115,7 @@ each([
         const start = sut.first! as SvgPathStart;
         for (let i = 0; i < 10; ++i) {
             mocks.push(mock<SvgPathNode>({
-                scale(x: number, y: number, value: number) { return reinterpretCast<SvgPathNode>(this); },
+                scale(x: number, y: number, value: number) { return; },
                 copy(prev) { return reinterpretCast<SvgPathNode>(this); }
             }));
             sut.addNode(mocks[i].subject);
@@ -1123,9 +1123,7 @@ each([
         const result = sut.scale(ox, oy, scale);
         expect(result).toBe(sut);
         expect(result.nodes.length).toBe(11);
-        expect(result.first instanceof SvgPathStart).toBe(true);
-        expect(result.first).not.toBe(start);
-        expect(result.first!.prev).toBeNull();
+        expect(result.first).toBe(start);
         expect(result.lastStart).toBe(result.first);
         for (let i = 1; i < result.nodes.length; ++i) {
             const m = mocks[i - 1];
@@ -1135,13 +1133,6 @@ each([
             expect(info.getData(0)!.arguments[0]).toBe(ox);
             expect(info.getData(0)!.arguments[1]).toBe(oy);
             expect(info.getData(0)!.arguments[2]).toBe(scale);
-            if (i === 1) {
-                expect(info.getData(0)!.arguments[3]).toBe(result.first);
-            } else {
-                const prevInfo = mocks[i - 2].getMemberInfo('scale') as IMockedMethodInfo;
-                expect(info.getData(0)!.globalNo).toBeGreaterThan(prevInfo.getData(0)!.globalNo);
-                expect(info.getData(0)!.arguments[3]).toBe(mocks[i - 2].subject);
-            }
         }
     }
 );

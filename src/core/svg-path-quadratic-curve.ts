@@ -86,20 +86,16 @@ export class SvgPathQuadraticCurve extends SvgPathNode {
         return new SvgPathQuadraticCurve(this.x, this.y, this.bezierX, this.bezierY, prev);
     }
     /**
-     * Creates a scaled copy of this node.
+     * Scales this node according to the provided origin and scale value.
      * @param originX x coordinate of the scaling origin point
      * @param originY y coordinate of the scaling origin point
      * @param value scale value
-     * @param prev predecessor node
-     * @returns a scaled copy of this node
      * */
-    public scale(originX: number, originY: number, value: number, prev: SvgPathNode): SvgPathQuadraticCurve {
-        return new SvgPathQuadraticCurve(
-            (this.x - originX) * value + originX,
-            (this.y - originY) * value + originY,
-            (this.bezierX - originX) * value + originX,
-            (this.bezierY - originY) * value + originY,
-            prev);
+    public scale(originX: number, originY: number, value: number): void {
+        this.x = (this.x - originX) * value + originX;
+        this.y = (this.y - originY) * value + originY;
+        this.bezierX = (this.bezierX - originX) * value + originX;
+        this.bezierY = (this.bezierY - originY) * value + originY;
     }
     /**
      * Creates an svg command from this node.
