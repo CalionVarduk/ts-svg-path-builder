@@ -543,6 +543,19 @@ export class SvgPathBuilder {
     }
 
     /**
+     * Translates all current svg path nodes.
+     * @param dx x coordinate offset
+     * @param dy y coordinate offset
+     * @returns `this`
+     * */
+    public translate(dx: number, dy: number): SvgPathBuilder {
+        for (let i = 0; i < this._nodes.length; ++i) {
+            this._nodes[i].translate(dx, dy);
+        }
+        return this;
+    }
+
+    /**
      * Returns a copy of this builder.
      * @returns a new copy of `this` svg path builder
      * */

@@ -163,6 +163,14 @@ test('scale should not throw',
     }
 );
 
+test('translate should not throw',
+    () => {
+        const sut = new SvgPathClose(createStart(), createStart());
+        const action = () => sut.translate(0, 0);
+        expect(action).not.toThrow();
+    }
+);
+
 test('create svg command should return correct result',
     () => {
         const sut = new SvgPathClose(createStart(), createStart());

@@ -200,11 +200,31 @@ each([
     [3.3, 22.87, 2.2222, -1.0987, { x: 12.1, y: 3.5 }, 2.8,
         { x: -12.54, y: 57.736 }, { x: -15.55784, y: -9.37636 }]
 ])
-.test(`scale should return new valid object (%#): x: %f, y: %f, bezier x2: %f, bezier y2: %f,
+.test(`scale should modify node properly (%#): x: %f, y: %f, bezier x2: %f, bezier y2: %f,
 origin: %o, scale: %f, expected point: %o, expected bezier point2: %o`,
     (x, y, bx2, by2, origin, scale, expected, expectedBezier2) => {
         const sut = create(x, y, bx2, by2, createStart());
         sut.scale(origin.x, origin.y, scale);
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
+        expect(sut.bezierX2).toBeCloseTo(expectedBezier2.x, 8);
+        expect(sut.bezierY2).toBeCloseTo(expectedBezier2.y, 8);
+    }
+);
+
+each([
+    [0, 0, 0, 0, 0, 0, { x: 0, y: 0 }, { x: 0, y: 0 }],
+    [10, -20, 13, 21, 5, -5, { x: 15, y: -25 }, { x: 18, y: 16 }],
+    [-5, -1, -3, -11, 0.5, 1, { x: -4.5, y: 0 }, { x: -2.5, y: -10 }],
+    [12.5, -0.5, 11.1, -7.65, -5, 1.2, { x: 7.5, y: 0.7 }, { x: 6.1, y: -6.45 }],
+    [7.7, 0, 1.32, -8.8, 2.355, 12.411, { x: 10.055, y: 12.411 }, { x: 3.675, y: 3.611 }],
+    [3.3, 22.87, 2.2222, -1.0987, 12.1, -2.8, { x: 15.4, y: 20.07 }, { x: 14.3222, y: -3.8987 }]
+])
+.test(`translate should modify node properly (%#): x: %f, y: %f, bezier x2: %f, bezier y2: %f,
+dx: %f, dy: %f, expected point: %o, expected bezier point2: %o`,
+    (x, y, bx2, by2, dx, dy, expected, expectedBezier2) => {
+        const sut = create(x, y, bx2, by2, createStart());
+        sut.translate(dx, dy);
         expect(sut.x).toBeCloseTo(expected.x, 8);
         expect(sut.y).toBeCloseTo(expected.y, 8);
         expect(sut.bezierX2).toBeCloseTo(expectedBezier2.x, 8);

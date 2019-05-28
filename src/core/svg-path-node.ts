@@ -51,6 +51,12 @@ export abstract class SvgPathNode {
      * */
     public abstract scale(originX: number, originY: number, value: number): void;
     /**
+     * Translates this node according to the provided offset.
+     * @param dx x coordinate offset
+     * @param dy y coordinate offset
+     * */
+    public abstract translate(dx: number, dy: number): void;
+    /**
      * Creates an svg command from this node.
      * @param precision number of digits after the decimal point
      * @returns created svg command

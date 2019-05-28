@@ -82,10 +82,28 @@ each([
     [7.7, 0, 200, { x: 0, y: 0 }, 2, { x: 15.4, y: 0 }],
     [3.3, 22.87, -80, { x: 12.1, y: 3.5 }, 2.8, { x: -12.54, y: 57.736 }]
 ])
-.test('scale should return new valid object (%#): x: %f, y: %f, angle: %f, origin: %o, scale: %f, expected point: %o',
+.test('scale should modify node properly (%#): x: %f, y: %f, angle: %f, origin: %o, scale: %f, expected point: %o',
     (x, y, angle, origin, scale, expected) => {
         const sut = new SvgPathStart(x, y, angle, createDefault());
         sut.scale(origin.x, origin.y, scale);
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
+        expect(sut.angleInDegrees).toBe(sut.angleInDegrees);
+    }
+);
+
+each([
+    [0, 0, 0, 0, 0, { x: 0, y: 0 }],
+    [10, -20, 30, 5, -5, { x: 15, y: -25 }],
+    [-5, -1, 60, 0.5, 1, { x: -4.5, y: 0 }],
+    [12.5, -0.5, 75, -5, 1.2, { x: 7.5, y: 0.7 }],
+    [7.7, 0, 200, 2.355, 12.411, { x: 10.055, y: 12.411 }],
+    [3.3, 22.87, -80, 12.1, -2.8, { x: 15.4, y: 20.07 }]
+])
+.test('translate should modify node properly (%#): x: %f, y: %f, angle: %f, dx: %f, dy: %f, expected point: %o',
+    (x, y, angle, dx, dy, expected) => {
+        const sut = new SvgPathStart(x, y, angle, createDefault());
+        sut.translate(dx, dy);
         expect(sut.x).toBeCloseTo(expected.x, 8);
         expect(sut.y).toBeCloseTo(expected.y, 8);
         expect(sut.angleInDegrees).toBe(sut.angleInDegrees);

@@ -86,6 +86,12 @@ export class SvgPathClose extends SvgPathNode {
      * */
     public scale(_originX: number, _originY: number, _value: number): void { }
     /**
+     * Translates this node according to the provided offset.
+     * @param _dx x coordinate offset (unused)
+     * @param _dy y coordinate offset (unused)
+     * */
+    public translate(_dx: number, _dy: number): void { }
+    /**
      * Creates an svg command from this node.
      * @param _precision number of digits after the decimal point (unused)
      * @returns created svg command

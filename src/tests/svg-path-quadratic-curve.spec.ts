@@ -145,11 +145,31 @@ each([
     [7.7, 0, 8, 0.09, { x: 0, y: 0 }, 2, { x: 15.4, y: 0 }, { x: 16, y: 0.18 }],
     [3.3, 22.87, 13.4, 2.231, { x: 12.1, y: 3.5 }, 2.8, { x: -12.54, y: 57.736 }, { x: 15.74, y: -0.0532 }]
 ])
-.test(`scale should return new valid object (%#): x: %f, y: %f, bezier x: %f, bezier y: %f,
+.test(`scale should modify node properly (%#): x: %f, y: %f, bezier x: %f, bezier y: %f,
 origin: %o, scale: %f, expected point: %o, expected bezier point: %o`,
     (x, y, bx, by, origin, scale, expected, expectedBezier) => {
         const sut = new SvgPathQuadraticCurve(x, y, bx, by, createStart());
         sut.scale(origin.x, origin.y, scale);
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
+        expect(sut.bezierX).toBeCloseTo(expectedBezier.x, 8);
+        expect(sut.bezierY).toBeCloseTo(expectedBezier.y, 8);
+    }
+);
+
+each([
+    [0, 0, 0, 0, 0, 0, { x: 0, y: 0 }, { x: 0, y: 0 }],
+    [10, -20, 15, 12, 5, -5, { x: 15, y: -25 }, { x: 20, y: 7 }],
+    [-5, -1, -13, 4, 0.5, 1, { x: -4.5, y: 0 }, { x: -12.5, y: 5 }],
+    [12.5, -0.5, 2.55, 4, -5, 1.2, { x: 7.5, y: 0.7 }, { x: -2.45, y: 5.2 }],
+    [7.7, 0, 8, 0.09, 2.355, 12.411, { x: 10.055, y: 12.411 }, { x: 10.355, y: 12.501 }],
+    [3.3, 22.87, 13.4, 2.231, 12.1, -2.8, { x: 15.4, y: 20.07 }, { x: 25.5, y: -0.569 }]
+])
+.test(`translate should modify node properly (%#): x: %f, y: %f, bezier x: %f, bezier y: %f,
+dx: %f, dy: %f, expected point: %o, expected bezier point: %o`,
+    (x, y, bx, by, dx, dy, expected, expectedBezier) => {
+        const sut = new SvgPathQuadraticCurve(x, y, bx, by, createStart());
+        sut.translate(dx, dy);
         expect(sut.x).toBeCloseTo(expected.x, 8);
         expect(sut.y).toBeCloseTo(expected.y, 8);
         expect(sut.bezierX).toBeCloseTo(expectedBezier.x, 8);

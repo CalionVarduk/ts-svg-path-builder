@@ -153,10 +153,27 @@ each([
     [7.7, 0, { x: 0, y: 0 }, 2, { x: 15.4, y: 0 }],
     [3.3, 22.87, { x: 12.1, y: 3.5 }, 2.8, { x: -12.54, y: 57.736 }]
 ])
-.test(`scale should return new valid object (%#): x: %f, y: %f, origin: %o, scale: %f, expected point: %o`,
+.test(`scale should modify node properly (%#): x: %f, y: %f, origin: %o, scale: %f, expected point: %o`,
     (x, y, origin, scale, expected) => {
         const sut = create(x, y, createStart());
         sut.scale(origin.x, origin.y, scale);
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
+    }
+);
+
+each([
+    [0, 0, 0, 0, { x: 0, y: 0 }],
+    [10, -20, 5, -5, { x: 15, y: -25 }],
+    [-5, -1, 0.5, 1, { x: -4.5, y: 0 }],
+    [12.5, -0.5, -5, 1.2, { x: 7.5, y: 0.7 }],
+    [7.7, 0, 2.355, 12.411, { x: 10.055, y: 12.411 }],
+    [3.3, 22.87, 12.1, -2.8, { x: 15.4, y: 20.07 }]
+])
+.test(`translate should modify node properly (%#): x: %f, y: %f, dx: %f, dy: %f, expected point: %o`,
+    (x, y, dx, dy, expected) => {
+        const sut = create(x, y, createStart());
+        sut.translate(dx, dy);
         expect(sut.x).toBeCloseTo(expected.x, 8);
         expect(sut.y).toBeCloseTo(expected.y, 8);
     }

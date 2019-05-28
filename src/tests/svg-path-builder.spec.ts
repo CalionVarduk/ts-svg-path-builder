@@ -1137,6 +1137,49 @@ each([
     }
 );
 
+test('builder translate should return the builder',
+    () => {
+        const sut = new SvgPathBuilder();
+        const result = sut.translate(0, 0);
+        expect(result).toBe(sut);
+        expect(result.isEmpty).toBe(true);
+    }
+);
+
+each([
+    [0, 0],
+    [-10, 12],
+    [223.4, -11.2],
+    [0.445, 1.22]
+])
+.test('builder translate should return the builder with translated nodes (%#): dx: %f, dy: %f',
+    (dx, dy) => {
+        const mocks: IMock<SvgPathNode>[] = [];
+        const sut = new SvgPathBuilder().moveTo(0, 0);
+        const start = sut.first! as SvgPathStart;
+        for (let i = 0; i < 10; ++i) {
+            mocks.push(mock<SvgPathNode>({
+                translate(x: number, y: number) { return; },
+                copy(prev) { return reinterpretCast<SvgPathNode>(this); }
+            }));
+            sut.addNode(mocks[i].subject);
+        }
+        const result = sut.translate(dx, dy);
+        expect(result).toBe(sut);
+        expect(result.nodes.length).toBe(11);
+        expect(result.first).toBe(start);
+        expect(result.lastStart).toBe(result.first);
+        for (let i = 1; i < result.nodes.length; ++i) {
+            const m = mocks[i - 1];
+            const info = m.getMemberInfo('translate') as IMockedMethodInfo;
+            expect(result.nodes[i]).toBe(m.subject);
+            expect(info.count).toBe(1);
+            expect(info.getData(0)!.arguments[0]).toBe(dx);
+            expect(info.getData(0)!.arguments[1]).toBe(dy);
+        }
+    }
+);
+
 each([
     [0],
     [1],

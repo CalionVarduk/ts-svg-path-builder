@@ -136,6 +136,15 @@ export class SvgPathArc extends SvgPathNode {
         this.ry *= value;
     }
     /**
+     * Translates this node according to the provided offset.
+     * @param dx x coordinate offset
+     * @param dy y coordinate offset
+     * */
+    public translate(dx: number, dy: number): void {
+        this.x += dx;
+        this.y += dy;
+    }
+    /**
      * Creates an svg command from this node.
      * @param precision number of digits after the decimal point
      * @returns created svg command

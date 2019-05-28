@@ -21,6 +21,9 @@ class Mock extends SvgPathNode {
     public scale(_originX: number, _originY: number, _value: number): void {
         throw new Error('Method not implemented.');
     }
+    public translate(_dx: number, _dy: number): void {
+        throw new Error('Method not implemented.');
+    }
     public createSvgCommand(_precision: number): string {
         throw new Error('Method not implemented.');
     }
