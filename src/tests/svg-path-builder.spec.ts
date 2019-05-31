@@ -11,6 +11,7 @@ import { SvgPathClose } from '../core/svg-path-close';
 import { SvgPathArc } from '../core/svg-path-arc';
 import { SvgPathArcStyle } from '../core/svg-path-arc-style';
 import { Nullable } from '../core/utils/nullable';
+import { Angle } from '../core/primitives/angle';
 import { mock, reinterpretCast, IMockedMethodInfo, IMock } from 'frlluc-mocking';
 import each from 'jest-each';
 
@@ -1176,6 +1177,50 @@ each([
             expect(info.count).toBe(1);
             expect(info.getData(0)!.arguments[0]).toBe(dx);
             expect(info.getData(0)!.arguments[1]).toBe(dy);
+        }
+    }
+);
+
+test('builder rotate should return the builder',
+    () => {
+        const sut = new SvgPathBuilder();
+        const result = sut.rotate(0, 0, 0);
+        expect(result).toBe(sut);
+        expect(result.isEmpty).toBe(true);
+    }
+);
+
+each([
+    [0, 0, 0],
+    [-10, 12, 100],
+    [223.4, -11.2, -456],
+    [0.445, 1.22, 234.52]
+])
+.test('builder rotate should return the builder with rotated nodes (%#): ox: %f, oy: %f, degrees: %f',
+    (ox, oy, degrees) => {
+        const mocks: IMock<SvgPathNode>[] = [];
+        const sut = new SvgPathBuilder().moveTo(0, 0);
+        const start = sut.first! as SvgPathStart;
+        for (let i = 0; i < 10; ++i) {
+            mocks.push(mock<SvgPathNode>({
+                rotate(x: number, y: number, value: Angle) { return; },
+                copy(prev) { return reinterpretCast<SvgPathNode>(this); }
+            }));
+            sut.addNode(mocks[i].subject);
+        }
+        const result = sut.rotate(ox, oy, degrees);
+        expect(result).toBe(sut);
+        expect(result.nodes.length).toBe(11);
+        expect(result.first).toBe(start);
+        expect(result.lastStart).toBe(result.first);
+        for (let i = 1; i < result.nodes.length; ++i) {
+            const m = mocks[i - 1];
+            const info = m.getMemberInfo('rotate') as IMockedMethodInfo;
+            expect(result.nodes[i]).toBe(m.subject);
+            expect(info.count).toBe(1);
+            expect(info.getData(0)!.arguments[0]).toBe(ox);
+            expect(info.getData(0)!.arguments[1]).toBe(oy);
+            expect(info.getData(0)!.arguments[2].degrees).toBe(degrees);
         }
     }
 );

@@ -3,6 +3,7 @@ import { SvgPathStart } from '../core/svg-path-start';
 import { SvgPathArc } from '../core/svg-path-arc';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
 import { SvgPathArcStyle } from '../core/svg-path-arc-style';
+import { Angle } from '../core/primitives/angle';
 import each from 'jest-each';
 
 function createDefault(prev: SvgPathNode): SvgPathArc {
@@ -246,6 +247,28 @@ each([
         expect(sut.rx).toBe(rx);
         expect(sut.ry).toBe(ry);
         expect(sut.rotationAngleInDegrees).toBe(angle);
+        expect(sut.style).toBe(style);
+    }
+);
+
+each([
+    [0, 0, 0, 0, 0, SvgPathArcStyle.CccwLt180, { x: 0, y: 0 }, 0, { x: 0, y: 0 }, 0],
+    [10, -20, 15, 12, 13, SvgPathArcStyle.CcwGt180, { x: 5, y: -5 }, 100, { x: -10.640357183, y: -7.3193161 }, 113],
+    [-5, -1, -13, 4, -3, SvgPathArcStyle.CcwLt180, { x: 1, y: 2 }, 0, { x: -5, y: -1 }, -3],
+    [12.5, -0.5, 2.55, 4, 11.1, SvgPathArcStyle.CccwGt180, { x: 5, y: -5 }, 5, { x: 12.863661078, y: -1.170791929 }, 16.1],
+    [7.7, 0, 8, 0.09, 1.32, SvgPathArcStyle.CcwGt180, { x: 0, y: 0 }, 67.24, { x: 2.978913708, y: -7.100427671 }, 68.56],
+    [3.3, 22.87, 13.4, 2.231, 2.2222, SvgPathArcStyle.CcwLt180, { x: 12.1, y: 3.5 }, -387, { x: -4.534653392, y: 16.763679975 }, -384.7778]
+])
+.test(`rotate should modify node properly (%#): x: %f, y: %f, rx: %f, ry: %f, angle: %f, style: %f,
+origin: %o, value: %o, expected point: %o, expected angle: %f`,
+    (x, y, rx, ry, angle, style, origin, value, expected, expectedAngle) => {
+        const sut = new SvgPathArc(x, y, rx, ry, angle, style, createStart());
+        sut.rotate(origin.x, origin.y, new Angle(value));
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
+        expect(sut.rx).toBe(rx);
+        expect(sut.ry).toBe(ry);
+        expect(sut.rotationAngleInDegrees).toBeCloseTo(expectedAngle, 8);
         expect(sut.style).toBe(style);
     }
 );

@@ -3,6 +3,7 @@ import { SvgPathClose } from '../core/svg-path-close';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
 import { SvgPathNode } from '../core/svg-path-node';
 import { Nullable } from '../core/utils/nullable';
+import { Angle } from '../core/primitives/angle';
 import { mock } from 'frlluc-mocking';
 import each from 'jest-each';
 
@@ -167,6 +168,14 @@ test('translate should not throw',
     () => {
         const sut = new SvgPathClose(createStart(), createStart());
         const action = () => sut.translate(0, 0);
+        expect(action).not.toThrow();
+    }
+);
+
+test('rotate should not throw',
+    () => {
+        const sut = new SvgPathClose(createStart(), createStart());
+        const action = () => sut.rotate(0, 0, new Angle(0));
         expect(action).not.toThrow();
     }
 );

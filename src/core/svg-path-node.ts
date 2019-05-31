@@ -1,6 +1,7 @@
 import { Vector2 } from './primitives/vector';
 import { SvgPathNodeType } from './svg-path-node-type';
 import { Nullable } from './utils/nullable';
+import { Angle } from './primitives/angle';
 
 /** Specifies an svg path node. */
 export abstract class SvgPathNode {
@@ -56,6 +57,13 @@ export abstract class SvgPathNode {
      * @param dy y coordinate offset
      * */
     public abstract translate(dx: number, dy: number): void;
+    /**
+     * Rotates this node clockwise according to the provided origin and angle.
+     * @param originX x coordinate of the rotation origin point
+     * @param originY y coordinate of the rotation origin point
+     * @param angle angle to rotate by
+     * */
+    public abstract rotate(originX: number, originY: number, angle: Angle): void;
     /**
      * Creates an svg command from this node.
      * @param precision number of digits after the decimal point

@@ -1,6 +1,7 @@
 import { SvgPathNode } from './svg-path-node';
 import { SvgPathNodeType } from './svg-path-node-type';
 import { Nullable } from './utils/nullable';
+import { Angle } from './primitives/angle';
 
 /** Specifies an svg path start node. */
 export class SvgPathStart extends SvgPathNode {
@@ -25,7 +26,7 @@ export class SvgPathStart extends SvgPathNode {
         return this._y;
     }
 
-    private readonly _angleInDegrees: number;
+    private _angleInDegrees: number;
     private _x: number;
     private _y: number;
 
@@ -69,6 +70,19 @@ export class SvgPathStart extends SvgPathNode {
     public translate(dx: number, dy: number): void {
         this.x += dx;
         this.y += dy;
+    }
+    /**
+     * Rotates this node clockwise according to the provided origin and angle.
+     * @param originX x coordinate of the rotation origin point
+     * @param originY y coordinate of the rotation origin point
+     * @param angle angle to rotate by
+     * */
+    public rotate(originX: number, originY: number, angle: Angle): void {
+        const x = this.x - originX;
+        const y = this.y - originY;
+        this.x = (x * angle.cos + y * angle.sin) + originX;
+        this.y = (-x * angle.sin + y * angle.cos) + originY;
+        this._angleInDegrees += angle.degrees;
     }
     /**
      * Creates an svg command from this node.

@@ -3,6 +3,7 @@ import { SvgPathStart } from '../core/svg-path-start';
 import { SvgPathSmoothCubicCurve } from '../core/svg-path-smooth-cubic-curve';
 import { SvgPathCubicCurve } from '../core/svg-path-cubic-curve';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
+import { Angle } from '../core/primitives/angle';
 import each from 'jest-each';
 
 function create(x: number, y: number, bx2: number, by2: number, prev: SvgPathNode): SvgPathSmoothCubicCurve {
@@ -225,6 +226,32 @@ dx: %f, dy: %f, expected point: %o, expected bezier point2: %o`,
     (x, y, bx2, by2, dx, dy, expected, expectedBezier2) => {
         const sut = create(x, y, bx2, by2, createStart());
         sut.translate(dx, dy);
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
+        expect(sut.bezierX2).toBeCloseTo(expectedBezier2.x, 8);
+        expect(sut.bezierY2).toBeCloseTo(expectedBezier2.y, 8);
+    }
+);
+
+each([
+    [0, 0, 0, 0, { x: 0, y: 0 }, 0,
+        { x: 0, y: 0 }, { x: 0, y: 0 }],
+    [10, -20, 13, 21, { x: 5, y: -5 }, 100,
+        { x: -10.640357183, y: -7.3193161 }, { x: 29.215816156, y: -17.393314643 }],
+    [-5, -1, -3, -11, { x: 1, y: 2 }, 0,
+        { x: -5, y: -1 }, { x: -3, y: -11 }],
+    [12.5, -0.5, 11.1, -7.65, { x: 5, y: -5 }, 5,
+        { x: 12.863661078, y: -1.170791929 }, { x: 10.84582494, y: -8.17156598 }],
+    [7.7, 0, 1.32, -8.8, { x: 0, y: 0 }, 67.24,
+        { x: 2.978913708, y: -7.100427671 }, { x: -7.60410356, y: -4.621688981 }],
+    [3.3, 22.87, 2.2222, -1.0987, { x: 12.1, y: 3.5 }, -387,
+        { x: -4.534653392, y: 16.763679975 }, { x: 5.386581866, y: -5.081899061 }]
+])
+.test(`rotate should modify node properly (%#): x: %f, y: %f, bezier x2: %f, bezier y2: %f,
+origin: %o, angle: %f, expected point: %o, expected bezier point2: %o`,
+    (x, y, bx2, by2, origin, angle, expected, expectedBezier2) => {
+        const sut = create(x, y, bx2, by2, createStart());
+        sut.rotate(origin.x, origin.y, new Angle(angle));
         expect(sut.x).toBeCloseTo(expected.x, 8);
         expect(sut.y).toBeCloseTo(expected.y, 8);
         expect(sut.bezierX2).toBeCloseTo(expectedBezier2.x, 8);

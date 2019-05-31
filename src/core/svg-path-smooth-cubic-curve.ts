@@ -2,6 +2,7 @@ import { SvgPathNode } from './svg-path-node';
 import { SvgPathNodeType } from './svg-path-node-type';
 import { Vector, Vector2 } from './primitives/vector';
 import { SvgPathCubicCurve } from './svg-path-cubic-curve';
+import { Angle } from './primitives/angle';
 
 /** Specifies an svg path smooth cubic curve node. */
 export class SvgPathSmoothCubicCurve extends SvgPathNode {
@@ -141,6 +142,22 @@ export class SvgPathSmoothCubicCurve extends SvgPathNode {
         this.y += dy;
         this.bezierX2 += dx;
         this.bezierY2 += dy;
+    }
+    /**
+     * Rotates this node clockwise according to the provided origin and angle.
+     * @param originX x coordinate of the rotation origin point
+     * @param originY y coordinate of the rotation origin point
+     * @param angle angle to rotate by
+     * */
+    public rotate(originX: number, originY: number, angle: Angle): void {
+        let x = this.x - originX;
+        let y = this.y - originY;
+        this.x = (x * angle.cos + y * angle.sin) + originX;
+        this.y = (-x * angle.sin + y * angle.cos) + originY;
+        x = this.bezierX2 - originX;
+        y = this.bezierY2 - originY;
+        this.bezierX2 = (x * angle.cos + y * angle.sin) + originX;
+        this.bezierY2 = (-x * angle.sin + y * angle.cos) + originY;
     }
     /**
      * Creates an svg command from this node.

@@ -2,6 +2,7 @@ import { SvgPathNode } from '../core/svg-path-node';
 import { SvgPathStart } from '../core/svg-path-start';
 import { SvgPathLineOffset } from '../core/svg-path-line-offset';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
+import { Angle } from '../core/primitives/angle';
 import each from 'jest-each';
 
 function createDefault(prev: SvgPathNode): SvgPathLineOffset {
@@ -215,6 +216,23 @@ each([
     (dx, dy, tdx, tdy, expected) => {
         const sut = new SvgPathLineOffset(dx, dy, createStart());
         sut.translate(tdx, tdy);
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
+    }
+);
+
+each([
+    [0, 0, { x: 0, y: 0 }, 0, { x: 0, y: 0 }],
+    [10, -20, { x: 5, y: -5 }, 100, { x: -10.640357183, y: -7.3193161 }],
+    [-5, -1, { x: 1, y: 2 }, 0, { x: -5, y: -1 }],
+    [12.5, -0.5, { x: 5, y: -5 }, 5, { x: 12.863661078, y: -1.170791929 }],
+    [7.7, 0, { x: 0, y: 0 }, 67.24, { x: 2.978913708, y: -7.100427671 }],
+    [3.3, 22.87, { x: 12.1, y: 3.5 }, -387, { x: -4.534653392, y: 16.763679975 }]
+])
+.test('rotate should modify node properly (%#): dx: %f, dy: %f, origin: %o, angle: %f, expected point: %o',
+    (dx, dy, origin, angle, expected) => {
+        const sut = new SvgPathLineOffset(dx, dy, createStart());
+        sut.rotate(origin.x, origin.y, new Angle(angle));
         expect(sut.x).toBeCloseTo(expected.x, 8);
         expect(sut.y).toBeCloseTo(expected.y, 8);
     }

@@ -2,6 +2,7 @@ import { SvgPathNode } from '../core/svg-path-node';
 import { SvgPathStart } from '../core/svg-path-start';
 import { SvgPathCubicCurve } from '../core/svg-path-cubic-curve';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
+import { Angle } from '../core/primitives/angle';
 import each from 'jest-each';
 
 function createDefault(prev: SvgPathNode): SvgPathCubicCurve {
@@ -226,6 +227,34 @@ dx: %f, dy: %f, expected point: %o, expected bezier point1: %o, expected bezier 
     (x, y, bx1, by1, bx2, by2, dx, dy, expected, expectedBezier1, expectedBezier2) => {
         const sut = new SvgPathCubicCurve(x, y, bx1, by1, bx2, by2, createStart());
         sut.translate(dx, dy);
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
+        expect(sut.bezierX1).toBeCloseTo(expectedBezier1.x, 8);
+        expect(sut.bezierY1).toBeCloseTo(expectedBezier1.y, 8);
+        expect(sut.bezierX2).toBeCloseTo(expectedBezier2.x, 8);
+        expect(sut.bezierY2).toBeCloseTo(expectedBezier2.y, 8);
+    }
+);
+
+each([
+    [0, 0, 0, 0, 0, 0, { x: 0, y: 0 }, 0,
+        { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }],
+    [10, -20, 15, 12, 13, 21, { x: 5, y: -5 }, 100,
+        { x: -10.640357183, y: -7.3193161 }, { x: 20.005250024, y: -17.80009655 }, { x: 29.215816156, y: -17.393314643 }],
+    [-5, -1, -13, 4, -3, -11, { x: 1, y: 2 }, 0,
+        { x: -5, y: -1 }, { x: -13, y: 4 }, { x: -3, y: -11 }],
+    [12.5, -0.5, 2.55, 4, 11.1, -7.65, { x: 5, y: -5 }, 5,
+        { x: 12.863661078, y: -1.170791929 }, { x: 3.343724674, y: 4.179283852 }, { x: 10.84582494, y: -8.17156598 }],
+    [7.7, 0, 8, 0.09, 1.32, -8.8, { x: 0, y: 0 }, 67.24,
+        { x: 2.978913708, y: -7.100427671 }, { x: 3.177967293, y: -7.342249238 }, { x: -7.60410356, y: -4.621688981 }],
+    [3.3, 22.87, 13.4, 2.231, 2.2222, -1.0987, { x: 12.1, y: 3.5 }, -387,
+        { x: -4.534653392, y: 16.763679975 }, { x: 13.834422425, y: 2.95950037 }, { x: 5.386581866, y: -5.081899061 }]
+])
+.test(`rotate should modify node properly (%#): x: %f, y: %f, bezier x1: %f, bezier y1: %f, bezier x2: %f, bezier y2: %f,
+origin: %o, angle: %f, expected point: %o, expected bezier point1: %o, expected bezier point2: %o`,
+    (x, y, bx1, by1, bx2, by2, origin, angle, expected, expectedBezier1, expectedBezier2) => {
+        const sut = new SvgPathCubicCurve(x, y, bx1, by1, bx2, by2, createStart());
+        sut.rotate(origin.x, origin.y, new Angle(angle));
         expect(sut.x).toBeCloseTo(expected.x, 8);
         expect(sut.y).toBeCloseTo(expected.y, 8);
         expect(sut.bezierX1).toBeCloseTo(expectedBezier1.x, 8);

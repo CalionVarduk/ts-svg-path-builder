@@ -1,6 +1,7 @@
 import { SvgPathNode } from '../core/svg-path-node';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
 import { Nullable } from '../core/utils/nullable';
+import { Angle } from '../core/primitives/angle';
 import each from 'jest-each';
 
 class Mock extends SvgPathNode {
@@ -22,6 +23,9 @@ class Mock extends SvgPathNode {
         throw new Error('Method not implemented.');
     }
     public translate(_dx: number, _dy: number): void {
+        throw new Error('Method not implemented.');
+    }
+    public rotate(_originX: number, _originY: number, _angle: Angle): void {
         throw new Error('Method not implemented.');
     }
     public createSvgCommand(_precision: number): string {

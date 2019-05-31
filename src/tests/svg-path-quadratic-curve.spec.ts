@@ -2,6 +2,7 @@ import { SvgPathNode } from '../core/svg-path-node';
 import { SvgPathStart } from '../core/svg-path-start';
 import { SvgPathQuadraticCurve } from '../core/svg-path-quadratic-curve';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
+import { Angle } from '../core/primitives/angle';
 import each from 'jest-each';
 
 function createDefault(prev: SvgPathNode): SvgPathQuadraticCurve {
@@ -170,6 +171,26 @@ dx: %f, dy: %f, expected point: %o, expected bezier point: %o`,
     (x, y, bx, by, dx, dy, expected, expectedBezier) => {
         const sut = new SvgPathQuadraticCurve(x, y, bx, by, createStart());
         sut.translate(dx, dy);
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
+        expect(sut.bezierX).toBeCloseTo(expectedBezier.x, 8);
+        expect(sut.bezierY).toBeCloseTo(expectedBezier.y, 8);
+    }
+);
+
+each([
+    [0, 0, 0, 0, { x: 0, y: 0 }, 0, { x: 0, y: 0 }, { x: 0, y: 0 }],
+    [10, -20, 15, 12, { x: 5, y: -5 }, 100, { x: -10.640357183, y: -7.3193161 }, { x: 20.005250024, y: -17.80009655 }],
+    [-5, -1, -13, 4, { x: 1, y: 2 }, 0, { x: -5, y: -1 }, { x: -13, y: 4 }],
+    [12.5, -0.5, 2.55, 4, { x: 5, y: -5 }, 5, { x: 12.863661078, y: -1.170791929 }, { x: 3.343724674, y: 4.179283852 }],
+    [7.7, 0, 8, 0.09, { x: 0, y: 0 }, 67.24, { x: 2.978913708, y: -7.100427671 }, { x: 3.177967293, y: -7.342249238 }],
+    [3.3, 22.87, 13.4, 2.231, { x: 12.1, y: 3.5 }, -387, { x: -4.534653392, y: 16.763679975 }, { x: 13.834422425, y: 2.95950037 }]
+])
+.test(`rotate should modify node properly (%#): x: %f, y: %f, bezier x: %f, bezier y: %f,
+origin: %o, angle: %f, expected point: %o, expected bezier point: %o`,
+    (x, y, bx, by, origin, angle, expected, expectedBezier) => {
+        const sut = new SvgPathQuadraticCurve(x, y, bx, by, createStart());
+        sut.rotate(origin.x, origin.y, new Angle(angle));
         expect(sut.x).toBeCloseTo(expected.x, 8);
         expect(sut.y).toBeCloseTo(expected.y, 8);
         expect(sut.bezierX).toBeCloseTo(expectedBezier.x, 8);

@@ -1,4 +1,5 @@
 import { Const } from '../utils/const';
+import { Angle } from './angle';
 
 /** 2D vector literal type alias. */
 export type Vector2 = {
@@ -10,9 +11,6 @@ export type Vector2 = {
 
 /** Contains helper functions that allow to manipulate vector literals. */
 export namespace Vector {
-
-    const _HALF_PI_DEGREES_BY_PI = 180 / Math.PI;
-    const _PI_BY_HALF_PI_DEGREES = Math.PI / 180;
 
     /**
      * Calculates squared magnitude of vector `v`.
@@ -36,7 +34,7 @@ export namespace Vector {
      * @returns angle of `v`
      * */
     export function getAngle(v: Const<Vector2>): number {
-        return Math.atan2(v.y, v.x) * _HALF_PI_DEGREES_BY_PI;
+        return Angle.toDegrees(Math.atan2(v.y, v.x));
     }
     /**
      * Sets angle in degrees of vector `v`.
@@ -48,10 +46,22 @@ export namespace Vector {
         let m = magnitudeSq(v);
         if (m > 0) {
             m = Math.sqrt(m);
-            const radians = degrees * _PI_BY_HALF_PI_DEGREES;
+            const radians = Angle.toRadians(degrees);
             v.x = Math.cos(radians) * m;
             v.y = Math.sin(radians) * m;
         }
+        return v;
+    }
+    /**
+     * Rotates vector `v` clockwise.
+     * @param v target vector literal
+     * @param angle angle to rotate by
+     * @returns `v`
+     * */
+    export function rotate(v: Vector2, angle: Angle): Vector2 {
+        const x = v.x;
+        v.x = x * angle.cos + v.y * angle.sin;
+        v.y = -x * angle.sin + v.y * angle.cos;
         return v;
     }
     /**

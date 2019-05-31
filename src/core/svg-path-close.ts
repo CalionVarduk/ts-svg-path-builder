@@ -3,6 +3,7 @@ import { SvgPathNodeType } from './svg-path-node-type';
 import { SvgPathStart } from './svg-path-start';
 import { Vector } from './primitives/vector';
 import { Nullable } from './utils/nullable';
+import { Angle } from './primitives/angle';
 
 function findStart(prev: Nullable<SvgPathNode>): SvgPathStart {
     let result = prev;
@@ -91,6 +92,13 @@ export class SvgPathClose extends SvgPathNode {
      * @param _dy y coordinate offset (unused)
      * */
     public translate(_dx: number, _dy: number): void { }
+    /**
+     * Rotates this node clockwise according to the provided origin and angle.
+     * @param _originX x coordinate of the rotation origin point (unused)
+     * @param _originY y coordinate of the rotation origin point (unused)
+     * @param _angle angle to rotate by (unused)
+     * */
+    public rotate(_originX: number, _originY: number, _angle: Angle): void { }
     /**
      * Creates an svg command from this node.
      * @param _precision number of digits after the decimal point (unused)

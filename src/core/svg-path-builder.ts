@@ -1,5 +1,6 @@
 import { Vector, Vector2 } from './primitives/vector';
 import { Line } from './primitives/line';
+import { Angle } from './primitives/angle';
 import { Nullable } from './utils/nullable';
 import { SvgPathNode } from './svg-path-node';
 import { SvgPathStart } from './svg-path-start';
@@ -551,6 +552,21 @@ export class SvgPathBuilder {
     public translate(dx: number, dy: number): SvgPathBuilder {
         for (let i = 0; i < this._nodes.length; ++i) {
             this._nodes[i].translate(dx, dy);
+        }
+        return this;
+    }
+
+    /**
+     * Rotates all current svg path nodes.
+     * @param originX rotation origin point's x coordinate
+     * @param originY rotation origin point's y coordinate
+     * @param degrees angle to rotate by
+     * @returns `this`
+     * */
+    public rotate(originX: number, originY: number, degrees: number): SvgPathBuilder {
+        const angle = new Angle(degrees);
+        for (let i = 0; i < this._nodes.length; ++i) {
+            this._nodes[i].rotate(originX, originY, angle);
         }
         return this;
     }
