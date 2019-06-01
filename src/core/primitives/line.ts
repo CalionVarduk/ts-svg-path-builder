@@ -1,7 +1,6 @@
 import { Vector2, Vector } from './vector';
-import { Nullable } from '../utils/nullable';
-import { Const } from '../utils/const';
 import * as utils from './normalize-angle';
+import { Nullable, Const } from 'frlluc-utils';
 
 /** 2D line literal type alias. */
 export type Line2 = {

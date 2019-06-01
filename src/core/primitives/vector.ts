@@ -1,5 +1,5 @@
-import { Const } from '../utils/const';
 import { Angle } from './angle';
+import { Const } from 'frlluc-utils';
 
 /** 2D vector literal type alias. */
 export type Vector2 = {

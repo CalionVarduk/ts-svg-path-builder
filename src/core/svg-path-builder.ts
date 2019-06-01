@@ -1,7 +1,6 @@
 import { Vector, Vector2 } from './primitives/vector';
 import { Line } from './primitives/line';
 import { Angle } from './primitives/angle';
-import { Nullable } from './utils/nullable';
 import { SvgPathNode } from './svg-path-node';
 import { SvgPathStart } from './svg-path-start';
 import { SvgPathLine } from './svg-path-line';
@@ -13,6 +12,7 @@ import { SvgPathArcStyle } from './svg-path-arc-style';
 import { SvgPathArc } from './svg-path-arc';
 import { SvgPathSmoothQuadraticCurve } from './svg-path-smooth-quadratic-curve';
 import { SvgPathSmoothCubicCurve } from './svg-path-smooth-cubic-curve';
+import { Nullable, Const } from 'frlluc-utils';
 
 /** Instances of this class are created by the `SvgPathBuilder` after the `addRoundedCornerTo` method call. */
 export class SvgPathAfterCornerBuilder {
@@ -203,7 +203,7 @@ export class SvgPathBuilder {
      * @param node svg path node to add a copy of
      * @returns `this`
      * */
-    public addNode(node: SvgPathNode): SvgPathBuilder {
+    public addNode(node: Const<SvgPathNode>): SvgPathBuilder {
         if (!node) {
             throw new Error('svg path node to add must be defined');
         }

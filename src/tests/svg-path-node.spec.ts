@@ -1,7 +1,7 @@
 import { SvgPathNode } from '../core/svg-path-node';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
-import { Nullable } from '../core/utils/nullable';
 import { Angle } from '../core/primitives/angle';
+import { Nullable } from 'frlluc-utils';
 import each from 'jest-each';
 
 class Mock extends SvgPathNode {

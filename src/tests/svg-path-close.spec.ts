@@ -2,9 +2,9 @@ import { SvgPathStart } from '../core/svg-path-start';
 import { SvgPathClose } from '../core/svg-path-close';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
 import { SvgPathNode } from '../core/svg-path-node';
-import { Nullable } from '../core/utils/nullable';
 import { Angle } from '../core/primitives/angle';
 import { mock } from 'frlluc-mocking';
+import { Nullable } from 'frlluc-utils';
 import each from 'jest-each';
 
 function createStart(x: number = 0, y: number = 0): SvgPathStart {

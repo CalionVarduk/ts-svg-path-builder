@@ -10,9 +10,9 @@ import { SvgPathSmoothCubicCurve } from '../core/svg-path-smooth-cubic-curve';
 import { SvgPathClose } from '../core/svg-path-close';
 import { SvgPathArc } from '../core/svg-path-arc';
 import { SvgPathArcStyle } from '../core/svg-path-arc-style';
-import { Nullable } from '../core/utils/nullable';
 import { Angle } from '../core/primitives/angle';
-import { mock, reinterpretCast, IMockedMethodInfo, IMock } from 'frlluc-mocking';
+import { mock, IMockedMethodInfo, IMock } from 'frlluc-mocking';
+import { reinterpretCast, Nullable } from 'frlluc-utils';
 import each from 'jest-each';
 
 test('after corner builder ctor should create with provided builder',

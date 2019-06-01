@@ -1,7 +1,7 @@
 import { SvgPathNode } from './svg-path-node';
 import { SvgPathNodeType } from './svg-path-node-type';
-import { Nullable } from './utils/nullable';
 import { Angle } from './primitives/angle';
+import { Nullable } from 'frlluc-utils';
 
 /** Specifies an svg path start node. */
 export class SvgPathStart extends SvgPathNode {

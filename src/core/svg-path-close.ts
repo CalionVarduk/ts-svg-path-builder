@@ -2,8 +2,8 @@ import { SvgPathNode } from './svg-path-node';
 import { SvgPathNodeType } from './svg-path-node-type';
 import { SvgPathStart } from './svg-path-start';
 import { Vector } from './primitives/vector';
-import { Nullable } from './utils/nullable';
 import { Angle } from './primitives/angle';
+import { Nullable } from 'frlluc-utils';
 
 function findStart(prev: Nullable<SvgPathNode>): SvgPathStart {
     let result = prev;
