@@ -1,15 +1,20 @@
 import { SvgPathStart } from '../core/svg-path-start';
 import { SvgPathClose } from '../core/svg-path-close';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
-import { SvgPathLine } from '../core/svg-path-line';
+import { SvgPathNode } from '../core/svg-path-node';
+import { Angle } from '../core/primitives/angle';
+import { mock } from 'frlluc-mocking';
+import { Nullable } from 'frlluc-utils';
 import each from 'jest-each';
 
 function createStart(x: number = 0, y: number = 0): SvgPathStart {
     return new SvgPathStart(x, y, 0, null);
 }
 
-function createLine(): SvgPathLine {
-    return new SvgPathLine(0, 0, createStart());
+function createAny(prev: Nullable<SvgPathNode> = null): SvgPathNode {
+    return mock<SvgPathNode>({
+        prev: prev
+    }).subject;
 }
 
 each([
@@ -123,13 +128,13 @@ each([
 );
 
 each([
-    [10, 20],
-    [0, 0],
-    [-5, -20]
+    [10, 20, createStart(10, 20)],
+    [0, 0, createStart(0, 0)],
+    [-5, -20, createAny(createStart(-5, -20))]
 ])
-.test('copy should return new valid object (%#): start x: %f, start y: %f',
-    (startX, startY) => {
-        const prev = createStart(startX, startY);
+.test('copy should return new valid object (%#): start x: %f, start y: %f, prev: %o',
+    (startX, startY, prev) => {
+        const start = prev.prev ? prev.prev : prev;
         const sut = new SvgPathClose(createStart(startX, startY), createStart());
         const result = sut.copy(prev);
         expect(result).toBeDefined();
@@ -139,7 +144,7 @@ each([
         expect(result.x).toBe(sut.x);
         expect(result.y).toBe(sut.y);
         expect(result.prev).toBe(prev);
-        expect(result.start).toBe(prev);
+        expect(result.start).toBe(start);
     }
 );
 
@@ -151,29 +156,27 @@ test('copy should throw when prev is not defined',
     }
 );
 
-each([
-    [{ x: 0, y: 0 }, 0, createLine()],
-    [{ x: 5, y: -5 }, 0, createLine()],
-    [{ x: 12.1, y: 3.5 }, 2.8, createLine()]
-])
-.test('scale should return new valid object (%#): origin: %o, scale: %f, prev: %o',
-    (origin, scale, prev) => {
+test('scale should not throw',
+    () => {
         const sut = new SvgPathClose(createStart(), createStart());
-        const result = sut.scale(origin.x, origin.y, scale, prev);
-        expect(result).toBeDefined();
-        expect(result).not.toBeNull();
-        expect(result).not.toBe(sut);
-        expect(result instanceof SvgPathClose).toBe(true);
-        expect(result.prev).toBe(prev);
-        expect(result.start).toBe(prev.prev);
+        const action = () => sut.scale(0, 0, 0);
+        expect(action).not.toThrow();
     }
 );
 
-test('scale should throw when prev is not defined',
+test('translate should not throw',
     () => {
         const sut = new SvgPathClose(createStart(), createStart());
-        const action = () => sut.scale(0, 0, 0, null as any);
-        expect(action).toThrowError();
+        const action = () => sut.translate(0, 0);
+        expect(action).not.toThrow();
+    }
+);
+
+test('rotate should not throw',
+    () => {
+        const sut = new SvgPathClose(createStart(), createStart());
+        const action = () => sut.rotate(0, 0, new Angle(0));
+        expect(action).not.toThrow();
     }
 );
 

@@ -2,6 +2,7 @@ import { SvgPathNode } from '../core/svg-path-node';
 import { SvgPathStart } from '../core/svg-path-start';
 import { SvgPathLine } from '../core/svg-path-line';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
+import { Angle } from '../core/primitives/angle';
 import each from 'jest-each';
 
 function createDefault(prev: SvgPathNode): SvgPathLine {
@@ -130,25 +131,62 @@ each([
     }
 );
 
+test('copy should throw when prev is not defined',
+    () => {
+        const sut = new SvgPathLine(0, 0, createStart());
+        const action = () => sut.copy(null as any);
+        expect(action).toThrowError();
+    }
+);
+
 each([
-    [0, 0, { x: 0, y: 0 }, 0, createStart(), { x: 0, y: 0 }],
-    [10, -20, { x: 5, y: -5 }, 0, createDefault(createStart()), { x: 5, y: -5 }],
-    [-5, -1, { x: 0, y: 0 }, 1, createStart(), { x: -5, y: -1 }],
-    [12.5, -0.5, { x: 5, y: -5 }, 1, createDefault(createStart()), { x: 12.5, y: -0.5 }],
-    [7.7, 0, { x: 0, y: 0 }, 2, createStart(), { x: 15.4, y: 0 }],
-    [3.3, 22.87, { x: 12.1, y: 3.5 }, 2.8, createStart(), { x: -12.54, y: 57.736 }]
+    [0, 0, { x: 0, y: 0 }, 0, { x: 0, y: 0 }],
+    [10, -20, { x: 5, y: -5 }, 0, { x: 5, y: -5 }],
+    [-5, -1, { x: 0, y: 0 }, 1, { x: -5, y: -1 }],
+    [12.5, -0.5, { x: 5, y: -5 }, 1, { x: 12.5, y: -0.5 }],
+    [7.7, 0, { x: 0, y: 0 }, 2, { x: 15.4, y: 0 }],
+    [3.3, 22.87, { x: 12.1, y: 3.5 }, 2.8, { x: -12.54, y: 57.736 }]
 ])
-.test('scale should return new valid object (%#): x: %f, y: %f, origin: %o, scale: %f, prev: %o, expected point: %o',
-    (x, y, origin, scale, prev, expected) => {
+.test('scale should modify node properly (%#): x: %f, y: %f, origin: %o, scale: %f, expected point: %o',
+    (x, y, origin, scale, expected) => {
         const sut = new SvgPathLine(x, y, createStart());
-        const result = sut.scale(origin.x, origin.y, scale, prev);
-        expect(result).toBeDefined();
-        expect(result).not.toBeNull();
-        expect(result).not.toBe(sut);
-        expect(result instanceof SvgPathLine).toBe(true);
-        expect(result.x).toBeCloseTo(expected.x, 8);
-        expect(result.y).toBeCloseTo(expected.y, 8);
-        expect(result.prev).toBe(prev);
+        sut.scale(origin.x, origin.y, scale);
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
+    }
+);
+
+each([
+    [0, 0, 0, 0, { x: 0, y: 0 }],
+    [10, -20, 5, -5, { x: 15, y: -25 }],
+    [-5, -1, 0.5, 1, { x: -4.5, y: 0 }],
+    [12.5, -0.5, -5, 1.2, { x: 7.5, y: 0.7 }],
+    [7.7, 0, 2.355, 12.411, { x: 10.055, y: 12.411 }],
+    [3.3, 22.87, 12.1, -2.8, { x: 15.4, y: 20.07 }]
+])
+.test('translate should modify node properly (%#): x: %f, y: %f, dx: %f, dy: %f, expected point: %o',
+    (x, y, dx, dy, expected) => {
+        const sut = new SvgPathLine(x, y, createStart());
+        sut.translate(dx, dy);
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
+    }
+);
+
+each([
+    [0, 0, { x: 0, y: 0 }, 0, { x: 0, y: 0 }],
+    [10, -20, { x: 5, y: -5 }, 100, { x: -10.640357183, y: -7.3193161 }],
+    [-5, -1, { x: 1, y: 2 }, 0, { x: -5, y: -1 }],
+    [12.5, -0.5, { x: 5, y: -5 }, 5, { x: 12.863661078, y: -1.170791929 }],
+    [7.7, 0, { x: 0, y: 0 }, 67.24, { x: 2.978913708, y: -7.100427671 }],
+    [3.3, 22.87, { x: 12.1, y: 3.5 }, -387, { x: -4.534653392, y: 16.763679975 }]
+])
+.test('rotate should modify node properly (%#): x: %f, y: %f, origin: %o, angle: %f, expected point: %o',
+    (x, y, origin, angle, expected) => {
+        const sut = new SvgPathLine(x, y, createStart());
+        sut.rotate(origin.x, origin.y, new Angle(angle));
+        expect(sut.x).toBeCloseTo(expected.x, 8);
+        expect(sut.y).toBeCloseTo(expected.y, 8);
     }
 );
 

@@ -1,6 +1,6 @@
 import { Vector, Vector2 } from './primitives/vector';
 import { Line } from './primitives/line';
-import { Nullable } from './utils/nullable';
+import { Angle } from './primitives/angle';
 import { SvgPathNode } from './svg-path-node';
 import { SvgPathStart } from './svg-path-start';
 import { SvgPathLine } from './svg-path-line';
@@ -12,6 +12,7 @@ import { SvgPathArcStyle } from './svg-path-arc-style';
 import { SvgPathArc } from './svg-path-arc';
 import { SvgPathSmoothQuadraticCurve } from './svg-path-smooth-quadratic-curve';
 import { SvgPathSmoothCubicCurve } from './svg-path-smooth-cubic-curve';
+import { Nullable, Const } from 'frlluc-utils';
 
 /** Instances of this class are created by the `SvgPathBuilder` after the `addRoundedCornerTo` method call. */
 export class SvgPathAfterCornerBuilder {
@@ -152,7 +153,7 @@ export class SvgPathBuilder {
     /** Specifies fixed precision of svg path node's coordinates. */
     public readonly precision: number;
 
-    private _nodes: SvgPathNode[] = [];
+    private readonly _nodes: SvgPathNode[] = [];
     private _lastStartIndex: number = -1;
 
     /**
@@ -202,7 +203,7 @@ export class SvgPathBuilder {
      * @param node svg path node to add a copy of
      * @returns `this`
      * */
-    public addNode(node: SvgPathNode): SvgPathBuilder {
+    public addNode(node: Const<SvgPathNode>): SvgPathBuilder {
         if (!node) {
             throw new Error('svg path node to add must be defined');
         }
@@ -536,12 +537,36 @@ export class SvgPathBuilder {
      * @returns `this`
      * */
     public scale(originX: number, originY: number, value: number): SvgPathBuilder {
-        if (!this.isEmpty) {
-            const newNodes = [this.first!.scale(originX, originY, value, null)];
-            for (let i = 1; i < this._nodes.length; ++i) {
-                newNodes.push(this._nodes[i].scale(originX, originY, value, newNodes[i - 1]));
-            }
-            this._nodes = newNodes;
+        for (let i = 0; i < this._nodes.length; ++i) {
+            this._nodes[i].scale(originX, originY, value);
+        }
+        return this;
+    }
+
+    /**
+     * Translates all current svg path nodes.
+     * @param dx x coordinate offset
+     * @param dy y coordinate offset
+     * @returns `this`
+     * */
+    public translate(dx: number, dy: number): SvgPathBuilder {
+        for (let i = 0; i < this._nodes.length; ++i) {
+            this._nodes[i].translate(dx, dy);
+        }
+        return this;
+    }
+
+    /**
+     * Rotates all current svg path nodes.
+     * @param originX rotation origin point's x coordinate
+     * @param originY rotation origin point's y coordinate
+     * @param degrees angle to rotate by
+     * @returns `this`
+     * */
+    public rotate(originX: number, originY: number, degrees: number): SvgPathBuilder {
+        const angle = new Angle(degrees);
+        for (let i = 0; i < this._nodes.length; ++i) {
+            this._nodes[i].rotate(originX, originY, angle);
         }
         return this;
     }

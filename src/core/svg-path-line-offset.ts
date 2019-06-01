@@ -1,6 +1,7 @@
 import { SvgPathNode } from './svg-path-node';
 import { SvgPathNodeType } from './svg-path-node-type';
 import { Vector } from './primitives/vector';
+import { Angle } from './primitives/angle';
 
 /** Specifies an svg path line offset node. */
 export class SvgPathLineOffset extends SvgPathNode {
@@ -72,18 +73,35 @@ export class SvgPathLineOffset extends SvgPathNode {
         return new SvgPathLineOffset(this.dx, this.dy, prev);
     }
     /**
-     * Creates a scaled copy of this node.
+     * Scales this node according to the provided origin and scale value.
      * @param _originX x coordinate of the scaling origin point (unused)
      * @param _originY y coordinate of the scaling origin point (unused)
      * @param value scale value
-     * @param prev predecessor node
-     * @returns a scaled copy of this node
      * */
-    public scale(_originX: number, _originY: number, value: number, prev: SvgPathNode): SvgPathLineOffset {
-        return new SvgPathLineOffset(
-            this.dx * value,
-            this.dy * value,
-            prev);
+    public scale(_originX: number, _originY: number, value: number): void {
+        this.dx *= value;
+        this.dy *= value;
+    }
+    /**
+     * Translates this node according to the provided offset.
+     * @param dx x coordinate offset
+     * @param dy y coordinate offset
+     * */
+    public translate(dx: number, dy: number): void {
+        this.x += dx;
+        this.y += dy;
+    }
+    /**
+     * Rotates this node clockwise according to the provided origin and angle.
+     * @param originX x coordinate of the rotation origin point
+     * @param originY y coordinate of the rotation origin point
+     * @param angle angle to rotate by
+     * */
+    public rotate(originX: number, originY: number, angle: Angle): void {
+        const x = this.x - originX;
+        const y = this.y - originY;
+        this.x = (x * angle.cos + y * angle.sin) + originX;
+        this.y = (-x * angle.sin + y * angle.cos) + originY;
     }
     /**
      * Creates an svg command from this node.

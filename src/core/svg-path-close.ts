@@ -2,7 +2,8 @@ import { SvgPathNode } from './svg-path-node';
 import { SvgPathNodeType } from './svg-path-node-type';
 import { SvgPathStart } from './svg-path-start';
 import { Vector } from './primitives/vector';
-import { Nullable } from './utils/nullable';
+import { Angle } from './primitives/angle';
+import { Nullable } from 'frlluc-utils';
 
 function findStart(prev: Nullable<SvgPathNode>): SvgPathStart {
     let result = prev;
@@ -79,18 +80,25 @@ export class SvgPathClose extends SvgPathNode {
         return new SvgPathClose(findStart(prev), prev);
     }
     /**
-     * Creates a scaled copy of this node.
+     * Scales this node according to the provided origin and scale value.
      * @param _originX x coordinate of the scaling origin point (unused)
      * @param _originY y coordinate of the scaling origin point (unused)
      * @param _value scale value (unused)
-     * @param prev predecessor node
-     * @returns a scaled copy of this node
      * */
-    public scale(_originX: number, _originY: number, _value: number, prev: SvgPathNode): SvgPathClose {
-        return new SvgPathClose(
-            findStart(prev),
-            prev);
-    }
+    public scale(_originX: number, _originY: number, _value: number): void { }
+    /**
+     * Translates this node according to the provided offset.
+     * @param _dx x coordinate offset (unused)
+     * @param _dy y coordinate offset (unused)
+     * */
+    public translate(_dx: number, _dy: number): void { }
+    /**
+     * Rotates this node clockwise according to the provided origin and angle.
+     * @param _originX x coordinate of the rotation origin point (unused)
+     * @param _originY y coordinate of the rotation origin point (unused)
+     * @param _angle angle to rotate by (unused)
+     * */
+    public rotate(_originX: number, _originY: number, _angle: Angle): void { }
     /**
      * Creates an svg command from this node.
      * @param _precision number of digits after the decimal point (unused)

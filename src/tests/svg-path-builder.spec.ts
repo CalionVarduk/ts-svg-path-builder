@@ -10,8 +10,9 @@ import { SvgPathSmoothCubicCurve } from '../core/svg-path-smooth-cubic-curve';
 import { SvgPathClose } from '../core/svg-path-close';
 import { SvgPathArc } from '../core/svg-path-arc';
 import { SvgPathArcStyle } from '../core/svg-path-arc-style';
-import { Nullable } from '../core/utils/nullable';
-import { mock, reinterpretCast, IMockedMethodInfo, IMock } from 'frlluc-mocking';
+import { Angle } from '../core/primitives/angle';
+import { mock, IMockedMethodInfo, IMock } from 'frlluc-mocking';
+import { reinterpretCast, Nullable } from 'frlluc-utils';
 import each from 'jest-each';
 
 test('after corner builder ctor should create with provided builder',
@@ -1115,7 +1116,7 @@ each([
         const start = sut.first! as SvgPathStart;
         for (let i = 0; i < 10; ++i) {
             mocks.push(mock<SvgPathNode>({
-                scale(x: number, y: number, value: number) { return reinterpretCast<SvgPathNode>(this); },
+                scale(x: number, y: number, value: number) { return; },
                 copy(prev) { return reinterpretCast<SvgPathNode>(this); }
             }));
             sut.addNode(mocks[i].subject);
@@ -1123,9 +1124,7 @@ each([
         const result = sut.scale(ox, oy, scale);
         expect(result).toBe(sut);
         expect(result.nodes.length).toBe(11);
-        expect(result.first instanceof SvgPathStart).toBe(true);
-        expect(result.first).not.toBe(start);
-        expect(result.first!.prev).toBeNull();
+        expect(result.first).toBe(start);
         expect(result.lastStart).toBe(result.first);
         for (let i = 1; i < result.nodes.length; ++i) {
             const m = mocks[i - 1];
@@ -1135,13 +1134,93 @@ each([
             expect(info.getData(0)!.arguments[0]).toBe(ox);
             expect(info.getData(0)!.arguments[1]).toBe(oy);
             expect(info.getData(0)!.arguments[2]).toBe(scale);
-            if (i === 1) {
-                expect(info.getData(0)!.arguments[3]).toBe(result.first);
-            } else {
-                const prevInfo = mocks[i - 2].getMemberInfo('scale') as IMockedMethodInfo;
-                expect(info.getData(0)!.globalNo).toBeGreaterThan(prevInfo.getData(0)!.globalNo);
-                expect(info.getData(0)!.arguments[3]).toBe(mocks[i - 2].subject);
-            }
+        }
+    }
+);
+
+test('builder translate should return the builder',
+    () => {
+        const sut = new SvgPathBuilder();
+        const result = sut.translate(0, 0);
+        expect(result).toBe(sut);
+        expect(result.isEmpty).toBe(true);
+    }
+);
+
+each([
+    [0, 0],
+    [-10, 12],
+    [223.4, -11.2],
+    [0.445, 1.22]
+])
+.test('builder translate should return the builder with translated nodes (%#): dx: %f, dy: %f',
+    (dx, dy) => {
+        const mocks: IMock<SvgPathNode>[] = [];
+        const sut = new SvgPathBuilder().moveTo(0, 0);
+        const start = sut.first! as SvgPathStart;
+        for (let i = 0; i < 10; ++i) {
+            mocks.push(mock<SvgPathNode>({
+                translate(x: number, y: number) { return; },
+                copy(prev) { return reinterpretCast<SvgPathNode>(this); }
+            }));
+            sut.addNode(mocks[i].subject);
+        }
+        const result = sut.translate(dx, dy);
+        expect(result).toBe(sut);
+        expect(result.nodes.length).toBe(11);
+        expect(result.first).toBe(start);
+        expect(result.lastStart).toBe(result.first);
+        for (let i = 1; i < result.nodes.length; ++i) {
+            const m = mocks[i - 1];
+            const info = m.getMemberInfo('translate') as IMockedMethodInfo;
+            expect(result.nodes[i]).toBe(m.subject);
+            expect(info.count).toBe(1);
+            expect(info.getData(0)!.arguments[0]).toBe(dx);
+            expect(info.getData(0)!.arguments[1]).toBe(dy);
+        }
+    }
+);
+
+test('builder rotate should return the builder',
+    () => {
+        const sut = new SvgPathBuilder();
+        const result = sut.rotate(0, 0, 0);
+        expect(result).toBe(sut);
+        expect(result.isEmpty).toBe(true);
+    }
+);
+
+each([
+    [0, 0, 0],
+    [-10, 12, 100],
+    [223.4, -11.2, -456],
+    [0.445, 1.22, 234.52]
+])
+.test('builder rotate should return the builder with rotated nodes (%#): ox: %f, oy: %f, degrees: %f',
+    (ox, oy, degrees) => {
+        const mocks: IMock<SvgPathNode>[] = [];
+        const sut = new SvgPathBuilder().moveTo(0, 0);
+        const start = sut.first! as SvgPathStart;
+        for (let i = 0; i < 10; ++i) {
+            mocks.push(mock<SvgPathNode>({
+                rotate(x: number, y: number, value: Angle) { return; },
+                copy(prev) { return reinterpretCast<SvgPathNode>(this); }
+            }));
+            sut.addNode(mocks[i].subject);
+        }
+        const result = sut.rotate(ox, oy, degrees);
+        expect(result).toBe(sut);
+        expect(result.nodes.length).toBe(11);
+        expect(result.first).toBe(start);
+        expect(result.lastStart).toBe(result.first);
+        for (let i = 1; i < result.nodes.length; ++i) {
+            const m = mocks[i - 1];
+            const info = m.getMemberInfo('rotate') as IMockedMethodInfo;
+            expect(result.nodes[i]).toBe(m.subject);
+            expect(info.count).toBe(1);
+            expect(info.getData(0)!.arguments[0]).toBe(ox);
+            expect(info.getData(0)!.arguments[1]).toBe(oy);
+            expect(info.getData(0)!.arguments[2].degrees).toBe(degrees);
         }
     }
 );

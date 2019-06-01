@@ -1,6 +1,7 @@
 import { SvgPathNode } from '../core/svg-path-node';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
-import { Nullable } from '../core/utils/nullable';
+import { Angle } from '../core/primitives/angle';
+import { Nullable } from 'frlluc-utils';
 import each from 'jest-each';
 
 class Mock extends SvgPathNode {
@@ -18,7 +19,13 @@ class Mock extends SvgPathNode {
     public copy(_prev: Nullable<SvgPathNode>): SvgPathNode {
         throw new Error('Method not implemented.');
     }
-    public scale(_originX: number, _originY: number, _value: number, _prev: Nullable<SvgPathNode>): SvgPathNode {
+    public scale(_originX: number, _originY: number, _value: number): void {
+        throw new Error('Method not implemented.');
+    }
+    public translate(_dx: number, _dy: number): void {
+        throw new Error('Method not implemented.');
+    }
+    public rotate(_originX: number, _originY: number, _angle: Angle): void {
         throw new Error('Method not implemented.');
     }
     public createSvgCommand(_precision: number): string {

@@ -1,6 +1,6 @@
 {
   "name": "frlluc-svg-path-builder",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "description": "A simple fluent API for dynamically creating svg paths",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -38,11 +38,14 @@
   "devDependencies": {
     "@types/jest": "^24.0.13",
     "coveralls": "^3.0.3",
-    "frlluc-mocking": "^0.9.5",
+    "frlluc-mocking": "^1.0.4",
     "jest": "^24.8.0",
     "jest-each": "^24.8.0",
     "ts-jest": "^24.0.2",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5"
+  },
+  "dependencies": {
+    "frlluc-utils": "^1.0.0"
   }
 }

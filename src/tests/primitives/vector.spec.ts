@@ -1,4 +1,5 @@
 import { Vector } from '../../core/primitives/vector';
+import { Angle } from '../../core/primitives/angle';
 import each from 'jest-each';
 
 each([
@@ -120,6 +121,38 @@ each([
 .test('set angle (%#): vector: %o, degrees: %f, expected: %o',
     (v, degrees, expected) => {
         const result = Vector.setAngle(v, degrees);
+        expect(result).toBe(v);
+        expect(result.x).toBeCloseTo(expected.x, 8);
+        expect(result.y).toBeCloseTo(expected.y, 8);
+    }
+);
+
+each([
+    [{ x: 0, y: 0 }, 0, { x: 0, y: 0 }],
+    [{ x: 0, y: 0 }, 90, { x: 0, y: 0 }],
+    [{ x: 0, y: 0 }, -180, { x: 0, y: 0 }],
+    [{ x: 0, y: 0 }, 270, { x: 0, y: 0 }],
+    [{ x: 0, y: 0 }, 540, { x: 0, y: 0 }],
+    [{ x: 2, y: 0 }, 90, { x: 0, y: -2 }],
+    [{ x: 0, y: 2 }, -180, { x: 0, y: -2 }],
+    [{ x: -2, y: 0 }, 270, { x: 0, y: -2 }],
+    [{ x: 0, y: -2 }, 540, { x: 0, y: 2 }],
+    [{ x: -2, y: 3 }, 45, { x: 0.707106781, y: 3.535533905 }],
+    [{ x: 2, y: -3 }, -135, { x: 0.707106781, y: 3.535533905 }],
+    [{ x: 2, y: 3 }, 0, { x: 2, y: 3 }],
+    [{ x: 3, y: 2 }, 540, { x: -3, y: -2 }],
+    [{ x: 5, y: 2 }, 10, { x: 5.27133512, y: 1.101374617 }],
+    [{ x: -2, y: -5 }, -20, { x: -0.169284524, y: -5.38250339 }],
+    [{ x: 5, y: 0 }, 30, { x: 4.330127018, y: -2.5 }],
+    [{ x: 0, y: 5 }, -40, { x: -3.213938048, y: 3.830222215 }],
+    [{ x: 5.5, y: 2.2 }, 360, { x: 5.5, y: 2.2 }],
+    [{ x: -2.2, y: -5.5 }, 540, { x: 2.2, y: 5.5 }],
+    [{ x: 5.5, y: -0.4 }, 700, { x: 5.305117471, y: 1.505233739 }],
+    [{ x: -0.4, y: 5.5 }, -1915, { x: -4.815645524, y: -2.686923554 }]
+])
+.test('rotate (%#): vector: %o, degrees: %f, expected: %o',
+    (v, degrees, expected) => {
+        const result = Vector.rotate(v, new Angle(degrees));
         expect(result).toBe(v);
         expect(result.x).toBeCloseTo(expected.x, 8);
         expect(result.y).toBeCloseTo(expected.y, 8);
