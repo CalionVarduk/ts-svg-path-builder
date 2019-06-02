@@ -13,6 +13,45 @@ import { SvgPathArc } from './svg-path-arc';
 import { SvgPathSmoothQuadraticCurve } from './svg-path-smooth-quadratic-curve';
 import { SvgPathSmoothCubicCurve } from './svg-path-smooth-cubic-curve';
 import { Nullable, Const } from 'frlluc-utils';
+import { normalizeAngle } from './primitives/normalize-angle';
+
+/** Specifies rectangle drawing options. */
+export type SvgRectangleOptions = {
+    /** Specifies rectangle's angle of rotation. */
+    angleInDegrees?: number;
+    /** Specifies rectangle's corner radii options. */
+    cornerRadii?: {
+        /** Specifies rectangle's top left corner radius. */
+        topLeft?: number;
+        /** Specifies rectangle's top right corner radius. */
+        topRight?: number;
+        /** Specifies rectangle's bottom left corner radius. */
+        bottomLeft?: number;
+        /** Specifies rectangle's bottom right corner radius. */
+        bottomRight?: number;
+    };
+};
+
+function ensureRectangleOptions(options: Nullable<SvgRectangleOptions>): {
+    angleInDegrees: number;
+    cornerRadii: {
+        topLeft: number;
+        topRight: number;
+        bottomLeft: number;
+        bottomRight: number;
+    };
+} {
+    options = options || {};
+    options.angleInDegrees = options.angleInDegrees || 0;
+    if (!options.cornerRadii) {
+        options.cornerRadii = {};
+    }
+    options.cornerRadii.topLeft = options.cornerRadii.topLeft || 0;
+    options.cornerRadii.topRight = options.cornerRadii.topRight || 0;
+    options.cornerRadii.bottomLeft = options.cornerRadii.bottomLeft || 0;
+    options.cornerRadii.bottomRight = options.cornerRadii.bottomRight || 0;
+    return options as any;
+}
 
 /** Instances of this class are created by the `SvgPathBuilder` after the `addRoundedCornerTo` method call. */
 export class SvgPathAfterCornerBuilder {
@@ -100,6 +139,250 @@ export class SvgPathAfterCornerBuilder {
      * */
     public build(): string {
         return this._builder.build();
+    }
+}
+
+/** Allows to build basic geometry as part of an svg path. */
+export class SvgGeometryBuilder {
+
+    private readonly _builder: SvgPathBuilder;
+
+    /**
+     * Creates new geometry builder.
+     * @param builder underlying builder
+     * */
+    public constructor(builder: SvgPathBuilder) {
+        this._builder = builder;
+    }
+
+    /** Returns the underlying svg path builder. */
+    public builder(): SvgPathBuilder {
+        return this._builder;
+    }
+
+    /**
+     * Adds a circle at the provided centre point and with the provided radius.
+     * @param cx circle's centre point's x coordinate
+     * @param cy circle's centre point's y coordinate
+     * @param r circle's radius
+     * @returns `this`
+     * */
+    public addCircle(cx: number, cy: number, r: number): SvgGeometryBuilder {
+        const minX = cx - r;
+        this._builder
+            .moveTo(minX, cy, -90)
+            .arcTo(cx + r, cy, r, r, 0, SvgPathArcStyle.CcwGt180)
+            .arcTo(minX, cy, r, r, 0, SvgPathArcStyle.CcwGt180)
+            .close();
+        return this;
+    }
+
+    /**
+     * Adds an ellipse at the provided centre point with the provided semi axes and rotated by the provided angle.
+     * @param cx ellipse's centre point's x coordinate
+     * @param cy ellipse's centre point's y coordinate
+     * @param rx ellipse's semi x axis
+     * @param ry ellipse's semi y axis
+     * @param angleInDegrees ellipse's angle of rotation
+     * @returns `this`
+     * */
+    public addEllipse(cx: number, cy: number, rx: number, ry: number, angleInDegrees: Nullable<number> = null): SvgGeometryBuilder {
+        angleInDegrees = angleInDegrees || 0;
+        const delta = Vector.mirrorY(Vector.setAngle({ x: -rx, y: 0 }, -angleInDegrees));
+        const start = Vector.sub({ x: cx, y: cy }, delta);
+        const end = Vector.add({ x: cx, y: cy }, delta);
+        this._builder
+            .moveTo(start.x, start.y, angleInDegrees - 90)
+            .arcTo(end.x, end.y, rx, ry, angleInDegrees, SvgPathArcStyle.CcwGt180)
+            .arcTo(start.x, start.y, rx, ry, angleInDegrees, SvgPathArcStyle.CcwGt180)
+            .close();
+        return this;
+    }
+
+    /**
+     * Adds a ring at the provided centre point, with the provided inner radius and width.
+     * @param cx ring's centre point's x coordinate
+     * @param cy ring's centre point's y coordinate
+     * @param innerRadius ring's inner radius
+     * @param width ring's width
+     * @returns `this`
+     * */
+    public addRing(cx: number, cy: number, innerRadius: number, width: number): SvgGeometryBuilder {
+        const r = innerRadius + width;
+        const minX = cx - r;
+        const minInnerX = cx - innerRadius;
+        this._builder
+            .moveTo(minX, cy, -90)
+            .arcTo(cx + r, cy, r, r, 0, SvgPathArcStyle.CcwGt180)
+            .arcTo(minX, cy, r, r, 0, SvgPathArcStyle.CcwGt180)
+            .moveTo(minInnerX, cy, 90)
+            .arcTo(cx + innerRadius, cy, innerRadius, innerRadius, 0, SvgPathArcStyle.CccwGt180)
+            .arcTo(minInnerX, cy, innerRadius, innerRadius, 0, SvgPathArcStyle.CccwGt180)
+            .close();
+        return this;
+    }
+
+    /**
+     * Adds a square at the provided top left point and with the provided size and options.
+     * @param left square's top left point's x coordinate
+     * @param top square's top right point's y coordinate
+     * @param size square's side length
+     * @param options square's additional drawing options
+     * @returns `this`
+     * */
+    public addSquare(left: number, top: number, size: number, options: Nullable<SvgRectangleOptions> = null): SvgGeometryBuilder {
+        return this.addRectangle(left, top, size, size, options);
+    }
+
+    /**
+     * Adds a rectangle at the provided top left point and with the provided size and options.
+     * @param left rectangle's top left point's x coordinate
+     * @param top rectangle's top left point's y coordinate
+     * @param width rectangle's width
+     * @param height rectangle's height
+     * @param options rectangle's additional drawing options
+     * @returns `this`
+     * */
+    public addRectangle(left: number, top: number, width: number, height: number, options: Nullable<SvgRectangleOptions> = null)
+        : SvgGeometryBuilder {
+        const o = ensureRectangleOptions(options);
+
+        if (!o.cornerRadii.topLeft) {
+            this._builder.moveTo(left, top, 270 + o.angleInDegrees);
+        } else {
+            const delta = Vector.setAngle({ x: o.cornerRadii.topLeft, y: 0 }, 90 - o.angleInDegrees);
+            this._builder
+                .moveTo(left - delta.x, top + delta.y, 270 + o.angleInDegrees)
+                .curveTo(left + delta.y, top + delta.x, left, top);
+        }
+        this._builder.addLine(width - o.cornerRadii.topLeft - o.cornerRadii.topRight, o.angleInDegrees);
+        this._addRoundedRectangleCorner(o.cornerRadii.topRight, -o.angleInDegrees);
+        this._builder.addLine(height - o.cornerRadii.topRight - o.cornerRadii.bottomRight, 90 + o.angleInDegrees);
+        this._addRoundedRectangleCorner(o.cornerRadii.bottomRight, 270 - o.angleInDegrees);
+        this._builder.addLine(width - o.cornerRadii.bottomRight - o.cornerRadii.bottomLeft, 180 + o.angleInDegrees);
+        this._addRoundedRectangleCorner(o.cornerRadii.bottomLeft, 180 - o.angleInDegrees);
+        this._builder.close();
+        return this;
+    }
+
+    /**
+     * Adds a polygon with the provided vertexes.
+     * @param points polygon vertexes
+     * @returns `this`
+     * */
+    public addPolygon(...points: Vector2[]): SvgGeometryBuilder {
+        if (points.length > 0) {
+            this._builder.moveTo(points[0].x, points[0].y);
+            for (let i = 1; i < points.length; ++i) {
+                this._builder.lineTo(points[i].x, points[i].y);
+            }
+            this._builder.close();
+        }
+        return this;
+    }
+
+    /**
+     * Adds a pie at the provided centre point, with the provided radius, starting angle and ending angle.
+     * @param cx pie's centre point's x coordinate
+     * @param cy pie's centre point's y coordinate
+     * @param r pie's radius
+     * @param startAngleInDegrees pie's starting angle
+     * @param endAngleInDegrees pie's ending angle
+     * @returns `this`
+     * */
+    public addPie(cx: number, cy: number, r: number, startAngleInDegrees: number, endAngleInDegrees: number): SvgGeometryBuilder {
+        startAngleInDegrees = normalizeAngle(startAngleInDegrees);
+        endAngleInDegrees = normalizeAngle(endAngleInDegrees);
+
+        if (startAngleInDegrees === endAngleInDegrees) {
+            return this.addCircle(cx, cy, r);
+        }
+        if (endAngleInDegrees < startAngleInDegrees) {
+            endAngleInDegrees += 360;
+        }
+        const start = new Angle(startAngleInDegrees - 90);
+        const end = new Angle(endAngleInDegrees - 90);
+        const x1 = cx + start.cos * r;
+        const y1 = cy + start.sin * r;
+        const x2 = cx + end.cos * r;
+        const y2 = cy + end.sin * r;
+
+        this._builder
+            .moveTo(x1, y1, startAngleInDegrees)
+            .arcTo(x2, y2, r, r, 0,
+                (endAngleInDegrees - startAngleInDegrees > 180) ? SvgPathArcStyle.CcwGt180 : SvgPathArcStyle.CcwLt180)
+            .lineTo(cx, cy)
+            .close();
+        return this;
+    }
+
+    /**
+     * Adds a ring pie at the provided centre point, with the provided inner radius, width, starting angle and ending angle.
+     * @param cx ring pie's centre point's x coordinate
+     * @param cy ring pie's centre point's y coordinate
+     * @param innerRadius ring pie's inner radius
+     * @param startAngleInDegrees pie's starting angle
+     * @param endAngleInDegrees pie's ending angle
+     * @returns `this`
+     * */
+    public addRingPie(
+        cx: number, cy: number,
+        innerRadius: number, width: number,
+        startAngleInDegrees: number, endAngleInDegrees: number): SvgGeometryBuilder {
+
+        startAngleInDegrees = normalizeAngle(startAngleInDegrees);
+        endAngleInDegrees = normalizeAngle(endAngleInDegrees);
+
+        if (startAngleInDegrees === endAngleInDegrees) {
+            return this.addRing(cx, cy, innerRadius, width);
+        }
+        if (endAngleInDegrees < startAngleInDegrees) {
+            endAngleInDegrees += 360;
+        }
+        const r = innerRadius + width;
+        const start = new Angle(startAngleInDegrees - 90);
+        const end = new Angle(endAngleInDegrees - 90);
+        const x1 = cx + start.cos * r;
+        const y1 = cy + start.sin * r;
+        const x2 = cx + end.cos * r;
+        const y2 = cy + end.sin * r;
+        const x3 = cx + start.cos * innerRadius;
+        const y3 = cy + start.sin * innerRadius;
+        const x4 = cx + end.cos * innerRadius;
+        const y4 = cy + end.sin * innerRadius;
+
+        this._builder.moveTo(x1, y1, startAngleInDegrees);
+        if (endAngleInDegrees - startAngleInDegrees > 180) {
+            this._builder
+                .arcTo(x2, y2, r, r, 0, SvgPathArcStyle.CcwGt180)
+                .lineTo(x4, y4)
+                .arcTo(x3, y3, innerRadius, innerRadius, 0, SvgPathArcStyle.CccwGt180);
+        } else {
+            this._builder
+                .arcTo(x2, y2, r, r, 0, SvgPathArcStyle.CcwLt180)
+                .lineTo(x4, y4)
+                .arcTo(x3, y3, innerRadius, innerRadius, 0, SvgPathArcStyle.CccwLt180);
+        }
+        this._builder.close();
+        return this;
+    }
+
+    /**
+     * Builds current svg path.
+     * @returns built svg path command
+     * */
+    public build(): string {
+        return this._builder.build();
+    }
+
+    private _addRoundedRectangleCorner(radius: number, angle: number): void {
+        if (radius > 0) {
+            const delta = Vector.setAngle({ x: radius, y: 0 }, angle);
+            const last = this._builder.last!;
+            const x = last.x + delta.x;
+            const y = last.y - delta.y;
+            this._builder.curveTo(x + delta.y, y + delta.x, x, y);
+        }
     }
 }
 
@@ -605,6 +888,14 @@ export class SvgPathBuilder {
      * */
     public build(): string {
         return this._nodes.map(n => n.createSvgCommand(this.precision)).join(' ');
+    }
+
+    /**
+     * Returns an instance of the `SvgGeometryBuilder` class with `this` as an underlying builder.
+     * @returns new `SvgGeometryBuilder` instance
+     * */
+    public withGeometry(): SvgGeometryBuilder {
+        return new SvgGeometryBuilder(this);
     }
 
     private _validatePathStart(): void {
