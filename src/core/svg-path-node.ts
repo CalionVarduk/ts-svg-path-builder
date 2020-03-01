@@ -1,11 +1,11 @@
 import { Vector2 } from './primitives/vector';
 import { SvgPathNodeType } from './svg-path-node-type';
 import { Angle } from './primitives/angle';
-import { Nullable } from 'frlluc-utils';
+import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
 
 /** Specifies an svg path node. */
-export abstract class SvgPathNode {
-
+export abstract class SvgPathNode
+{
     /** Returns node's type. */
     public abstract get type(): SvgPathNodeType;
     /** Returns node's angle in degrees. */
@@ -17,16 +17,21 @@ export abstract class SvgPathNode {
     public abstract y: number;
 
     /** Specifies node's coordinates. */
-    public set point(value: Vector2) {
-        if (value) {
+    public set point(value: Vector2)
+    {
+        if (value)
+        {
             this.x = value.x;
             this.y = value.y;
-        } else {
+        }
+        else
+        {
             this.x = 0;
             this.y = 0;
         }
     }
-    public get point(): Vector2 {
+    public get point(): Vector2
+    {
         return { x: this.x, y: this.y };
     }
 

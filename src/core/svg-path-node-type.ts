@@ -1,5 +1,6 @@
 /** Specifies svg path node type. */
-export enum SvgPathNodeType {
+export enum SvgPathNodeType
+{
     Start = 0,
     Close = 1,
     Line = 2,

@@ -2,14 +2,15 @@ const _HALF_PI_DEGREES_BY_PI = 180 / Math.PI;
 const _PI_BY_HALF_PI_DEGREES = Math.PI / 180;
 
 /** Represents basic angle data. */
-export class Angle {
-
+export class Angle
+{
     /**
      * Converts radians to degrees.
      * @param radians angle in radians to convert
      * @returns angle converted to degrees
      * */
-    public static toDegrees(radians: number): number {
+    public static toDegrees(radians: number): number
+    {
         return radians * _HALF_PI_DEGREES_BY_PI;
     }
     /**
@@ -17,20 +18,24 @@ export class Angle {
      * @param degrees angle in degrees to convert
      * @returns angle converted to radians
      * */
-    public static toRadians(degrees: number): number {
+    public static toRadians(degrees: number): number
+    {
         return degrees * _PI_BY_HALF_PI_DEGREES;
     }
 
     /** Returns the angle's sine. */
-    public get sin(): number {
+    public get sin(): number
+    {
         return this._sin;
     }
     /** Returns the angle's cosine. */
-    public get cos(): number {
+    public get cos(): number
+    {
         return this._cos;
     }
     /** Returns the angle's radians. */
-    public get radians(): number {
+    public get radians(): number
+    {
         return Angle.toRadians(this.degrees);
     }
 
@@ -43,7 +48,8 @@ export class Angle {
      * */
     public constructor(
         /** Specifies the angle's degrees. */
-        public readonly degrees: number) {
+        public readonly degrees: number)
+    {
         const radians = Angle.toRadians(degrees);
         this._sin = Math.sin(radians);
         this._cos = Math.cos(radians);

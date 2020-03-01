@@ -1,9 +1,11 @@
 import { Vector2, Vector } from './vector';
 import * as utils from './normalize-angle';
-import { Nullable, Const } from 'frlluc-utils';
+import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
+import { DeepReadonly } from 'frl-ts-utils/lib/core/types/deep-readonly';
 
 /** 2D line literal type alias. */
-export type Line2 = {
+export type Line2 =
+{
     /** Point on the line. */
     p: Vector2;
     /** Angle in degrees of the line. */
@@ -11,9 +13,10 @@ export type Line2 = {
 };
 
 /** Contains helper functions that allow to manipulate line literals. */
-export namespace Line {
-
-    function _createIntersectionPoint(p: Const<Vector2>, d: Vector2, t: number): Vector2 {
+export namespace Line
+{
+    function _createIntersectionPoint(p: DeepReadonly<Vector2>, d: Vector2, t: number): Vector2
+    {
         return Vector.add(Vector.scale(d, t), p);
     }
 
@@ -22,7 +25,8 @@ export namespace Line {
      * @param l target line literal to copy
      * @returns a copy of `l`
      * */
-    export function copy(l: Const<Line2>): Line2 {
+    export function copy(l: DeepReadonly<Line2>): Line2
+    {
         return { p: { x: l.p.x, y: l.p.y }, angle: l.angle };
     }
     /**
@@ -31,7 +35,8 @@ export namespace Line {
      * @param other line literal to assign properties from
      * @returns `l`
      * */
-    export function assign(l: Line2, other: Const<Line2>): Line2 {
+    export function assign(l: Line2, other: DeepReadonly<Line2>): Line2
+    {
         l.p.x = other.p.x;
         l.p.y = other.p.y;
         l.angle = other.angle;
@@ -43,7 +48,8 @@ export namespace Line {
      * @param t offset value. If negative, then the point will be moved at the `l.angle - 180` angle.
      * @returns point on `l`
      * */
-    export function createPointOn(l: Const<Line2>, t: number): Vector2 {
+    export function createPointOn(l: DeepReadonly<Line2>, t: number): Vector2
+    {
         return Vector.add(Vector.setAngle({ x: t, y: 0 }, l.angle), l.p);
     }
     /**
@@ -52,17 +58,18 @@ export namespace Line {
      * @param l2 second line literal
      * @returns line intersection solution or `null`, if lines `l1` and `l2` are parallel to each other
      * */
-    export function createIntersectionSolution(l1: Const<Line2>, l2: Const<Line2>): Nullable<{
+    export function createIntersectionSolution(l1: DeepReadonly<Line2>, l2: DeepReadonly<Line2>): Nullable<{
         p1: Vector2;
         d1: Vector2;
         p2: Vector2;
         d2: Vector2;
         t: number;
         u: number;
-    }> {
-        if (areParallel(l1, l2)) {
+    }>
+    {
+        if (areParallel(l1, l2))
             return null;
-        }
+
         const p1 = l1.p;
         const p2 = createPointOn(l1, 1);
         const q1 = l2.p;
@@ -86,7 +93,8 @@ export namespace Line {
      * @param l2 second line literal
      * @returns intersection point or `null`, if lines `l1` and `l2` are parallel to each other
      * */
-    export function findIntersection(l1: Const<Line2>, l2: Const<Line2>): Nullable<Vector2> {
+    export function findIntersection(l1: DeepReadonly<Line2>, l2: DeepReadonly<Line2>): Nullable<Vector2>
+    {
         const sol = createIntersectionSolution(l1, l2);
         return sol ? _createIntersectionPoint(sol.p1, sol.d1, sol.t) : null;
     }
@@ -96,7 +104,8 @@ export namespace Line {
      * @param ray second line literal representing a ray
      * @returns intersection point or `null`, if line `l` and ray `ray` don't intersect each other
      * */
-    export function findRayIntersection(l: Const<Line2>, ray: Const<Line2>): Nullable<Vector2> {
+    export function findRayIntersection(l: DeepReadonly<Line2>, ray: DeepReadonly<Line2>): Nullable<Vector2>
+    {
         const sol = createIntersectionSolution(ray, l);
         return sol && sol.t >= 0 ? _createIntersectionPoint(sol.p1, sol.d1, sol.t) : null;
     }
@@ -105,7 +114,8 @@ export namespace Line {
      * @param l target line literal
      * @returns `l`
      * */
-    export function normalizeAngle(l: Line2): Line2 {
+    export function normalizeAngle(l: Line2): Line2
+    {
         l.angle = utils.normalizeAngle(l.angle);
         return l;
     }
@@ -115,7 +125,8 @@ export namespace Line {
      * @param l2 second line literal
      * @returns `true`, if lines are parallel to each other, otherwise `false`
      * */
-    export function areParallel(l1: Const<Line2>, l2: Const<Line2>): boolean {
+    export function areParallel(l1: DeepReadonly<Line2>, l2: DeepReadonly<Line2>): boolean
+    {
         const ans = (l1.angle - l2.angle) % 180;
         return ans === 0 || ans === -0;
     }
@@ -124,7 +135,8 @@ export namespace Line {
      * @param l target line literal
      * @returns `l`
      * */
-    export function mirrorX(l: Line2): Line2 {
+    export function mirrorX(l: Line2): Line2
+    {
         l.p.x = -l.p.x;
         l.angle = 180 - l.angle;
         return l;
@@ -134,7 +146,8 @@ export namespace Line {
      * @param l target line literal
      * @returns `l`
      * */
-    export function mirrorY(l: Line2): Line2 {
+    export function mirrorY(l: Line2): Line2
+    {
         l.p.y = -l.p.y;
         l.angle = -l.angle;
         return l;
@@ -144,7 +157,8 @@ export namespace Line {
      * @param l target line literal
      * @returns `l`
      * */
-    export function mirror(l: Line2): Line2 {
+    export function mirror(l: Line2): Line2
+    {
         return mirrorY(mirrorX(l));
     }
 }

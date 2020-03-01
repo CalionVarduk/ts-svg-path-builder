@@ -26,7 +26,8 @@ each([
     [{ p: { x: -0.4, y: 5.5 }, angle: -1111 }]
 ])
 .test('copy (%#): line: %o',
-    (l) => {
+    (l) =>
+    {
         const result = Line.copy(l);
         expect(result).toBeDefined();
         expect(result).not.toBeNull();
@@ -64,7 +65,8 @@ each([
     [{ p: { x: -0.4, y: 5.5 }, angle: -1111 }, { p: { x: 5.6, y: 5.5 }, angle: -1111 }]
 ])
 .test('assign (%#): line1: %o, line2: %o',
-    (l1, l2) => {
+    (l1, l2) =>
+    {
         const result = Line.assign(l1, l2);
         expect(result).toBe(l1);
         expect(result.p).toBeDefined();
@@ -100,7 +102,8 @@ each([
     [{ p: { x: -0.4, y: 5.5 }, angle: 300.88 }, 30.88, { x: 15.448903684, y: -21.002578214 }]
 ])
 .test('create point on (%#): line: %o, t: %f, expected point: %o',
-    (l, t, expected) => {
+    (l, t, expected) =>
+    {
         const result = Line.createPointOn(l, t);
         expect(result).toBeDefined();
         expect(result).not.toBeNull();
@@ -189,11 +192,13 @@ each([
     [{ p: { x: -0.4, y: 5.5 }, angle: -1111 }, { p: { x: 5.6, y: 5.5 }, angle: -1111 }, null]
 ])
 .test('create intersection solution (%#): line1: %o, line2: %o, expected: %o',
-    (l1, l2, expected) => {
+    (l1, l2, expected) =>
+    {
         const result = Line.createIntersectionSolution(l1, l2);
-        if (expected === null) {
+        if (expected === null)
             expect(result).toBeNull();
-        } else {
+        else
+        {
             expect(result).toBeDefined();
             expect(result).not.toBeNull();
             expect(result).not.toBe(l1.p);
@@ -236,11 +241,13 @@ each([
     [{ p: { x: -0.4, y: 5.5 }, angle: -1111 }, { p: { x: 5.6, y: 5.5 }, angle: -1111 }, null]
 ])
 .test('find intersection (%#): line1: %o, line2: %o, expected: %o',
-    (l1, l2, expected) => {
+    (l1, l2, expected) =>
+    {
         const result = Line.findIntersection(l1, l2);
-        if (expected === null) {
+        if (expected === null)
             expect(result).toBeNull();
-        } else {
+        else
+        {
             expect(result).toBeDefined();
             expect(result).not.toBeNull();
             expect(result).not.toBe(l1.p);
@@ -275,11 +282,13 @@ each([
     [{ p: { x: -0.4, y: 5.5 }, angle: -1111 }, { p: { x: 5.6, y: 5.5 }, angle: -1111 }, null]
 ])
 .test('find ray intersection (%#): line: %o, ray: %o, expected: %o',
-    (l, r, expected) => {
+    (l, r, expected) =>
+    {
         const result = Line.findRayIntersection(l, r);
-        if (expected === null) {
+        if (expected === null)
             expect(result).toBeNull();
-        } else {
+        else
+        {
             expect(result).toBeDefined();
             expect(result).not.toBeNull();
             expect(result).not.toBe(l.p);
@@ -314,7 +323,8 @@ each([
     [{ p: { x: -0.4, y: 5.5 }, angle: 300.88 }, 300.88]
 ])
 .test('normalize angle (%#): line: %o, expected angle: %f',
-    (l, expectedAngle) => {
+    (l, expectedAngle) =>
+    {
         const x: number = l.p.x;
         const y: number = l.p.y;
         const p: Vector2 = l.p;
@@ -351,7 +361,8 @@ each([
     [{ p: { x: -0.4, y: 5.5 }, angle: 300.88 }, 0.4, -120.88]
 ])
 .test('mirror x (%#): line: %o, expected x: %f, expected angle: %f',
-    (l, expectedX, expectedAngle) => {
+    (l, expectedX, expectedAngle) =>
+    {
         const y: number = l.p.y;
         const p: Vector2 = l.p;
         const result = Line.mirrorX(l);
@@ -387,7 +398,8 @@ each([
     [{ p: { x: -0.4, y: 5.5 }, angle: 300.88 }, -5.5, -300.88]
 ])
 .test('mirror y (%#): line: %o, expected y: %f, expected angle: %f',
-    (l, expectedY, expectedAngle) => {
+    (l, expectedY, expectedAngle) =>
+    {
         const x: number = l.p.x;
         const p: Vector2 = l.p;
         const result = Line.mirrorY(l);
@@ -423,7 +435,8 @@ each([
     [{ p: { x: -0.4, y: 5.5 }, angle: 300.88 }, 0.4, -5.5, 120.88]
 ])
 .test('mirror (%#): line: %o, expected x: %f, expected y: %f, expected angle: %f',
-    (l, expectedX, expectedY, expectedAngle) => {
+    (l, expectedX, expectedY, expectedAngle) =>
+    {
         const p: Vector2 = l.p;
         const result = Line.mirror(l);
         expect(result).toBe(l);

@@ -4,53 +4,68 @@ import { Vector, Vector2 } from './primitives/vector';
 import { Angle } from './primitives/angle';
 
 /** Specifies an svg path quadratic curve node. */
-export class SvgPathQuadraticCurve extends SvgPathNode {
-
-    public get type(): SvgPathNodeType {
+export class SvgPathQuadraticCurve extends SvgPathNode
+{
+    public get type(): SvgPathNodeType
+    {
         return SvgPathNodeType.QuadraticCurve;
     }
-    public get angleInDegrees(): number {
+    public get angleInDegrees(): number
+    {
         return Vector.getAngle({ x: this.x - this.bezierX, y: this.y - this.bezierY });
     }
 
     /** Specifies curve node's bezier point's x coordinate. */
-    public set bezierX(value: number) {
+    public set bezierX(value: number)
+    {
         this._bezierX = value || 0;
     }
-    public get bezierX(): number {
+    public get bezierX(): number
+    {
         return this._bezierX;
     }
     /** Specifies curve node's bezier point's y coordinate. */
-    public set bezierY(value: number) {
+    public set bezierY(value: number)
+    {
         this._bezierY = value || 0;
     }
-    public get bezierY(): number {
+    public get bezierY(): number
+    {
         return this._bezierY;
     }
     /** Specifies curve node's bezier point's coordinates. */
-    public set bezierPoint(value: Vector2) {
-        if (value) {
+    public set bezierPoint(value: Vector2)
+    {
+        if (value)
+        {
             this.bezierX = value.x;
             this.bezierY = value.y;
-        } else {
+        }
+        else
+        {
             this.bezierX = 0;
             this.bezierY = 0;
         }
     }
-    public get bezierPoint(): Vector2 {
+    public get bezierPoint(): Vector2
+    {
         return { x: this.bezierX, y: this.bezierY };
     }
 
-    public set x(value: number) {
+    public set x(value: number)
+    {
         this._x = value || 0;
     }
-    public get x(): number {
+    public get x(): number
+    {
         return this._x;
     }
-    public set y(value: number) {
+    public set y(value: number)
+    {
         this._y = value || 0;
     }
-    public get y(): number {
+    public get y(): number
+    {
         return this._y;
     }
 
@@ -67,11 +82,12 @@ export class SvgPathQuadraticCurve extends SvgPathNode {
      * @param bezierY bezier point's y coordinate
      * @param prev node's predecessor
      * */
-    public constructor(x: number, y: number, bezierX: number, bezierY: number, prev: SvgPathNode) {
+    public constructor(x: number, y: number, bezierX: number, bezierY: number, prev: SvgPathNode)
+    {
         super(prev);
-        if (!prev) {
+        if (!prev)
             throw new Error('svg path quadratic curve node lacks predecessor node');
-        }
+
         this._x = x || 0;
         this._y = y || 0;
         this._bezierX = bezierX || 0;
@@ -83,7 +99,8 @@ export class SvgPathQuadraticCurve extends SvgPathNode {
      * @param prev predecessor node
      * @returns a copy of this node
      * */
-    public copy(prev: SvgPathNode): SvgPathQuadraticCurve {
+    public copy(prev: SvgPathNode): SvgPathQuadraticCurve
+    {
         return new SvgPathQuadraticCurve(this.x, this.y, this.bezierX, this.bezierY, prev);
     }
     /**
@@ -92,7 +109,8 @@ export class SvgPathQuadraticCurve extends SvgPathNode {
      * @param originY y coordinate of the scaling origin point
      * @param value scale value
      * */
-    public scale(originX: number, originY: number, value: number): void {
+    public scale(originX: number, originY: number, value: number): void
+    {
         this.x = (this.x - originX) * value + originX;
         this.y = (this.y - originY) * value + originY;
         this.bezierX = (this.bezierX - originX) * value + originX;
@@ -103,7 +121,8 @@ export class SvgPathQuadraticCurve extends SvgPathNode {
      * @param dx x coordinate offset
      * @param dy y coordinate offset
      * */
-    public translate(dx: number, dy: number): void {
+    public translate(dx: number, dy: number): void
+    {
         this.x += dx;
         this.y += dy;
         this.bezierX += dx;
@@ -115,7 +134,8 @@ export class SvgPathQuadraticCurve extends SvgPathNode {
      * @param originY y coordinate of the rotation origin point
      * @param angle angle to rotate by
      * */
-    public rotate(originX: number, originY: number, angle: Angle): void {
+    public rotate(originX: number, originY: number, angle: Angle): void
+    {
         let x = this.x - originX;
         let y = this.y - originY;
         this.x = (x * angle.cos + y * angle.sin) + originX;
@@ -130,7 +150,8 @@ export class SvgPathQuadraticCurve extends SvgPathNode {
      * @param precision number of digits after the decimal point
      * @returns created svg command
      * */
-    public createSvgCommand(precision: number): string {
+    public createSvgCommand(precision: number): string
+    {
         const bx = this.bezierX.toFixed(precision);
         const by = this.bezierY.toFixed(precision);
         const x = this.x.toFixed(precision);

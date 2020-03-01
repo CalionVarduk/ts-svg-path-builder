@@ -25,7 +25,8 @@ each([
     [-1111, -19.390607989]
 ])
 .test('to radians (%#): degrees: %f, expected radians: %f',
-    (v, expected) => {
+    (v, expected) =>
+    {
         expect(Angle.toRadians(v)).toBeCloseTo(expected, 8);
     }
 );
@@ -54,7 +55,8 @@ each([
     [-19.390607989, -1111]
 ])
 .test('to degrees (%#): radians: %f, expected degrees: %f',
-    (v, expected) => {
+    (v, expected) =>
+    {
         expect(Angle.toDegrees(v)).toBeCloseTo(expected, 6);
     }
 );
@@ -83,7 +85,8 @@ each([
     [-1111, -0.515038074, 0.8571673, -19.390607989]
 ])
 .test('ctor should create properly (%#): degrees: %f, expected sin: %f, expected cos: %f, expected radians: %f',
-    (degrees, expectedSin, expectedCos, expectedRad) => {
+    (degrees, expectedSin, expectedCos, expectedRad) =>
+    {
         const sut = new Angle(degrees);
         expect(sut.degrees).toBe(degrees);
         expect(sut.sin).toBeCloseTo(expectedSin, 8);

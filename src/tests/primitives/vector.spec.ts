@@ -26,7 +26,8 @@ each([
     [{ x: -0.4, y: 5.5 }, 30.41]
 ])
 .test('magnitude sq (%#): vector: %o, expected: %f',
-    (v, expected) => {
+    (v, expected) =>
+    {
         expect(Vector.magnitudeSq(v)).toBeCloseTo(expected, 8);
     }
 );
@@ -55,7 +56,8 @@ each([
     [{ x: -0.4, y: 5.5 }, 5.514526271]
 ])
 .test('magnitude (%#): vector: %o, expected: %f',
-    (v, expected) => {
+    (v, expected) =>
+    {
         expect(Vector.magnitude(v)).toBeCloseTo(expected, 8);
     }
 );
@@ -84,13 +86,14 @@ each([
     [{ x: -0.4, y: 5.5 }, 94.159642293]
 ])
 .test('get angle (%#): vector: %o, expected: %f',
-    (v, expected) => {
+    (v, expected) =>
+    {
         let result = Vector.getAngle(v);
-        if (result === -0) {
+        if (result === -0)
             result = 0;
-        } else if (result < 0) {
+        else if (result < 0)
             result += 360;
-        }
+
         expect(result).toBeCloseTo(expected, 8);
     }
 );
@@ -119,7 +122,8 @@ each([
     [{ x: -0.4, y: 5.5 }, -1915, { x: -2.330539507, y: -4.997858101 }]
 ])
 .test('set angle (%#): vector: %o, degrees: %f, expected: %o',
-    (v, degrees, expected) => {
+    (v, degrees, expected) =>
+    {
         const result = Vector.setAngle(v, degrees);
         expect(result).toBe(v);
         expect(result.x).toBeCloseTo(expected.x, 8);
@@ -151,7 +155,8 @@ each([
     [{ x: -0.4, y: 5.5 }, -1915, { x: -4.815645524, y: -2.686923554 }]
 ])
 .test('rotate (%#): vector: %o, degrees: %f, expected: %o',
-    (v, degrees, expected) => {
+    (v, degrees, expected) =>
+    {
         const result = Vector.rotate(v, new Angle(degrees));
         expect(result).toBe(v);
         expect(result.x).toBeCloseTo(expected.x, 8);
@@ -183,7 +188,8 @@ each([
     [{ x: -0.4, y: 5.5 }, { x: 0.4, y: -3.2 }, -0.92]
 ])
 .test('cross (%#): vector1: %o, vector2: %o, expected: %f',
-    (v1, v2, expected) => {
+    (v1, v2, expected) =>
+    {
         expect(Vector.cross(v1, v2)).toBeCloseTo(expected, 8);
     }
 );
@@ -212,7 +218,8 @@ each([
     [{ x: -0.4, y: 5.5 }, { x: 0.4, y: -3.2 }, -17.76]
 ])
 .test('dot (%#): vector1: %o, vector2: %o, expected: %f',
-    (v1, v2, expected) => {
+    (v1, v2, expected) =>
+    {
         expect(Vector.dot(v1, v2)).toBeCloseTo(expected, 8);
     }
 );
@@ -241,7 +248,8 @@ each([
     [{ x: -0.4, y: 5.5 }]
 ])
 .test('copy (%#): vector: %o',
-    (v) => {
+    (v) =>
+    {
         const result = Vector.copy(v);
         expect(result).toBeDefined();
         expect(result).not.toBeNull();
@@ -275,7 +283,8 @@ each([
     [{ x: -0.4, y: 5.5 }, { x: 0.4, y: -3.2 }]
 ])
 .test('assign (%#): vector1: %o, vector2: %o',
-    (v1, v2) => {
+    (v1, v2) =>
+    {
         const result = Vector.assign(v1, v2);
         expect(result).toBe(v1);
         expect(result.x).toBe(v2.x);
@@ -307,7 +316,8 @@ each([
     [{ x: -0.4, y: 5.5 }, -0.072535695, 0.997365816]
 ])
 .test('normalize (%#): vector: %o, expected x: %f, expected y: %f',
-    (v, expectedX, expectedY) => {
+    (v, expectedX, expectedY) =>
+    {
         const result = Vector.normalize(v);
         expect(result).toBe(v);
         expect(result.x).toBeCloseTo(expectedX, 8);
@@ -339,7 +349,8 @@ each([
     [{ x: -0.4, y: 5.5 }, { x: 0.4, y: -3.2 }, { x: 0, y: 2.3 }]
 ])
 .test('add (%#): vector1: %o, vector2: %o, expected: %o',
-    (v1, v2, expected) => {
+    (v1, v2, expected) =>
+    {
         const result = Vector.add(v1, v2);
         expect(result).toBe(v1);
         expect(result.x).toBeCloseTo(expected.x, 8);
@@ -371,7 +382,8 @@ each([
     [{ x: -0.4, y: 5.5 }, 5.4, { x: 5, y: 10.9 }]
 ])
 .test('add scalar (%#): vector: %o, scalar: %f, expected: %o',
-    (v, scalar, expected) => {
+    (v, scalar, expected) =>
+    {
         const result = Vector.addScalar(v, scalar);
         expect(result).toBe(v);
         expect(result.x).toBeCloseTo(expected.x, 8);
@@ -403,7 +415,8 @@ each([
     [{ x: -0.4, y: 5.5 }, { x: 0.4, y: -3.2 }, { x: -0.8, y: 8.7 }]
 ])
 .test('sub (%#): vector1: %o, vector2: %o, expected: %o',
-    (v1, v2, expected) => {
+    (v1, v2, expected) =>
+    {
         const result = Vector.sub(v1, v2);
         expect(result).toBe(v1);
         expect(result.x).toBeCloseTo(expected.x, 8);
@@ -435,7 +448,8 @@ each([
     [{ x: -0.4, y: 5.5 }, 5.4, { x: -5.8, y: 0.1 }]
 ])
 .test('sub scalar (%#): vector: %o, scalar: %f, expected: %o',
-    (v, scalar, expected) => {
+    (v, scalar, expected) =>
+    {
         const result = Vector.subScalar(v, scalar);
         expect(result).toBe(v);
         expect(result.x).toBeCloseTo(expected.x, 8);
@@ -467,7 +481,8 @@ each([
     [{ x: -0.4, y: 5.5 }, 5.4, { x: -2.16, y: 29.7 }]
 ])
 .test('scale (%#): vector: %o, scalar: %f, expected: %o',
-    (v, scalar, expected) => {
+    (v, scalar, expected) =>
+    {
         const result = Vector.scale(v, scalar);
         expect(result).toBe(v);
         expect(result.x).toBeCloseTo(expected.x, 8);
@@ -499,7 +514,8 @@ each([
     [{ x: -0.4, y: 5.5 }, 0.4]
 ])
 .test('mirror x (%#): vector: %o, expected x: %f',
-    (v, expectedX) => {
+    (v, expectedX) =>
+    {
         const y: number = v.y;
         const result = Vector.mirrorX(v);
         expect(result).toBe(v);
@@ -532,7 +548,8 @@ each([
     [{ x: -0.4, y: 5.5 }, -5.5]
 ])
 .test('mirror y (%#): vector: %o, expected y: %f',
-    (v, expectedY) => {
+    (v, expectedY) =>
+    {
         const x: number = v.x;
         const result = Vector.mirrorY(v);
         expect(result).toBe(v);
@@ -565,7 +582,8 @@ each([
     [{ x: -0.4, y: 5.5 }, 0.4, -5.5]
 ])
 .test('mirror (%#): vector: %o, expected x: %f, expected y: %f',
-    (v, expectedX, expectedY) => {
+    (v, expectedX, expectedY) =>
+    {
         const result = Vector.mirror(v);
         expect(result).toBe(v);
         expect(result.x).toBeCloseTo(expectedX, 8);

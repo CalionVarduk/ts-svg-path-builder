@@ -1,5 +1,6 @@
 /** Specifies svg path arc node style. */
-export enum SvgPathArcStyle {
+export enum SvgPathArcStyle
+{
     /** LargeArcFlag: `false`, SweepFlag: `false` */
     CccwLt180 = 0,
     /** LargeArcFlag: `true`, SweepFlag: `false` */

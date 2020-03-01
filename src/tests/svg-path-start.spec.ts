@@ -1,10 +1,11 @@
 import { SvgPathStart } from '../core/svg-path-start';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
 import { Angle } from '../core/primitives/angle';
-import { Nullable } from 'frlluc-utils';
+import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
 import each from 'jest-each';
 
-function createDefault(prev: Nullable<SvgPathStart> = null): SvgPathStart {
+function createDefault(prev: Nullable<SvgPathStart> = null): SvgPathStart
+{
     return new SvgPathStart(0, 0, 0, prev);
 }
 
@@ -16,7 +17,8 @@ each([
     [null, 5, null, createDefault(createDefault())]
 ])
 .test('ctor should create with provided parameters (%#): x: %f, y: %f, angle in degrees: %f, prev: %o',
-    (x, y, angle, prev) => {
+    (x, y, angle, prev) =>
+    {
         const sut = new SvgPathStart(x, y, angle, prev);
         expect(sut.x).toBe(x || 0);
         expect(sut.y).toBe(y || 0);
@@ -26,7 +28,8 @@ each([
 );
 
 test('type getter should return start',
-    () => {
+    () =>
+    {
         const sut = createDefault();
         expect(sut.type).toBe(SvgPathNodeType.Start);
     }
@@ -39,7 +42,8 @@ each([
     [null, null]
 ])
 .test('x and y setters should set correct values (%#): x: %f, y: %f',
-    (x, y) => {
+    (x, y) =>
+    {
         const sut = createDefault();
         sut.x = x;
         sut.y = y;
@@ -53,7 +57,8 @@ each([
     [10, -50, 30, createDefault()]
 ])
 .test('copy should return new valid object (%#): x: %f, y: %f, angle: %f, prev: %o',
-    (x, y, angle, prev) => {
+    (x, y, angle, prev) =>
+    {
         const sut = new SvgPathStart(x, y, angle, createDefault());
         const result = sut.copy(prev);
         expect(result).toBeDefined();
@@ -68,7 +73,8 @@ each([
 );
 
 test('copy should not throw when prev is not defined',
-    () => {
+    () =>
+    {
         const sut = new SvgPathStart(0, 0, 0, createDefault());
         const action = () => sut.copy(null as any);
         expect(action).not.toThrow();
@@ -84,7 +90,8 @@ each([
     [3.3, 22.87, -80, { x: 12.1, y: 3.5 }, 2.8, { x: -12.54, y: 57.736 }]
 ])
 .test('scale should modify node properly (%#): x: %f, y: %f, angle: %f, origin: %o, scale: %f, expected point: %o',
-    (x, y, angle, origin, scale, expected) => {
+    (x, y, angle, origin, scale, expected) =>
+    {
         const sut = new SvgPathStart(x, y, angle, createDefault());
         sut.scale(origin.x, origin.y, scale);
         expect(sut.x).toBeCloseTo(expected.x, 8);
@@ -102,7 +109,8 @@ each([
     [3.3, 22.87, -80, 12.1, -2.8, { x: 15.4, y: 20.07 }]
 ])
 .test('translate should modify node properly (%#): x: %f, y: %f, angle: %f, dx: %f, dy: %f, expected point: %o',
-    (x, y, angle, dx, dy, expected) => {
+    (x, y, angle, dx, dy, expected) =>
+    {
         const sut = new SvgPathStart(x, y, angle, createDefault());
         sut.translate(dx, dy);
         expect(sut.x).toBeCloseTo(expected.x, 8);
@@ -120,7 +128,8 @@ each([
     [3.3, 22.87, -80, { x: 12.1, y: 3.5 }, -387, { x: -4.534653392, y: 16.763679975 }, -467]
 ])
 .test('rotate should modify node properly (%#): x: %f, y: %f, angle: %f, origin: %o, value: %f, expected point: %o, expected angle: %f',
-    (x, y, angle, origin, value, expected, expectedAngle) => {
+    (x, y, angle, origin, value, expected, expectedAngle) =>
+    {
         const sut = new SvgPathStart(x, y, angle, createDefault());
         sut.rotate(origin.x, origin.y, new Angle(value));
         expect(sut.x).toBeCloseTo(expected.x, 8);
@@ -137,7 +146,8 @@ each([
     [1, -0.0005543, 4, 'M 1.0000 -0.0006']
 ])
 .test('create svg command should return correct result (%#): x: %f, y: %f, precision: %f, expected: %s',
-    (x, y, precision, expected) => {
+    (x, y, precision, expected) =>
+    {
         const sut = new SvgPathStart(x, y, 0, null);
         expect(sut.createSvgCommand(precision)).toBe(expected);
     }
