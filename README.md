@@ -1,4 +1,4 @@
-# SVG Path Builder
+# FRL TypeScript SVG Path Builder
 
 [![Build Status](https://travis-ci.com/CalionVarduk/ts-svg-path-builder.png?branch=master)](https://travis-ci.com/CalionVarduk/ts-svg-path-builder)
 [![Coverage Status](https://coveralls.io/repos/github/CalionVarduk/ts-svg-path-builder/badge.svg)](https://coveralls.io/github/CalionVarduk/ts-svg-path-builder)
