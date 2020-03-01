@@ -5,11 +5,13 @@ import { SvgPathNodeType } from '../core/svg-path-node-type';
 import { Angle } from '../core/primitives/angle';
 import each from 'jest-each';
 
-function createDefault(prev: SvgPathNode): SvgPathQuadraticCurve {
+function createDefault(prev: SvgPathNode): SvgPathQuadraticCurve
+{
     return new SvgPathQuadraticCurve(0, 0, 0, 0, prev);
 }
 
-function createStart(x: number = 0, y: number = 0): SvgPathStart {
+function createStart(x: number = 0, y: number = 0): SvgPathStart
+{
     return new SvgPathStart(x, y, 0, null);
 }
 
@@ -19,7 +21,8 @@ each([
     [null, null, null, null, createDefault(createStart())]
 ])
 .test('ctor should create with provided parameters (%#): x: %f, y: %f, bezier x: %f, bezier y: %f, prev: %o',
-    (x, y, bx, by, prev) => {
+    (x, y, bx, by, prev) =>
+    {
         const sut = new SvgPathQuadraticCurve(x, y, bx, by, prev);
         expect(sut.x).toBe(x || 0);
         expect(sut.y).toBe(y || 0);
@@ -30,14 +33,16 @@ each([
 );
 
 test('ctor should throw when prev is not defined',
-    () => {
+    () =>
+    {
         const action = () => new SvgPathQuadraticCurve(0, 0, 0, 0, null as any);
         expect(action).toThrowError();
     }
 );
 
 test('type getter should return quadratic curve',
-    () => {
+    () =>
+    {
         const sut = createDefault(createStart());
         expect(sut.type).toBe(SvgPathNodeType.QuadraticCurve);
     }
@@ -51,7 +56,8 @@ each([
     [-55.6, 11.234, -66.834, -0.63423, 46.572557157]
 ])
 .test('angle in degrees getter should return correct value (%#): x: %f, y: %f, bezier x: %f, bezier y: %f, expected: %f',
-    (x, y, bx, by, expected) => {
+    (x, y, bx, by, expected) =>
+    {
         const sut = new SvgPathQuadraticCurve(x, y, bx, by, createStart());
         expect(sut.angleInDegrees).toBeCloseTo(expected, 8);
     }
@@ -64,7 +70,8 @@ each([
     [null, null]
 ])
 .test('x and y setters should set correct values (%#): x: %f, y: %f',
-    (x, y) => {
+    (x, y) =>
+    {
         const sut = createDefault(createStart());
         sut.x = x;
         sut.y = y;
@@ -80,7 +87,8 @@ each([
     [null, null]
 ])
 .test('bezier x and y setters should set correct values (%#): x: %f, y: %f',
-    (x, y) => {
+    (x, y) =>
+    {
         const sut = createDefault(createStart());
         sut.bezierX = x;
         sut.bezierY = y;
@@ -90,7 +98,8 @@ each([
 );
 
 test('bezier point getter should return correct x and y',
-    () => {
+    () =>
+    {
         const sut = createDefault(createStart());
         expect(sut.bezierPoint).toStrictEqual({ x: sut.bezierX, y: sut.bezierY });
     }
@@ -103,7 +112,8 @@ each([
     [{ x: -2, y: 17 }]
 ])
 .test('bezier point setter should set correct x and y (%#): value: %o',
-    (value) => {
+    (value) =>
+    {
         const sut = createDefault(createStart());
         sut.bezierPoint = value;
         expect(sut.bezierPoint).toStrictEqual(value || { x: 0, y: 0 });
@@ -115,7 +125,8 @@ each([
     [10, -50, 20, 40, createStart()]
 ])
 .test('copy should return new valid object (%#): x: %f, y: %f, bezier x: %f, bezier y: %f, prev: %o',
-    (x, y, bx, by, prev) => {
+    (x, y, bx, by, prev) =>
+    {
         const sut = new SvgPathQuadraticCurve(x, y, bx, by, createStart());
         const result = sut.copy(prev);
         expect(result).toBeDefined();
@@ -131,7 +142,8 @@ each([
 );
 
 test('copy should throw when prev is not defined',
-    () => {
+    () =>
+    {
         const sut = new SvgPathQuadraticCurve(0, 0, 0, 0, createStart());
         const action = () => sut.copy(null as any);
         expect(action).toThrowError();
@@ -148,7 +160,8 @@ each([
 ])
 .test(`scale should modify node properly (%#): x: %f, y: %f, bezier x: %f, bezier y: %f,
 origin: %o, scale: %f, expected point: %o, expected bezier point: %o`,
-    (x, y, bx, by, origin, scale, expected, expectedBezier) => {
+    (x, y, bx, by, origin, scale, expected, expectedBezier) =>
+    {
         const sut = new SvgPathQuadraticCurve(x, y, bx, by, createStart());
         sut.scale(origin.x, origin.y, scale);
         expect(sut.x).toBeCloseTo(expected.x, 8);
@@ -168,7 +181,8 @@ each([
 ])
 .test(`translate should modify node properly (%#): x: %f, y: %f, bezier x: %f, bezier y: %f,
 dx: %f, dy: %f, expected point: %o, expected bezier point: %o`,
-    (x, y, bx, by, dx, dy, expected, expectedBezier) => {
+    (x, y, bx, by, dx, dy, expected, expectedBezier) =>
+    {
         const sut = new SvgPathQuadraticCurve(x, y, bx, by, createStart());
         sut.translate(dx, dy);
         expect(sut.x).toBeCloseTo(expected.x, 8);
@@ -188,7 +202,8 @@ each([
 ])
 .test(`rotate should modify node properly (%#): x: %f, y: %f, bezier x: %f, bezier y: %f,
 origin: %o, angle: %f, expected point: %o, expected bezier point: %o`,
-    (x, y, bx, by, origin, angle, expected, expectedBezier) => {
+    (x, y, bx, by, origin, angle, expected, expectedBezier) =>
+    {
         const sut = new SvgPathQuadraticCurve(x, y, bx, by, createStart());
         sut.rotate(origin.x, origin.y, new Angle(angle));
         expect(sut.x).toBeCloseTo(expected.x, 8);
@@ -209,7 +224,8 @@ each([
     [1, -0.0005543, -9.7676, -0.0006, 4, 'Q -9.7676 -0.0006 1.0000 -0.0006']
 ])
 .test('create svg command should return correct result (%#): x: %f, y: %f, bezier x: %f, bezier y: %f, precision: %f, expected: %s',
-    (x, y, bx, by, precision, expected) => {
+    (x, y, bx, by, precision, expected) =>
+    {
         const sut = new SvgPathQuadraticCurve(x, y, bx, by, createStart());
         expect(sut.createSvgCommand(precision)).toBe(expected);
     }

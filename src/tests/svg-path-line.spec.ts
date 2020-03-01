@@ -5,11 +5,13 @@ import { SvgPathNodeType } from '../core/svg-path-node-type';
 import { Angle } from '../core/primitives/angle';
 import each from 'jest-each';
 
-function createDefault(prev: SvgPathNode): SvgPathLine {
+function createDefault(prev: SvgPathNode): SvgPathLine
+{
     return new SvgPathLine(0, 0, prev);
 }
 
-function createStart(x: number = 0, y: number = 0): SvgPathStart {
+function createStart(x: number = 0, y: number = 0): SvgPathStart
+{
     return new SvgPathStart(x, y, 0, null);
 }
 
@@ -19,7 +21,8 @@ each([
     [null, null, createDefault(createStart())]
 ])
 .test('ctor should create with provided parameters (%#): x: %f, y: %f, prev: %o',
-    (x, y, prev) => {
+    (x, y, prev) =>
+    {
         const sut = new SvgPathLine(x, y, prev);
         expect(sut.x).toBe(x || 0);
         expect(sut.y).toBe(y || 0);
@@ -28,14 +31,16 @@ each([
 );
 
 test('ctor should throw when prev is not defined',
-    () => {
+    () =>
+    {
         const action = () => new SvgPathLine(0, 0, null as any);
         expect(action).toThrowError();
     }
 );
 
 test('type getter should return line',
-    () => {
+    () =>
+    {
         const sut = createDefault(createStart());
         expect(sut.type).toBe(SvgPathNodeType.Line);
     }
@@ -49,7 +54,8 @@ each([
     [-55.6, 11.234, -66.834, -0.63423, 46.572557157]
 ])
 .test('angle in degrees getter should return correct value (%#): x: %f, y: %f, prev x: %f, prev y: %f, expected: %f',
-    (x, y, prevX, prevY, expected) => {
+    (x, y, prevX, prevY, expected) =>
+    {
         const sut = new SvgPathLine(x, y, createStart(prevX, prevY));
         expect(sut.angleInDegrees).toBeCloseTo(expected, 8);
     }
@@ -63,7 +69,8 @@ each([
     [-55.6, 11.234, -66.834, -0.63423, 16.341898278]
 ])
 .test('length getter should return correct value (%#): x: %f, y: %f, prev x: %f, prev y: %f, expected: %f',
-    (x, y, prevX, prevY, expected) => {
+    (x, y, prevX, prevY, expected) =>
+    {
         const sut = new SvgPathLine(x, y, createStart(prevX, prevY));
         expect(sut.length).toBeCloseTo(expected, 8);
     }
@@ -77,7 +84,8 @@ each([
     [-55.6, 11.234, -66.834]
 ])
 .test('dx getter should return correct value (%#): x: %f, prev x: %f, expected: %f',
-    (x, prevX, expected) => {
+    (x, prevX, expected) =>
+    {
         const sut = new SvgPathLine(x, 0, createStart(prevX));
         expect(sut.dx).toBeCloseTo(expected, 8);
     }
@@ -91,7 +99,8 @@ each([
     [-55.6, 11.234, -66.834]
 ])
 .test('dy getter should return correct value (%#): y: %f, prev y: %f, expected: %f',
-    (y, prevY, expected) => {
+    (y, prevY, expected) =>
+    {
         const sut = new SvgPathLine(0, y, createStart(0, prevY));
         expect(sut.dy).toBeCloseTo(expected, 8);
     }
@@ -104,7 +113,8 @@ each([
     [null, null]
 ])
 .test('x and y setters should set correct values (%#): x: %f, y: %f',
-    (x, y) => {
+    (x, y) =>
+    {
         const sut = createDefault(createStart());
         sut.x = x;
         sut.y = y;
@@ -118,7 +128,8 @@ each([
     [10, -50, createStart()]
 ])
 .test('copy should return new valid object (%#): x: %f, y: %f, prev: %o',
-    (x, y, prev) => {
+    (x, y, prev) =>
+    {
         const sut = new SvgPathLine(x, y, createStart());
         const result = sut.copy(prev);
         expect(result).toBeDefined();
@@ -132,7 +143,8 @@ each([
 );
 
 test('copy should throw when prev is not defined',
-    () => {
+    () =>
+    {
         const sut = new SvgPathLine(0, 0, createStart());
         const action = () => sut.copy(null as any);
         expect(action).toThrowError();
@@ -148,7 +160,8 @@ each([
     [3.3, 22.87, { x: 12.1, y: 3.5 }, 2.8, { x: -12.54, y: 57.736 }]
 ])
 .test('scale should modify node properly (%#): x: %f, y: %f, origin: %o, scale: %f, expected point: %o',
-    (x, y, origin, scale, expected) => {
+    (x, y, origin, scale, expected) =>
+    {
         const sut = new SvgPathLine(x, y, createStart());
         sut.scale(origin.x, origin.y, scale);
         expect(sut.x).toBeCloseTo(expected.x, 8);
@@ -165,7 +178,8 @@ each([
     [3.3, 22.87, 12.1, -2.8, { x: 15.4, y: 20.07 }]
 ])
 .test('translate should modify node properly (%#): x: %f, y: %f, dx: %f, dy: %f, expected point: %o',
-    (x, y, dx, dy, expected) => {
+    (x, y, dx, dy, expected) =>
+    {
         const sut = new SvgPathLine(x, y, createStart());
         sut.translate(dx, dy);
         expect(sut.x).toBeCloseTo(expected.x, 8);
@@ -182,7 +196,8 @@ each([
     [3.3, 22.87, { x: 12.1, y: 3.5 }, -387, { x: -4.534653392, y: 16.763679975 }]
 ])
 .test('rotate should modify node properly (%#): x: %f, y: %f, origin: %o, angle: %f, expected point: %o',
-    (x, y, origin, angle, expected) => {
+    (x, y, origin, angle, expected) =>
+    {
         const sut = new SvgPathLine(x, y, createStart());
         sut.rotate(origin.x, origin.y, new Angle(angle));
         expect(sut.x).toBeCloseTo(expected.x, 8);
@@ -201,7 +216,8 @@ each([
     [1, -0.0005543, -9.7676, -0.0006, 4, 'H 1.0000']
 ])
 .test('create svg command should return correct result (%#): x: %f, y: %f, prev x: %f, prev y: %f, precision: %f, expected: %s',
-    (x, y, prevX, prevY, precision, expected) => {
+    (x, y, prevX, prevY, precision, expected) =>
+    {
         const sut = new SvgPathLine(x, y, createStart(prevX, prevY));
         expect(sut.createSvgCommand(precision)).toBe(expected);
     }

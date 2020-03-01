@@ -11,24 +11,27 @@ import { SvgPathClose } from '../core/svg-path-close';
 import { SvgPathArc } from '../core/svg-path-arc';
 import { SvgPathArcStyle } from '../core/svg-path-arc-style';
 import { Angle } from '../core/primitives/angle';
-import { mock, IMockedMethodInfo, IMock, partialMock, IInvocationData } from 'frlluc-mocking';
-import { reinterpretCast, Nullable } from 'frlluc-utils';
+import { mock, IMockedMethodInfo, IMock, partialMock, IInvocationData } from 'frl-ts-mocking';
+import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
+import { reinterpretCast } from 'frl-ts-utils/lib/core/functions/reinterpret-cast';
 import each from 'jest-each';
 
-function assertMockArgs(data: IInvocationData[], expected: any[][]): void {
-    for (let i = 1; i < data.length; ++i) {
+function assertMockArgs(data: IInvocationData[], expected: any[][]): void
+{
+    for (let i = 1; i < data.length; ++i)
         expect(data[i].globalNo).toBeGreaterThan(data[i - 1].globalNo);
-    }
-    for (let i = 0; i < data.length; ++i) {
+
+    for (let i = 0; i < data.length; ++i)
+    {
         expect(data[i].arguments.length).toBe(expected[i].length);
-        for (let a = 0; a < expected[i].length; ++a) {
+        for (let a = 0; a < expected[i].length; ++a)
             expect(data[i].arguments[a]).toBeCloseTo(expected[i][a], 8);
-        }
     }
 }
 
 test('after corner builder ctor should create with provided builder',
-    () => {
+    () =>
+    {
         const builderMock = mock<SvgPathBuilder>({});
         const sut = new SvgPathAfterCornerBuilder(builderMock.subject);
         expect(sut.builder()).toBe(builderMock.subject);
@@ -43,7 +46,8 @@ each([
     [-45.32, 12.312],
 ])
 .test('after corner builder add line should invoke proper builder method (%#): length: %f, prev angle: %f',
-    (length, prevAngle) => {
+    (length, prevAngle) =>
+    {
         const lastMock = mock<SvgPathNode>({
             angleInDegrees: prevAngle
         });
@@ -70,7 +74,8 @@ each([
     [-45.32, 12.312],
 ])
 .test('after corner builder line to x should invoke proper builder method (%#): x: %f, prev angle: %f',
-    (x, prevAngle) => {
+    (x, prevAngle) =>
+    {
         const lastMock = mock<SvgPathNode>({
             angleInDegrees: prevAngle
         });
@@ -97,7 +102,8 @@ each([
     [-45.32, 12.312],
 ])
 .test('after corner builder line to y should invoke proper builder method (%#): y: %f, prev angle: %f',
-    (y, prevAngle) => {
+    (y, prevAngle) =>
+    {
         const lastMock = mock<SvgPathNode>({
             angleInDegrees: prevAngle
         });
@@ -124,7 +130,8 @@ each([
     [-45.32, 24.332, 12.312],
 ])
 .test('after corner builder add rounded corner to should invoke proper builder method (%#): x: %f, y: %f, angle: %f',
-    (x, y, angle) => {
+    (x, y, angle) =>
+    {
         const builderMock = mock<SvgPathBuilder>({
             addRoundedCornerTo(c, d, a) { return new SvgPathAfterCornerBuilder(reinterpretCast<SvgPathBuilder>(this)); }
         });
@@ -151,7 +158,8 @@ each([
     [-45.32, 24.332, 12.312],
 ])
 .test('after corner builder add rounded corner by should invoke proper builder method (%#): dx: %f, dy: %f, angle: %f',
-    (dx, dy, angle) => {
+    (dx, dy, angle) =>
+    {
         const builderMock = mock<SvgPathBuilder>({
             addRoundedCornerBy(c, d, a) { return new SvgPathAfterCornerBuilder(reinterpretCast<SvgPathBuilder>(this)); }
         });
@@ -171,7 +179,8 @@ each([
 );
 
 test('after corner builder close should invoke proper builder method',
-    () => {
+    () =>
+    {
         const builderMock = mock<SvgPathBuilder>({
             close() { return reinterpretCast<SvgPathBuilder>(this); }
         });
@@ -185,7 +194,8 @@ test('after corner builder close should invoke proper builder method',
 );
 
 test('after corner builder build should invoke proper builder method',
-    () => {
+    () =>
+    {
         const svg = 'foo';
         const builderMock = mock<SvgPathBuilder>({
             build() { return svg; }
@@ -200,7 +210,8 @@ test('after corner builder build should invoke proper builder method',
 );
 
 test('geometry builder ctor should create with provided builder',
-    () => {
+    () =>
+    {
         const builderMock = mock<SvgPathBuilder>({});
         const sut = new SvgGeometryBuilder(builderMock.subject);
         expect(sut.builder()).toBe(builderMock.subject);
@@ -240,7 +251,8 @@ each([
     ]],
 ])
 .test('geometry builder add circle should invoke proper builder methods (%#): cx: %f, cy: %f, r: %f, expected args: %o',
-    (cx, cy, r, args) => {
+    (cx, cy, r, args) =>
+    {
         const builderMock = mock<SvgPathBuilder>({
             moveTo(x, y, a) { return reinterpretCast<SvgPathBuilder>(this); },
             arcTo(x, y, rx, ry, a, s) { return reinterpretCast<SvgPathBuilder>(this); },
@@ -305,7 +317,8 @@ each([
 ])
 .test(`geometry builder add ellipse should invoke proper builder methods (%#):
 cx: %f, cy: %f, rx: %f, ry: %f, angle: %f, expected args: %o`,
-    (cx, cy, rx, ry, angle, args) => {
+    (cx, cy, rx, ry, angle, args) =>
+    {
         const builderMock = mock<SvgPathBuilder>({
             moveTo(x, y, a) { return reinterpretCast<SvgPathBuilder>(this); },
             arcTo(x, y, r1, r2, a, s) { return reinterpretCast<SvgPathBuilder>(this); },
@@ -379,7 +392,8 @@ each([
 ])
 .test(`geometry builder add ring should invoke proper builder methods (%#):
 cx: %f, cy: %f, r: %f, w: %f, expected args: %o`,
-    (cx, cy, r, w, args) => {
+    (cx, cy, r, w, args) =>
+    {
         const builderMock = mock<SvgPathBuilder>({
             moveTo(x, y, a) { return reinterpretCast<SvgPathBuilder>(this); },
             arcTo(x, y, r1, r2, a, s) { return reinterpretCast<SvgPathBuilder>(this); },
@@ -416,7 +430,8 @@ each([
     [234.12, -1.235, 21.345, { angleInDegrees: -123.4, cornerRadii: { topLeft: 5.5, bottomRight: 12.32, topRight: 0 } }]
 ])
 .test('geometry builder add square should invoke add rectangle (%#): left: %f, top: %f, size: %f, options: %o',
-    (l, t, s, o) => {
+    (l, t, s, o) =>
+    {
         const sut = new SvgGeometryBuilder(mock<SvgPathBuilder>({}).subject);
         const sutMock = partialMock(sut, {
             addRectangle(x: number, y: number, w: number, h: number, opt: any) { return reinterpretCast<SvgGeometryBuilder>(this); }
@@ -475,7 +490,8 @@ each([
 ])
 .test(`geometry builder add rectangle without corner options should invoke proper builder methods (%#):
 left: %f, top: %f, width: %f, height: %f, options: %o, expected args: %o`,
-    (x, y, w, h, o, args) => {
+    (x, y, w, h, o, args) =>
+    {
         const builderMock = mock<SvgPathBuilder>({
             moveTo(l, t, a) { return reinterpretCast<SvgPathBuilder>(this); },
             addLine(l, a) { return reinterpretCast<SvgPathBuilder>(this); },
@@ -529,7 +545,8 @@ each([
 ])
 .test(`geometry builder add rectangle with top left corner option should invoke proper builder methods (%#):
 left: %f, top: %f, width: %f, height: %f, options: %o, expected args: %o`,
-    (x, y, w, h, o, args) => {
+    (x, y, w, h, o, args) =>
+    {
         const builderMock = mock<SvgPathBuilder>({
             moveTo(l, t, a) { return reinterpretCast<SvgPathBuilder>(this); },
             addLine(l, a) { return reinterpretCast<SvgPathBuilder>(this); },
@@ -587,7 +604,8 @@ each([
 ])
 .test(`geometry builder add rectangle with top right corner option should invoke proper builder methods (%#):
 left: %f, top: %f, width: %f, height: %f, options: %o, expected args: %o`,
-    (x, y, w, h, o, args) => {
+    (x, y, w, h, o, args) =>
+    {
         const builder = new SvgPathBuilder();
         const moveToMethod = builder.moveTo.bind(builder);
         const addLineMethod = builder.addLine.bind(builder);
@@ -659,7 +677,8 @@ each([
 ])
 .test(`geometry builder add rectangle with bottom right corner option should invoke proper builder methods (%#):
 left: %f, top: %f, width: %f, height: %f, options: %o, expected args: %o`,
-    (x, y, w, h, o, args) => {
+    (x, y, w, h, o, args) =>
+    {
         const builder = new SvgPathBuilder();
         const moveToMethod = builder.moveTo.bind(builder);
         const addLineMethod = builder.addLine.bind(builder);
@@ -731,7 +750,8 @@ each([
 ])
 .test(`geometry builder add rectangle with bottom left corner option should invoke proper builder methods (%#):
 left: %f, top: %f, width: %f, height: %f, options: %o, expected args: %o`,
-    (x, y, w, h, o, args) => {
+    (x, y, w, h, o, args) =>
+    {
         const builder = new SvgPathBuilder();
         const moveToMethod = builder.moveTo.bind(builder);
         const addLineMethod = builder.addLine.bind(builder);
@@ -815,7 +835,8 @@ each([
 ])
 .test(`geometry builder add rectangle with bottom left corner option should invoke proper builder methods (%#):
 left: %f, top: %f, width: %f, height: %f, options: %o, expected args: %o`,
-    (x, y, w, h, o, args) => {
+    (x, y, w, h, o, args) =>
+    {
         const builder = new SvgPathBuilder();
         const moveToMethod = builder.moveTo.bind(builder);
         const addLineMethod = builder.addLine.bind(builder);
@@ -870,7 +891,8 @@ each([
     [[{ x: 0, y: 0 }, { x: 2, y: -3 }, { x: 2.45, y: -0.42 }, { x: 0, y: 0 }, { x: 1.34, y: 7.64 }, { x: 0.12, y: 1.4 }]]
 ])
 .test('geometry builder add polygon should invoke proper builder methods (%#): vertexes: %o',
-    (v) => {
+    (v) =>
+    {
         const builderMock = mock<SvgPathBuilder>({
             moveTo(x, y, a) { return reinterpretCast<SvgPathBuilder>(this); },
             lineTo(x, y) { return reinterpretCast<SvgPathBuilder>(this); },
@@ -882,18 +904,20 @@ each([
         const lineToInfo = builderMock.getMemberInfo('lineTo') as IMockedMethodInfo;
         const closeInfo = builderMock.getMemberInfo('close') as IMockedMethodInfo;
         expect(result).toBe(sut);
-        if (v.length === 0) {
+        if (v.length === 0)
+        {
             expect(moveToInfo.count).toBe(0);
             expect(lineToInfo.count).toBe(0);
             expect(closeInfo.count).toBe(0);
-        } else {
+        }
+        else
+        {
             expect(moveToInfo.count).toBe(1);
             expect(lineToInfo.count).toBe(v.length - 1);
             expect(closeInfo.count).toBe(1);
             expect(moveToInfo.getData(0)!.arguments).toStrictEqual([v[0].x, v[0].y]);
-            for (let i = 1; i < v.length; ++i) {
+            for (let i = 1; i < v.length; ++i)
                 expect(lineToInfo.getData(i - 1)!.arguments).toStrictEqual([v[i].x, v[i].y]);
-            }
         }
     }
 );
@@ -906,7 +930,8 @@ each([
     [234.12, -1.235, 21.345, -22.5, 337.5]
 ])
 .test('geometry builder add pie should invoke add circle with the same angles (%#): cx: %f, cy: %f, r: %f, start: %f, end: %f',
-    (cx, cy, r, start, end) => {
+    (cx, cy, r, start, end) =>
+    {
         const sut = new SvgGeometryBuilder(mock<SvgPathBuilder>({}).subject);
         const sutMock = partialMock(sut, {
             addCircle(x: number, y: number, s: number) { return reinterpretCast<SvgGeometryBuilder>(this); }
@@ -952,7 +977,8 @@ each([
     ]],
 ])
 .test('geometry builder add pie should invoke proper builder methods (%#): cx: %f, cy: %f, r: %f, start: %f, end: %f, expected args: %o',
-    (cx, cy, r, start, end, args) => {
+    (cx, cy, r, start, end, args) =>
+    {
         const builderMock = mock<SvgPathBuilder>({
             moveTo(x, y, a) { return reinterpretCast<SvgPathBuilder>(this); },
             arcTo(x, y, rx, ry, a, s) { return reinterpretCast<SvgPathBuilder>(this); },
@@ -989,7 +1015,8 @@ each([
 ])
 .test(`geometry builder add ring pie should invoke add circle with the same angles (%#):
 cx: %f, cy: %f, r: %f, width: %f, start: %f, end: %f`,
-    (cx, cy, r, w, start, end) => {
+    (cx, cy, r, w, start, end) =>
+    {
         const sut = new SvgGeometryBuilder(mock<SvgPathBuilder>({}).subject);
         const sutMock = partialMock(sut, {
             addRing(x: number, y: number, i: number, s: number) { return reinterpretCast<SvgGeometryBuilder>(this); }
@@ -1041,7 +1068,8 @@ each([
 ])
 .test(`geometry builder add ring pie should invoke proper builder methods (%#):
 cx: %f, cy: %f, r: %f, width: %f, start: %f, end: %f, expected args: %o`,
-    (cx, cy, r, w, start, end, args) => {
+    (cx, cy, r, w, start, end, args) =>
+    {
         const builderMock = mock<SvgPathBuilder>({
             moveTo(x, y, a) { return reinterpretCast<SvgPathBuilder>(this); },
             arcTo(x, y, rx, ry, a, s) { return reinterpretCast<SvgPathBuilder>(this); },
@@ -1071,7 +1099,8 @@ cx: %f, cy: %f, r: %f, width: %f, start: %f, end: %f, expected args: %o`,
 );
 
 test('geometry builder build should invoke proper builder method',
-    () => {
+    () =>
+    {
         const svg = 'foo';
         const builderMock = mock<SvgPathBuilder>({
             build() { return svg; }
@@ -1102,7 +1131,8 @@ each([
     [void(0), SvgPathBuilder.DEFAULT_PRECISION]
 ])
 .test('builder ctor should create with provided precision (%#): value: %f, expected: %i',
-    (value, expected) => {
+    (value, expected) =>
+    {
         const sut = new SvgPathBuilder(value);
         expect(sut.precision).toBe(expected);
     }
@@ -1112,8 +1142,8 @@ function assert(sut: SvgPathBuilder,
     expectedNodeCount: number,
     expectedFirst: SvgPathNode,
     expectedLast: SvgPathNode,
-    expectedLastStart: Nullable<SvgPathStart> = null): void {
-
+    expectedLastStart: Nullable<SvgPathStart> = null): void
+{
     expect(sut.nodes).toBeDefined();
     expect(sut.nodes).not.toBeNull();
     expect(sut.nodes.length).toBe(expectedNodeCount);
@@ -1128,7 +1158,8 @@ function assert(sut: SvgPathBuilder,
 }
 
 test('builder ctor should create empty',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         expect(sut.nodes).toBeDefined();
         expect(sut.nodes).not.toBeNull();
@@ -1154,7 +1185,8 @@ each([
     [11.23, 0.003, 471]
 ])
 .test('builder move to should add start node (%#): x: %f, y: %f, angle: %f',
-    (x, y, angle) => {
+    (x, y, angle) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(x, y, angle);
         const node = sut.last as SvgPathStart;
@@ -1176,7 +1208,8 @@ each([
     [11.23, 0.003, 471]
 ])
 .test('builder move to should add another start node (%#): x: %f, y: %f, angle: %f',
-    (x, y, angle) => {
+    (x, y, angle) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(0, 0).moveTo(x, y, angle);
         const node = sut.last as SvgPathStart;
@@ -1198,7 +1231,8 @@ each([
     [11.23, 0.003, 471]
 ])
 .test('builder move by should add start node (%#): dx: %f, dy: %f, angle: %f',
-    (dx, dy, angle) => {
+    (dx, dy, angle) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveBy(dx, dy, angle);
         const node = sut.last as SvgPathStart;
@@ -1221,7 +1255,8 @@ each([
 ])
 .test(`builder move by should add start node (%#): prev x: %f, prev y: %f, prev angle: %f, dx: %f, dy: %f, angle: %f,
 expected x: %f, expected y: %f, expected angle: %f`,
-    (prevX, prevY, prevAngle, dx, dy, angle, expectedX, expectedY, expectedAngle) => {
+    (prevX, prevY, prevAngle, dx, dy, angle, expectedX, expectedY, expectedAngle) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(prevX, prevY, prevAngle).moveBy(dx, dy, angle);
         const node = sut.last as SvgPathStart;
@@ -1235,7 +1270,8 @@ expected x: %f, expected y: %f, expected angle: %f`,
 );
 
 test('builder add node should throw when node is null',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.addNode(reinterpretCast<SvgPathNode>(null));
         expect(action).toThrowError();
@@ -1243,7 +1279,8 @@ test('builder add node should throw when node is null',
 );
 
 test('builder add node should throw when node is not a start node and start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const nodeMock = mock<SvgPathNode>({
             copy(prev) { return reinterpretCast<SvgPathNode>({ prev: prev }); }
         });
@@ -1258,7 +1295,8 @@ test('builder add node should throw when node is not a start node and start node
 );
 
 test('builder add node should add another non-start node properly',
-    () => {
+    () =>
+    {
         const nodeMock = mock<SvgPathNode>({
             copy(prev) { return reinterpretCast<SvgPathNode>({ prev: prev }); }
         });
@@ -1281,7 +1319,8 @@ each([
     [11.23, 0.003, 471]
 ])
 .test('builder add node should add start node properly (%#): x: %f, y: %f, angle: %f',
-    (x, y, angle) => {
+    (x, y, angle) =>
+    {
         const start = new SvgPathStart(x, y, angle, null);
         const sut = new SvgPathBuilder();
         const result = sut.addNode(start);
@@ -1304,7 +1343,8 @@ each([
     [11.23, 0.003, 471]
 ])
 .test('builder add node should add another start node properly (%#): x: %f, y: %f, angle: %f',
-    (x, y, angle) => {
+    (x, y, angle) =>
+    {
         const start = new SvgPathStart(x, y, angle, null);
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(0, 0).addNode(start);
@@ -1320,7 +1360,8 @@ each([
 );
 
 test('builder line by x should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.lineByX(0);
         expect(action).toThrowError();
@@ -1334,7 +1375,8 @@ each([
     [2.56]
 ])
 .test('builder line by x should add new line offset node (%#): dx: %f',
-    (dx) => {
+    (dx) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(0, 0).lineByX(dx);
         const node = sut.last! as SvgPathLineOffset;
@@ -1347,7 +1389,8 @@ each([
 );
 
 test('builder line by y should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.lineByY(0);
         expect(action).toThrowError();
@@ -1361,7 +1404,8 @@ each([
     [2.56]
 ])
 .test('builder line by y should add new line offset node (%#): dy: %f',
-    (dy) => {
+    (dy) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(0, 0).lineByY(dy);
         const node = sut.last! as SvgPathLineOffset;
@@ -1374,7 +1418,8 @@ each([
 );
 
 test('builder line by should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.lineBy(0, 0);
         expect(action).toThrowError();
@@ -1388,7 +1433,8 @@ each([
     [2.56, -6.332]
 ])
 .test('builder line by should add new line offset node (%#): dx: %f, dy: %f',
-    (dx, dy) => {
+    (dx, dy) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(0, 0).lineBy(dx, dy);
         const node = sut.last! as SvgPathLineOffset;
@@ -1401,7 +1447,8 @@ each([
 );
 
 test('builder line to x should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.lineToX(0);
         expect(action).toThrowError();
@@ -1415,7 +1462,8 @@ each([
     [0.04, 2.56]
 ])
 .test('builder line to x should add new line node (%#): start y: %f, x: %f',
-    (startY, x) => {
+    (startY, x) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(0, startY).lineToX(x);
         const node = sut.last! as SvgPathLine;
@@ -1428,7 +1476,8 @@ each([
 );
 
 test('builder line to y should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.lineToY(0);
         expect(action).toThrowError();
@@ -1442,7 +1491,8 @@ each([
     [0.04, 2.56]
 ])
 .test('builder line to y should add new line node (%#): start x: %f, y: %f',
-    (startX, y) => {
+    (startX, y) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(startX, 0).lineToY(y);
         const node = sut.last! as SvgPathLine;
@@ -1455,7 +1505,8 @@ each([
 );
 
 test('builder line to should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.lineTo(0, 0);
         expect(action).toThrowError();
@@ -1469,7 +1520,8 @@ each([
     [2.56, -6.332]
 ])
 .test('builder line to should add new line node (%#): x: %f, y: %f',
-    (x, y) => {
+    (x, y) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(0, 0).lineTo(x, y);
         const node = sut.last! as SvgPathLine;
@@ -1482,7 +1534,8 @@ each([
 );
 
 test('builder angled line to x should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.angledLineToX(0, 0);
         expect(action).toThrowError();
@@ -1497,7 +1550,8 @@ each([
     [0.045, 2.56, 6.332, -567]
 ])
 .test('builder angled line to x should throw when intersection doesn\'t exist (%#): start x: %f, start y: %f, x: %f, angle: %f',
-    (startX, startY, x, angle) => {
+    (startX, startY, x, angle) =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.moveTo(startX, startY).angledLineToX(x, angle);
         expect(action).toThrowError();
@@ -1513,7 +1567,8 @@ each([
 ])
 .test(`builder angled line to x should add new line node (%#): start x: %f, start y: %f, x: %f, angle: %f,
 expected y: %f, expected angle : %f`,
-    (startX, startY, x, angle, expectedY, expectedAngle) => {
+    (startX, startY, x, angle, expectedY, expectedAngle) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(startX, startY).angledLineToX(x, angle);
         const node = sut.last! as SvgPathLine;
@@ -1527,7 +1582,8 @@ expected y: %f, expected angle : %f`,
 );
 
 test('builder angled line to y should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.angledLineToY(0, 0);
         expect(action).toThrowError();
@@ -1542,7 +1598,8 @@ each([
     [0.045, 2.56, -6.332, -567]
 ])
 .test('builder angled line to y should throw when intersection doesn\'t exist (%#): start x: %f, start y: %f, y: %f, angle: %f',
-    (startX, startY, y, angle) => {
+    (startX, startY, y, angle) =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.moveTo(startX, startY).angledLineToY(y, angle);
         expect(action).toThrowError();
@@ -1558,7 +1615,8 @@ each([
 ])
 .test(`builder angled line to y should add new line node (%#): start x: %f, start y: %f, y: %f, angle: %f,
 expected x: %f, expected angle: %f`,
-    (startX, startY, y, angle, expectedX, expectedAngle) => {
+    (startX, startY, y, angle, expectedX, expectedAngle) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(startX, startY).angledLineToY(y, angle);
         const node = sut.last! as SvgPathLine;
@@ -1572,7 +1630,8 @@ expected x: %f, expected angle: %f`,
 );
 
 test('builder add line should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.addLine(0, 0);
         expect(action).toThrowError();
@@ -1588,7 +1647,8 @@ each([
 ])
 .test(`builder add line should add new offset line node (%#):
 start x: %f, start y: %f, length: %f, angle: %f, expected x: %f, expected y: %f`,
-    (startX, startY, length, angle, expectedX, expectedY) => {
+    (startX, startY, length, angle, expectedX, expectedY) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(startX, startY).addLine(length, angle);
         const node = sut.last! as SvgPathLineOffset;
@@ -1601,7 +1661,8 @@ start x: %f, start y: %f, length: %f, angle: %f, expected x: %f, expected y: %f`
 );
 
 test('builder curve to should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.curveTo(0, 0, 0, 0);
         expect(action).toThrowError();
@@ -1616,7 +1677,8 @@ each([
     [0.045, 2.56, -6.332, 5.686]
 ])
 .test(`builder curve to should add new quadratic curve node (%#): x: %f, y: %f, bezier x: %f, bezier y: %f`,
-    (x, y, bx, by) => {
+    (x, y, bx, by) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(0, 0).curveTo(x, y, bx, by);
         const node = sut.last! as SvgPathQuadraticCurve;
@@ -1638,7 +1700,8 @@ each([
     [0.045, 2.56, -6.332, 5.686, 45.43, 6.74]
 ])
 .test(`builder curve to should add new cubic curve node (%#): x: %f, y: %f, bezier x1: %f, bezier y1: %f, bezier x2: %f, bezier y2: %f`,
-    (x, y, bx1, by1, bx2, by2) => {
+    (x, y, bx1, by1, bx2, by2) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(0, 0).curveTo(x, y, bx1, by1, bx2, by2);
         const node = sut.last! as SvgPathCubicCurve;
@@ -1655,7 +1718,8 @@ each([
 );
 
 test('builder curve by should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.curveBy(0, 0, 0, 0);
         expect(action).toThrowError();
@@ -1671,7 +1735,8 @@ each([
 ])
 .test(`builder curve by should add new quadratic curve node (%#): start x: %f, start y: %f, dx: %f, dy: %f, bezier dx: %f, bezier dy: %f,
 expected x: %f, expected y: %f, expected bezier x: %f, expected bezier y: %f`,
-    (startX, startY, dx, dy, bdx, bdy, expectedX, expectedY, expectedBx, expectedBy) => {
+    (startX, startY, dx, dy, bdx, bdy, expectedX, expectedY, expectedBx, expectedBy) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(startX, startY).curveBy(dx, dy, bdx, bdy);
         const node = sut.last! as SvgPathQuadraticCurve;
@@ -1695,7 +1760,8 @@ each([
 .test(`builder curve by should add new cubic curve node (%#): start x: %f, start y: %f, dx: %f, dy: %f, bezier dx1: %f, bezier dy1: %f,
 bezier dx2: %f, bezier dy2: %f, expected x: %f, expected y: %f, expected bezier x1: %f, expected bezier y1: %f,
 expected bezier x2: %f, expected bezier y2: %f`,
-    (startX, startY, dx, dy, bdx1, bdy1, bdx2, bdy2, expectedX, expectedY, expectedBx1, expectedBy1, expectedBx2, expectedBy2) => {
+    (startX, startY, dx, dy, bdx1, bdy1, bdx2, bdy2, expectedX, expectedY, expectedBx1, expectedBy1, expectedBx2, expectedBy2) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(startX, startY).curveBy(dx, dy, bdx1, bdy1, bdx2, bdy2);
         const node = sut.last! as SvgPathCubicCurve;
@@ -1712,7 +1778,8 @@ expected bezier x2: %f, expected bezier y2: %f`,
 );
 
 test('builder smooth curve to should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.smoothCurveTo(0, 0);
         expect(action).toThrowError();
@@ -1727,7 +1794,8 @@ each([
     [0.045, 2.56]
 ])
 .test(`builder smooth curve to should add new smooth quadratic curve node (%#): x: %f, y: %f`,
-    (x, y) => {
+    (x, y) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(0, 0).smoothCurveTo(x, y);
         const node = sut.last! as SvgPathSmoothQuadraticCurve;
@@ -1747,7 +1815,8 @@ each([
     [0.045, 2.56, 45.43, 6.74]
 ])
 .test(`builder smooth curve to should add new smooth cubic curve node (%#): x: %f, y: %f, bezier x2: %f, bezier y2: %f`,
-    (x, y, bx2, by2) => {
+    (x, y, bx2, by2) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(0, 0).smoothCurveTo(x, y, bx2, by2);
         const node = sut.last! as SvgPathSmoothCubicCurve;
@@ -1762,7 +1831,8 @@ each([
 );
 
 test('builder smooth curve by should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.smoothCurveBy(0, 0);
         expect(action).toThrowError();
@@ -1778,7 +1848,8 @@ each([
 ])
 .test(`builder smooth curve by should add new smooth quadratic curve node (%#):
 start x: %f, start y: %f, dx: %f, dy: %f, expected x: %f, expected y: %f`,
-    (startX, startY, dx, dy, expectedX, expectedY) => {
+    (startX, startY, dx, dy, expectedX, expectedY) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(startX, startY).smoothCurveBy(dx, dy);
         const node = sut.last! as SvgPathSmoothQuadraticCurve;
@@ -1799,7 +1870,8 @@ each([
 ])
 .test(`builder smooth curve to should add new smooth cubic curve node (%#): start x: %f, start y: %f, dx: %f, dy: %f,
 bezier dx2: %f, bezier dy2: %f, expected x: %f, expected y: %f, expected bezier x2: %f, expected bezier y2: %f`,
-    (startX, startY, dx, dy, bdx2, bdy2, expectedX, expectedY, expectedBx2, expectedBy2) => {
+    (startX, startY, dx, dy, bdx2, bdy2, expectedX, expectedY, expectedBx2, expectedBy2) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(startX, startY).smoothCurveBy(dx, dy, bdx2, bdy2);
         const node = sut.last! as SvgPathSmoothCubicCurve;
@@ -1814,7 +1886,8 @@ bezier dx2: %f, bezier dy2: %f, expected x: %f, expected y: %f, expected bezier 
 );
 
 test('builder arc to should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.arcTo(0, 0, 0, 0, 0, SvgPathArcStyle.CccwLt180);
         expect(action).toThrowError();
@@ -1828,7 +1901,8 @@ each([
     [2.56, -6.332, -5.43, 0.853, 267, SvgPathArcStyle.CcwLt180]
 ])
 .test('builder arc to should add new arc node (%#): x: %f, y: %f, rx: %f, ry: %f, angle: %f, style: %i',
-    (x, y, rx, ry, angle, style) => {
+    (x, y, rx, ry, angle, style) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(0, 0).arcTo(x, y, rx, ry, angle, style);
         const node = sut.last! as SvgPathArc;
@@ -1845,7 +1919,8 @@ each([
 );
 
 test('builder arc by should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.arcBy(0, 0, 0, 0, 0, SvgPathArcStyle.CccwLt180);
         expect(action).toThrowError();
@@ -1860,7 +1935,8 @@ each([
 ])
 .test(`builder arc by should add new arc node (%#):
 prev x: %f, prev y: %f, dx: %f, dy: %f, rx: %f, ry: %f, angle: %f, style: %i, expected x: %f, expected y: %f`,
-    (startX, startY, dx, dy, rx, ry, angle, style, expectedX, expectedY) => {
+    (startX, startY, dx, dy, rx, ry, angle, style, expectedX, expectedY) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(startX, startY).arcBy(dx, dy, rx, ry, angle, style);
         const node = sut.last! as SvgPathArc;
@@ -1877,7 +1953,8 @@ prev x: %f, prev y: %f, dx: %f, dy: %f, rx: %f, ry: %f, angle: %f, style: %i, ex
 );
 
 test('builder add rounded corner to should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.addRoundedCornerTo(0, 0, 0);
         expect(action).toThrowError();
@@ -1893,7 +1970,8 @@ each([
 ])
 .test(`builder add rounded corner to should add line node when no intersection was found (%#):
 prev x: %f, prev y: %f, prev angle: %f, x: %f, y: %f, angle: %f, expected angle: %f`,
-    (prevX, prevY, prevAngle, x, y, angle, expectedAngle) => {
+    (prevX, prevY, prevAngle, x, y, angle, expectedAngle) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(prevX, prevY, prevAngle).addRoundedCornerTo(x, y, angle);
         const node = sut.last as SvgPathLine;
@@ -1917,7 +1995,8 @@ each([
 ])
 .test(`builder add rounded corner to should add quadratic curve node (%#): prev x: %f, prev y: %f, prev angle: %f, x: %f, y: %f, angle: %f,
 expected bezier x: %f, expected bezier y: %f, expected angle: %f`,
-    (prevX, prevY, prevAngle, x, y, angle, expectedBx, expectedBy, expectedAngle) => {
+    (prevX, prevY, prevAngle, x, y, angle, expectedBx, expectedBy, expectedAngle) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(prevX, prevY, prevAngle).addRoundedCornerTo(x, y, angle);
         const node = sut.last as SvgPathQuadraticCurve;
@@ -1935,7 +2014,8 @@ expected bezier x: %f, expected bezier y: %f, expected angle: %f`,
 );
 
 test('builder add rounded corner by should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.addRoundedCornerBy(0, 0, 0);
         expect(action).toThrowError();
@@ -1951,7 +2031,8 @@ each([
 ])
 .test(`builder add rounded corner by should add line offset node when no intersection was found (%#):
 prev x: %f, prev y: %f, prev angle: %f, dx: %f, dy: %f, angle: %f, expected angle: %f`,
-    (prevX, prevY, prevAngle, dx, dy, angle, expectedAngle) => {
+    (prevX, prevY, prevAngle, dx, dy, angle, expectedAngle) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(prevX, prevY, prevAngle).addRoundedCornerBy(dx, dy, angle);
         const node = sut.last as SvgPathLineOffset;
@@ -1975,7 +2056,8 @@ each([
 ])
 .test(`builder add rounded corner by should add quadratic curve node (%#): prev x: %f, prev y: %f, prev angle: %f, dx: %f, dy: %f,
 angle: %f, expected x: %f, expected y: %f, expected bezier x: %f, expected bezier y: %f, expected angle: %f`,
-    (prevX, prevY, prevAngle, dx, dy, angle, expectedX, expectedY, expectedBx, expectedBy, expectedAngle) => {
+    (prevX, prevY, prevAngle, dx, dy, angle, expectedX, expectedY, expectedBx, expectedBy, expectedAngle) =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(prevX, prevY, prevAngle).addRoundedCornerBy(dx, dy, angle);
         const node = sut.last as SvgPathQuadraticCurve;
@@ -1993,7 +2075,8 @@ angle: %f, expected x: %f, expected y: %f, expected bezier x: %f, expected bezie
 );
 
 test('builder scale should return the builder',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.scale(0, 0, 0);
         expect(result).toBe(sut);
@@ -2008,11 +2091,13 @@ each([
     [0.445, 1.22, 2.5]
 ])
 .test('builder scale should return the builder with scaled nodes (%#): ox: %f, oy: %f, value: %f',
-    (ox, oy, scale) => {
+    (ox, oy, scale) =>
+    {
         const mocks: IMock<SvgPathNode>[] = [];
         const sut = new SvgPathBuilder().moveTo(0, 0);
         const start = sut.first! as SvgPathStart;
-        for (let i = 0; i < 10; ++i) {
+        for (let i = 0; i < 10; ++i)
+        {
             mocks.push(mock<SvgPathNode>({
                 scale(x: number, y: number, value: number) { return; },
                 copy(prev) { return reinterpretCast<SvgPathNode>(this); }
@@ -2024,7 +2109,8 @@ each([
         expect(result.nodes.length).toBe(11);
         expect(result.first).toBe(start);
         expect(result.lastStart).toBe(result.first);
-        for (let i = 1; i < result.nodes.length; ++i) {
+        for (let i = 1; i < result.nodes.length; ++i)
+        {
             const m = mocks[i - 1];
             const info = m.getMemberInfo('scale') as IMockedMethodInfo;
             expect(result.nodes[i]).toBe(m.subject);
@@ -2037,7 +2123,8 @@ each([
 );
 
 test('builder translate should return the builder',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.translate(0, 0);
         expect(result).toBe(sut);
@@ -2052,11 +2139,13 @@ each([
     [0.445, 1.22]
 ])
 .test('builder translate should return the builder with translated nodes (%#): dx: %f, dy: %f',
-    (dx, dy) => {
+    (dx, dy) =>
+    {
         const mocks: IMock<SvgPathNode>[] = [];
         const sut = new SvgPathBuilder().moveTo(0, 0);
         const start = sut.first! as SvgPathStart;
-        for (let i = 0; i < 10; ++i) {
+        for (let i = 0; i < 10; ++i)
+        {
             mocks.push(mock<SvgPathNode>({
                 translate(x: number, y: number) { return; },
                 copy(prev) { return reinterpretCast<SvgPathNode>(this); }
@@ -2068,7 +2157,8 @@ each([
         expect(result.nodes.length).toBe(11);
         expect(result.first).toBe(start);
         expect(result.lastStart).toBe(result.first);
-        for (let i = 1; i < result.nodes.length; ++i) {
+        for (let i = 1; i < result.nodes.length; ++i)
+        {
             const m = mocks[i - 1];
             const info = m.getMemberInfo('translate') as IMockedMethodInfo;
             expect(result.nodes[i]).toBe(m.subject);
@@ -2080,7 +2170,8 @@ each([
 );
 
 test('builder rotate should return the builder',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.rotate(0, 0, 0);
         expect(result).toBe(sut);
@@ -2095,11 +2186,13 @@ each([
     [0.445, 1.22, 234.52]
 ])
 .test('builder rotate should return the builder with rotated nodes (%#): ox: %f, oy: %f, degrees: %f',
-    (ox, oy, degrees) => {
+    (ox, oy, degrees) =>
+    {
         const mocks: IMock<SvgPathNode>[] = [];
         const sut = new SvgPathBuilder().moveTo(0, 0);
         const start = sut.first! as SvgPathStart;
-        for (let i = 0; i < 10; ++i) {
+        for (let i = 0; i < 10; ++i)
+        {
             mocks.push(mock<SvgPathNode>({
                 rotate(x: number, y: number, value: Angle) { return; },
                 copy(prev) { return reinterpretCast<SvgPathNode>(this); }
@@ -2111,7 +2204,8 @@ each([
         expect(result.nodes.length).toBe(11);
         expect(result.first).toBe(start);
         expect(result.lastStart).toBe(result.first);
-        for (let i = 1; i < result.nodes.length; ++i) {
+        for (let i = 1; i < result.nodes.length; ++i)
+        {
             const m = mocks[i - 1];
             const info = m.getMemberInfo('rotate') as IMockedMethodInfo;
             expect(result.nodes[i]).toBe(m.subject);
@@ -2133,7 +2227,8 @@ each([
     [20]
 ])
 .test('builder copy should return an empty builder if is empty (%#): precision: %i',
-    (precision) => {
+    (precision) =>
+    {
         const sut = new SvgPathBuilder(precision);
         const result = sut.copy();
         expect(result).toBeDefined();
@@ -2145,11 +2240,13 @@ each([
 );
 
 test('builder copy should return a valid builder',
-    () => {
+    () =>
+    {
         const mocks: IMock<SvgPathNode>[] = [];
         const sut = new SvgPathBuilder().moveTo(0, 0);
         const start = sut.first! as SvgPathStart;
-        for (let i = 0; i < 10; ++i) {
+        for (let i = 0; i < 10; ++i)
+        {
             mocks.push(mock<SvgPathNode>({
                 copy(prev) { return reinterpretCast<SvgPathNode>(this); }
             }));
@@ -2165,14 +2262,16 @@ test('builder copy should return a valid builder',
         expect(result.first).not.toBe(start);
         expect(result.first!.prev).toBeNull();
         expect(result.lastStart).toBe(result.first);
-        for (let i = 1; i < result.nodes.length; ++i) {
+        for (let i = 1; i < result.nodes.length; ++i)
+        {
             const m = mocks[i - 1];
             const info = m.getMemberInfo('copy') as IMockedMethodInfo;
             expect(result.nodes[i]).toBe(m.subject);
             expect(info.count).toBe(1);
-            if (i === 1) {
+            if (i === 1)
                 expect(info.getData(0)!.arguments[0]).toBe(result.first);
-            } else {
+            else
+            {
                 const prevInfo = mocks[i - 2].getMemberInfo('copy') as IMockedMethodInfo;
                 expect(info.getData(0)!.globalNo).toBeGreaterThan(prevInfo.getData(0)!.globalNo);
                 expect(info.getData(0)!.arguments[0]).toBe(mocks[i - 2].subject);
@@ -2182,7 +2281,8 @@ test('builder copy should return a valid builder',
 );
 
 test('builder close should throw when start node doesn\'t exist yet',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const action = () => sut.close();
         expect(action).toThrowError();
@@ -2190,7 +2290,8 @@ test('builder close should throw when start node doesn\'t exist yet',
 );
 
 test('builder close should add close node and reset last start node',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.moveTo(0, 0).close();
         const node = sut.last as SvgPathClose;
@@ -2201,7 +2302,8 @@ test('builder close should add close node and reset last start node',
 );
 
 test('builder build should return an empty text if is empty',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.build();
         expect(result).toBe('');
@@ -2209,11 +2311,13 @@ test('builder build should return an empty text if is empty',
 );
 
 test('builder build should return a valid text',
-    () => {
+    () =>
+    {
         const mocks: IMock<SvgPathNode>[] = [];
         const sut = new SvgPathBuilder().moveTo(0, 0);
         const start = sut.first! as SvgPathStart;
-        for (let i = 0; i < 10; ++i) {
+        for (let i = 0; i < 10; ++i)
+        {
             mocks.push(mock<SvgPathNode>({
                 createSvgCommand(prec) { return `MOCK[${i}]`; },
                 copy(prev) { return reinterpretCast<SvgPathNode>(this); }
@@ -2228,7 +2332,8 @@ test('builder build should return a valid text',
 );
 
 test('builder with geometry should return a geometry builder',
-    () => {
+    () =>
+    {
         const sut = new SvgPathBuilder();
         const result = sut.withGeometry();
         expect(result.builder()).toBe(sut);
@@ -2252,7 +2357,8 @@ each([
     [void(0), SvgPathBuilder.DEFAULT_PRECISION]
 ])
 .test('starter ctor should create with provided precision (%#): value: %f, expected: %i',
-    (value, expected) => {
+    (value, expected) =>
+    {
         const sut = new SvgPathStarter(value);
         expect(sut.precision).toBe(expected);
     }
@@ -2268,7 +2374,8 @@ each([
     [20]
 ])
 .test('starter start should create new empty builder (%#): precision: %i',
-    (precision) => {
+    (precision) =>
+    {
         const sut = new SvgPathStarter(precision);
         const result = sut.start();
         expect(result).toBeDefined();
@@ -2289,7 +2396,8 @@ each([
     [55, -43, -678, 20]
 ])
 .test('starter start at should create new builder with start node (%#): x: %f, y: %f, angle: %f, precision: %i',
-    (x, y, angle, precision) => {
+    (x, y, angle, precision) =>
+    {
         const sut = new SvgPathStarter(precision);
         const result = sut.startAt(x, y, angle);
         expect(result).toBeDefined();

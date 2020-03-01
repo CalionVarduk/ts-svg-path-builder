@@ -1,28 +1,34 @@
 import { SvgPathNode } from './svg-path-node';
 import { SvgPathNodeType } from './svg-path-node-type';
 import { Angle } from './primitives/angle';
-import { Nullable } from 'frlluc-utils';
+import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
 
 /** Specifies an svg path start node. */
-export class SvgPathStart extends SvgPathNode {
-
-    public get type(): SvgPathNodeType {
+export class SvgPathStart extends SvgPathNode
+{
+    public get type(): SvgPathNodeType
+    {
         return SvgPathNodeType.Start;
     }
-    public get angleInDegrees(): number {
+    public get angleInDegrees(): number
+    {
         return this._angleInDegrees;
     }
 
-    public set x(value: number) {
+    public set x(value: number)
+    {
         this._x = value || 0;
     }
-    public get x(): number {
+    public get x(): number
+    {
         return this._x;
     }
-    public set y(value: number) {
+    public set y(value: number)
+    {
         this._y = value || 0;
     }
-    public get y(): number {
+    public get y(): number
+    {
         return this._y;
     }
 
@@ -37,7 +43,8 @@ export class SvgPathStart extends SvgPathNode {
      * @param angleInDegrees starting angle in degrees
      * @param prev node's predecessor
      * */
-    public constructor(x: number, y: number, angleInDegrees: number, prev: Nullable<SvgPathNode>) {
+    public constructor(x: number, y: number, angleInDegrees: number, prev: Nullable<SvgPathNode>)
+    {
         super(prev);
         this._x = x || 0;
         this._y = y || 0;
@@ -49,7 +56,8 @@ export class SvgPathStart extends SvgPathNode {
      * @param prev predecessor node
      * @returns a copy of this node
      * */
-    public copy(prev: Nullable<SvgPathNode>): SvgPathNode {
+    public copy(prev: Nullable<SvgPathNode>): SvgPathNode
+    {
         return new SvgPathStart(this.x, this.y, this._angleInDegrees, prev);
     }
     /**
@@ -58,7 +66,8 @@ export class SvgPathStart extends SvgPathNode {
      * @param originY y coordinate of the scaling origin point
      * @param value scale value
      * */
-    public scale(originX: number, originY: number, value: number): void {
+    public scale(originX: number, originY: number, value: number): void
+    {
         this.x = (this.x - originX) * value + originX;
         this.y = (this.y - originY) * value + originY;
     }
@@ -67,7 +76,8 @@ export class SvgPathStart extends SvgPathNode {
      * @param dx x coordinate offset
      * @param dy y coordinate offset
      * */
-    public translate(dx: number, dy: number): void {
+    public translate(dx: number, dy: number): void
+    {
         this.x += dx;
         this.y += dy;
     }
@@ -77,7 +87,8 @@ export class SvgPathStart extends SvgPathNode {
      * @param originY y coordinate of the rotation origin point
      * @param angle angle to rotate by
      * */
-    public rotate(originX: number, originY: number, angle: Angle): void {
+    public rotate(originX: number, originY: number, angle: Angle): void
+    {
         const x = this.x - originX;
         const y = this.y - originY;
         this.x = (x * angle.cos + y * angle.sin) + originX;
@@ -89,7 +100,8 @@ export class SvgPathStart extends SvgPathNode {
      * @param precision number of digits after the decimal point
      * @returns created svg command
      * */
-    public createSvgCommand(precision: number): string {
+    public createSvgCommand(precision: number): string
+    {
         return `M ${this.x.toFixed(precision)} ${this.y.toFixed(precision)}`;
     }
 }

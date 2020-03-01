@@ -5,42 +5,52 @@ import { SvgPathCubicCurve } from './svg-path-cubic-curve';
 import { Angle } from './primitives/angle';
 
 /** Specifies an svg path smooth cubic curve node. */
-export class SvgPathSmoothCubicCurve extends SvgPathNode {
-
-    public get type(): SvgPathNodeType {
+export class SvgPathSmoothCubicCurve extends SvgPathNode
+{
+    public get type(): SvgPathNodeType
+    {
         return SvgPathNodeType.SmoothCubicCurve;
     }
-    public get angleInDegrees(): number {
+    public get angleInDegrees(): number
+    {
         return Vector.getAngle({ x: this.x - this.bezierX2, y: this.y - this.bezierY2 });
     }
 
     /** Specifies smooth curve node's first bezier point's x coordinate. */
-    public set bezierX1(value: number) {
+    public set bezierX1(value: number)
+    {
         this._setBezierPoint1(value || 0, this.bezierY1);
     }
-    public get bezierX1(): number {
+    public get bezierX1(): number
+    {
         return this.bezierPoint1.x;
     }
     /** Specifies smooth curve node's first bezier point's y coordinate. */
-    public set bezierY1(value: number) {
+    public set bezierY1(value: number)
+    {
         this._setBezierPoint1(this.bezierX1, value || 0);
     }
-    public get bezierY1(): number {
+    public get bezierY1(): number
+    {
         return this.bezierPoint1.y;
     }
     /** Specifies smooth curve node's first bezier point's coordinates. */
-    public set bezierPoint1(value: Vector2) {
-        if (!value) {
+    public set bezierPoint1(value: Vector2)
+    {
+        if (!value)
             value = { x: 0, y: 0 };
-        }
+
         this._setBezierPoint1(value.x, value.y);
     }
-    public get bezierPoint1(): Vector2 {
-        if (this.prev!.type === SvgPathNodeType.CubicCurve) {
+    public get bezierPoint1(): Vector2
+    {
+        if (this.prev!.type === SvgPathNodeType.CubicCurve)
+        {
             const prev = this.prev as SvgPathCubicCurve;
             return this._getBezierPoint1(prev.bezierPoint2);
         }
-        if (this.prev!.type === SvgPathNodeType.SmoothCubicCurve) {
+        if (this.prev!.type === SvgPathNodeType.SmoothCubicCurve)
+        {
             const prev = this.prev as SvgPathSmoothCubicCurve;
             return this._getBezierPoint1(prev.bezierPoint2);
         }
@@ -48,43 +58,56 @@ export class SvgPathSmoothCubicCurve extends SvgPathNode {
     }
 
     /** Specifies smooth curve node's second bezier point's x coordinate. */
-    public set bezierX2(value: number) {
+    public set bezierX2(value: number)
+    {
         this._bezierX2 = value || 0;
     }
-    public get bezierX2(): number {
+    public get bezierX2(): number
+    {
         return this._bezierX2;
     }
     /** Specifies smooth curve node's second bezier point's y coordinate. */
-    public set bezierY2(value: number) {
+    public set bezierY2(value: number)
+    {
         this._bezierY2 = value || 0;
     }
-    public get bezierY2(): number {
+    public get bezierY2(): number
+    {
         return this._bezierY2;
     }
     /** Specifies smooth curve node's second bezier point's coordinates. */
-    public set bezierPoint2(value: Vector2) {
-        if (value) {
+    public set bezierPoint2(value: Vector2)
+    {
+        if (value)
+        {
             this.bezierX2 = value.x;
             this.bezierY2 = value.y;
-        } else {
+        }
+        else
+        {
             this.bezierX2 = 0;
             this.bezierY2 = 0;
         }
     }
-    public get bezierPoint2(): Vector2 {
+    public get bezierPoint2(): Vector2
+    {
         return { x: this.bezierX2, y: this.bezierY2 };
     }
 
-    public set x(value: number) {
+    public set x(value: number)
+    {
         this._x = value || 0;
     }
-    public get x(): number {
+    public get x(): number
+    {
         return this._x;
     }
-    public set y(value: number) {
+    public set y(value: number)
+    {
         this._y = value || 0;
     }
-    public get y(): number {
+    public get y(): number
+    {
         return this._y;
     }
 
@@ -101,11 +124,12 @@ export class SvgPathSmoothCubicCurve extends SvgPathNode {
      * @param bezierY2 second bezier point's y coordinate
      * @param prev node's predecessor
      * */
-    public constructor(x: number, y: number, bezierX2: number, bezierY2: number, prev: SvgPathNode) {
+    public constructor(x: number, y: number, bezierX2: number, bezierY2: number, prev: SvgPathNode)
+    {
         super(prev);
-        if (!prev) {
+        if (!prev)
             throw new Error('svg path smooth cubic curve node lacks predecessor node');
-        }
+
         this._x = x || 0;
         this._y = y || 0;
         this._bezierX2 = bezierX2 || 0;
@@ -117,7 +141,8 @@ export class SvgPathSmoothCubicCurve extends SvgPathNode {
      * @param prev predecessor node
      * @returns a copy of this node
      * */
-    public copy(prev: SvgPathNode): SvgPathSmoothCubicCurve {
+    public copy(prev: SvgPathNode): SvgPathSmoothCubicCurve
+    {
         return new SvgPathSmoothCubicCurve(this.x, this.y, this.bezierX2, this.bezierY2, prev);
     }
     /**
@@ -126,7 +151,8 @@ export class SvgPathSmoothCubicCurve extends SvgPathNode {
      * @param originY y coordinate of the scaling origin point
      * @param value scale value
      * */
-    public scale(originX: number, originY: number, value: number): void {
+    public scale(originX: number, originY: number, value: number): void
+    {
         this.x = (this.x - originX) * value + originX;
         this.y = (this.y - originY) * value + originY;
         this.bezierX2 = (this.bezierX2 - originX) * value + originX;
@@ -137,7 +163,8 @@ export class SvgPathSmoothCubicCurve extends SvgPathNode {
      * @param dx x coordinate offset
      * @param dy y coordinate offset
      * */
-    public translate(dx: number, dy: number): void {
+    public translate(dx: number, dy: number): void
+    {
         this.x += dx;
         this.y += dy;
         this.bezierX2 += dx;
@@ -149,7 +176,8 @@ export class SvgPathSmoothCubicCurve extends SvgPathNode {
      * @param originY y coordinate of the rotation origin point
      * @param angle angle to rotate by
      * */
-    public rotate(originX: number, originY: number, angle: Angle): void {
+    public rotate(originX: number, originY: number, angle: Angle): void
+    {
         let x = this.x - originX;
         let y = this.y - originY;
         this.x = (x * angle.cos + y * angle.sin) + originX;
@@ -164,7 +192,8 @@ export class SvgPathSmoothCubicCurve extends SvgPathNode {
      * @param precision number of digits after the decimal point
      * @returns created svg command
      * */
-    public createSvgCommand(precision: number): string {
+    public createSvgCommand(precision: number): string
+    {
         const x = this.x.toFixed(precision);
         const y = this.y.toFixed(precision);
         const bx2 = this.bezierX2.toFixed(precision);
@@ -172,31 +201,38 @@ export class SvgPathSmoothCubicCurve extends SvgPathNode {
         return `S ${bx2} ${by2} ${x} ${y}`;
     }
 
-    private _setBezierPoint1(x: number, y: number): void {
-        switch (this.prev!.type) {
-            case SvgPathNodeType.CubicCurve: {
+    private _setBezierPoint1(x: number, y: number): void
+    {
+        switch (this.prev!.type)
+        {
+            case SvgPathNodeType.CubicCurve:
+            {
                 const prev = this.prev as SvgPathCubicCurve;
                 prev.bezierPoint2 = this._createPrevBezierPoint2({ x: x, y: y });
                 break;
             }
-            case SvgPathNodeType.SmoothCubicCurve: {
+            case SvgPathNodeType.SmoothCubicCurve:
+            {
                 const prev = this.prev as SvgPathSmoothCubicCurve;
                 prev.bezierPoint2 = this._createPrevBezierPoint2({ x: x, y: y });
                 break;
             }
-            default: {
+            default:
+            {
                 this.prev!.point = { x: x, y: y };
                 break;
             }
         }
     }
 
-    private _createPrevBezierPoint2(thisBezierPoint1: Vector2): Vector2 {
+    private _createPrevBezierPoint2(thisBezierPoint1: Vector2): Vector2
+    {
         const prevPoint = this.prev!.point;
         return Vector.sub(prevPoint, Vector.sub(thisBezierPoint1, prevPoint));
     }
 
-    private _getBezierPoint1(prevBezierPoint2: Vector2): Vector2 {
+    private _getBezierPoint1(prevBezierPoint2: Vector2): Vector2
+    {
         const prevPoint = this.prev!.point;
         return Vector.add(Vector.sub(Vector.copy(prevPoint), prevBezierPoint2), prevPoint);
     }

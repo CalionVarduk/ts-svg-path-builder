@@ -5,11 +5,13 @@ import { SvgPathNodeType } from '../core/svg-path-node-type';
 import { Angle } from '../core/primitives/angle';
 import each from 'jest-each';
 
-function createDefault(prev: SvgPathNode): SvgPathCubicCurve {
+function createDefault(prev: SvgPathNode): SvgPathCubicCurve
+{
     return new SvgPathCubicCurve(0, 0, 0, 0, 0, 0, prev);
 }
 
-function createStart(x: number = 0, y: number = 0): SvgPathStart {
+function createStart(x: number = 0, y: number = 0): SvgPathStart
+{
     return new SvgPathStart(x, y, 0, null);
 }
 
@@ -20,7 +22,8 @@ each([
 ])
 .test(`ctor should create with provided parameters (%#): x: %f, y: %f,
 bezier x1: %f, bezier y1: %f, bezier x2: %f, bezier y2: %f, prev: %o`,
-    (x, y, bx1, by1, bx2, by2, prev) => {
+    (x, y, bx1, by1, bx2, by2, prev) =>
+    {
         const sut = new SvgPathCubicCurve(x, y, bx1, by1, bx2, by2, prev);
         expect(sut.x).toBe(x || 0);
         expect(sut.y).toBe(y || 0);
@@ -33,14 +36,16 @@ bezier x1: %f, bezier y1: %f, bezier x2: %f, bezier y2: %f, prev: %o`,
 );
 
 test('ctor should throw when prev is not defined',
-    () => {
+    () =>
+    {
         const action = () => new SvgPathCubicCurve(0, 0, 0, 0, 0, 0, null as any);
         expect(action).toThrowError();
     }
 );
 
 test('type getter should return cubic curve',
-    () => {
+    () =>
+    {
         const sut = createDefault(createStart());
         expect(sut.type).toBe(SvgPathNodeType.CubicCurve);
     }
@@ -54,7 +59,8 @@ each([
     [-55.6, 11.234, -66.834, -0.63423, 46.572557157]
 ])
 .test('angle in degrees getter should return correct value (%#): x: %f, y: %f, bezier x2: %f, bezier y2: %f, expected: %f',
-    (x, y, bx2, by2, expected) => {
+    (x, y, bx2, by2, expected) =>
+    {
         const sut = new SvgPathCubicCurve(x, y, 0, 0, bx2, by2, createStart());
         expect(sut.angleInDegrees).toBeCloseTo(expected, 8);
     }
@@ -67,7 +73,8 @@ each([
     [null, null]
 ])
 .test('x and y setters should set correct values (%#): x: %f, y: %f',
-    (x, y) => {
+    (x, y) =>
+    {
         const sut = createDefault(createStart());
         sut.x = x;
         sut.y = y;
@@ -83,7 +90,8 @@ each([
     [null, null]
 ])
 .test('bezier x1 and y1 setters should set correct values (%#): x: %f, y: %f',
-    (x, y) => {
+    (x, y) =>
+    {
         const sut = createDefault(createStart());
         sut.bezierX1 = x;
         sut.bezierY1 = y;
@@ -93,7 +101,8 @@ each([
 );
 
 test('bezier point1 getter should return correct x and y',
-    () => {
+    () =>
+    {
         const sut = createDefault(createStart());
         expect(sut.bezierPoint1).toStrictEqual({ x: sut.bezierX1, y: sut.bezierY1 });
     }
@@ -106,7 +115,8 @@ each([
     [{ x: -2, y: 17 }]
 ])
 .test('bezier point1 setter should set correct x and y (%#): value: %o',
-    (value) => {
+    (value) =>
+    {
         const sut = createDefault(createStart());
         sut.bezierPoint1 = value;
         expect(sut.bezierPoint1).toStrictEqual(value || { x: 0, y: 0 });
@@ -120,7 +130,8 @@ each([
     [null, null]
 ])
 .test('bezier x2 and y2 setters should set correct values (%#): x: %f, y: %f',
-    (x, y) => {
+    (x, y) =>
+    {
         const sut = createDefault(createStart());
         sut.bezierX2 = x;
         sut.bezierY2 = y;
@@ -130,7 +141,8 @@ each([
 );
 
 test('bezier point2 getter should return correct x and y',
-    () => {
+    () =>
+    {
         const sut = createDefault(createStart());
         expect(sut.bezierPoint2).toStrictEqual({ x: sut.bezierX2, y: sut.bezierY2 });
     }
@@ -143,7 +155,8 @@ each([
     [{ x: -2, y: 17 }]
 ])
 .test('bezier point2 setter should set correct x and y (%#): value: %o',
-    (value) => {
+    (value) =>
+    {
         const sut = createDefault(createStart());
         sut.bezierPoint2 = value;
         expect(sut.bezierPoint2).toStrictEqual(value || { x: 0, y: 0 });
@@ -155,7 +168,8 @@ each([
     [10, -50, 20, 40, 12, -13, createStart()]
 ])
 .test('copy should return new valid object (%#): x: %f, y: %f, bezier x1: %f, bezier y1: %f, bezier x2: %f, bezier y2: %f, prev: %o',
-    (x, y, bx1, by1, bx2, by2, prev) => {
+    (x, y, bx1, by1, bx2, by2, prev) =>
+    {
         const sut = new SvgPathCubicCurve(x, y, bx1, by1, bx2, by2, createStart());
         const result = sut.copy(prev);
         expect(result).toBeDefined();
@@ -173,7 +187,8 @@ each([
 );
 
 test('copy should throw when prev is not defined',
-    () => {
+    () =>
+    {
         const sut = new SvgPathCubicCurve(0, 0, 0, 0, 0, 0, createStart());
         const action = () => sut.copy(null as any);
         expect(action).toThrowError();
@@ -196,7 +211,8 @@ each([
 ])
 .test(`scale should modify node properly (%#): x: %f, y: %f, bezier x1: %f, bezier y1: %f, bezier x2: %f, bezier y2: %f,
 origin: %o, scale: %f, expected point: %o, expected bezier point1: %o, expected bezier point2: %o`,
-    (x, y, bx1, by1, bx2, by2, origin, scale, expected, expectedBezier1, expectedBezier2) => {
+    (x, y, bx1, by1, bx2, by2, origin, scale, expected, expectedBezier1, expectedBezier2) =>
+    {
         const sut = new SvgPathCubicCurve(x, y, bx1, by1, bx2, by2, createStart());
         sut.scale(origin.x, origin.y, scale);
         expect(sut.x).toBeCloseTo(expected.x, 8);
@@ -224,7 +240,8 @@ each([
 ])
 .test(`translate should modify node properly (%#): x: %f, y: %f, bezier x1: %f, bezier y1: %f, bezier x2: %f, bezier y2: %f,
 dx: %f, dy: %f, expected point: %o, expected bezier point1: %o, expected bezier point2: %o`,
-    (x, y, bx1, by1, bx2, by2, dx, dy, expected, expectedBezier1, expectedBezier2) => {
+    (x, y, bx1, by1, bx2, by2, dx, dy, expected, expectedBezier1, expectedBezier2) =>
+    {
         const sut = new SvgPathCubicCurve(x, y, bx1, by1, bx2, by2, createStart());
         sut.translate(dx, dy);
         expect(sut.x).toBeCloseTo(expected.x, 8);
@@ -252,7 +269,8 @@ each([
 ])
 .test(`rotate should modify node properly (%#): x: %f, y: %f, bezier x1: %f, bezier y1: %f, bezier x2: %f, bezier y2: %f,
 origin: %o, angle: %f, expected point: %o, expected bezier point1: %o, expected bezier point2: %o`,
-    (x, y, bx1, by1, bx2, by2, origin, angle, expected, expectedBezier1, expectedBezier2) => {
+    (x, y, bx1, by1, bx2, by2, origin, angle, expected, expectedBezier1, expectedBezier2) =>
+    {
         const sut = new SvgPathCubicCurve(x, y, bx1, by1, bx2, by2, createStart());
         sut.rotate(origin.x, origin.y, new Angle(angle));
         expect(sut.x).toBeCloseTo(expected.x, 8);
@@ -276,7 +294,8 @@ each([
 ])
 .test(`create svg command should return correct result (%#): x: %f, y: %f,
 bezier x1: %f, bezier y1: %f, bezier x2: %f, bezier y2: %f, precision: %f, expected: %s`,
-    (x, y, bx1, by1, bx2, by2, precision, expected) => {
+    (x, y, bx1, by1, bx2, by2, precision, expected) =>
+    {
         const sut = new SvgPathCubicCurve(x, y, bx1, by1, bx2, by2, createStart());
         expect(sut.createSvgCommand(precision)).toBe(expected);
     }

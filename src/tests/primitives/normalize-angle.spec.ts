@@ -25,7 +25,8 @@ each([
     [300.88, 300.88]
 ])
 .test('normalize angle (%#): angle: %f, expected angle: %f',
-    (angle, expected) => {
+    (angle, expected) =>
+    {
         const result = normalizeAngle(angle);
         expect(result).toBeCloseTo(expected, 8);
     }

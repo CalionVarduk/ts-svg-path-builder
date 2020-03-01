@@ -6,15 +6,17 @@ import { SqMatrix } from './primitives/sq-matrix';
 import { Angle } from './primitives/angle';
 
 /** Specifies an svg path arc node. */
-export class SvgPathArc extends SvgPathNode {
-
-    public get type(): SvgPathNodeType {
+export class SvgPathArc extends SvgPathNode
+{
+    public get type(): SvgPathNodeType
+    {
         return SvgPathNodeType.Arc;
     }
-    public get angleInDegrees(): number {
-        if (this.rx === 0 || this.ry === 0 || (this.x === this.prev!.x && this.y === this.prev!.y)) {
+    public get angleInDegrees(): number
+    {
+        if (this.rx === 0 || this.ry === 0 || (this.x === this.prev!.x && this.y === this.prev!.y))
             return Vector.getAngle({ x: this.x - this.prev!.x, y: this.y - this.prev!.y });
-        }
+
         const c = this._getCentrePoint();
         const d = Vector.mirrorY(Vector.setAngle({ x: 1, y: 0 }, -this.rotationAngleInDegrees));
         const f1 = Vector.add(Vector.copy(c), d);
@@ -25,63 +27,78 @@ export class SvgPathArc extends SvgPathNode {
     }
 
     /** Specifies whether or not this arc node has large arc flag enabled. */
-    public get hasLargeArcFlag(): boolean {
+    public get hasLargeArcFlag(): boolean
+    {
         return (this.style & 1) === 1;
     }
     /** Specifies whether or not this arc node has sweep flag enabled. */
-    public get hasSweepFlag(): boolean {
+    public get hasSweepFlag(): boolean
+    {
         return this.style > 1;
     }
 
     /** Returns the centre point of an ellipse that this arc lies on. */
-    public get centrePoint(): Vector2 {
-        if (this.rx === 0 || this.ry === 0 || (this.x === this.prev!.x && this.y === this.prev!.y)) {
+    public get centrePoint(): Vector2
+    {
+        if (this.rx === 0 || this.ry === 0 || (this.x === this.prev!.x && this.y === this.prev!.y))
             return Vector.add(Vector.scale({ x: this.x - this.prev!.x, y: this.y - this.prev!.y }, 0.5), this.prev!.point);
-        }
+
         return this._getCentrePoint();
     }
 
     /** Specifies arc node's semi x axis' value. */
-    public set rx(value: number) {
+    public set rx(value: number)
+    {
         this._rx = value || 0;
     }
-    public get rx(): number {
+    public get rx(): number
+    {
         return this._rx;
     }
     /** Specifies arc node's semi y axis' value. */
-    public set ry(value: number) {
+    public set ry(value: number)
+    {
         this._ry = value || 0;
     }
-    public get ry(): number {
+    public get ry(): number
+    {
         return this._ry;
     }
 
     /** Specifies arc node's rotation angle in degrees. */
-    public set rotationAngleInDegrees(value: number) {
+    public set rotationAngleInDegrees(value: number)
+    {
         this._rotationAngleInDegrees = value || 0;
     }
-    public get rotationAngleInDegrees(): number {
+    public get rotationAngleInDegrees(): number
+    {
         return this._rotationAngleInDegrees;
     }
 
     /** Specifies arc node's style. */
-    public set style(value: SvgPathArcStyle) {
+    public set style(value: SvgPathArcStyle)
+    {
         this._style = value || SvgPathArcStyle.CccwLt180;
     }
-    public get style(): SvgPathArcStyle {
+    public get style(): SvgPathArcStyle
+    {
         return this._style;
     }
 
-    public set x(value: number) {
+    public set x(value: number)
+    {
         this._x = value || 0;
     }
-    public get x(): number {
+    public get x(): number
+    {
         return this._x;
     }
-    public set y(value: number) {
+    public set y(value: number)
+    {
         this._y = value || 0;
     }
-    public get y(): number {
+    public get y(): number
+    {
         return this._y;
     }
 
@@ -103,11 +120,12 @@ export class SvgPathArc extends SvgPathNode {
      * @param prev node's predecessor
      * */
     public constructor(x: number, y: number, rx: number, ry: number,
-        rotationAngleInDegrees: number, style: SvgPathArcStyle, prev: SvgPathNode) {
+        rotationAngleInDegrees: number, style: SvgPathArcStyle, prev: SvgPathNode)
+    {
         super(prev);
-        if (!prev) {
+        if (!prev)
             throw new Error('svg path arc node lacks predecessor node');
-        }
+
         this._x = x || 0;
         this._y = y || 0;
         this._rx = rx || 0;
@@ -121,7 +139,8 @@ export class SvgPathArc extends SvgPathNode {
      * @param prev predecessor node
      * @returns a copy of this node
      * */
-    public copy(prev: SvgPathNode): SvgPathArc {
+    public copy(prev: SvgPathNode): SvgPathArc
+    {
         return new SvgPathArc(this.x, this.y, this.rx, this.ry, this.rotationAngleInDegrees, this.style, prev);
     }
     /**
@@ -130,7 +149,8 @@ export class SvgPathArc extends SvgPathNode {
      * @param originY y coordinate of the scaling origin point
      * @param value scale value
      * */
-    public scale(originX: number, originY: number, value: number): void {
+    public scale(originX: number, originY: number, value: number): void
+    {
         this.x = (this.x - originX) * value + originX;
         this.y = (this.y - originY) * value + originY;
         this.rx *= value;
@@ -141,7 +161,8 @@ export class SvgPathArc extends SvgPathNode {
      * @param dx x coordinate offset
      * @param dy y coordinate offset
      * */
-    public translate(dx: number, dy: number): void {
+    public translate(dx: number, dy: number): void
+    {
         this.x += dx;
         this.y += dy;
     }
@@ -151,7 +172,8 @@ export class SvgPathArc extends SvgPathNode {
      * @param originY y coordinate of the rotation origin point
      * @param angle angle to rotate by
      * */
-    public rotate(originX: number, originY: number, angle: Angle): void {
+    public rotate(originX: number, originY: number, angle: Angle): void
+    {
         const x = this.x - originX;
         const y = this.y - originY;
         this.x = (x * angle.cos + y * angle.sin) + originX;
@@ -163,7 +185,8 @@ export class SvgPathArc extends SvgPathNode {
      * @param precision number of digits after the decimal point
      * @returns created svg command
      * */
-    public createSvgCommand(precision: number): string {
+    public createSvgCommand(precision: number): string
+    {
         const rx = this.rx.toFixed(precision);
         const ry = this.ry.toFixed(precision);
         const rot = this.rotationAngleInDegrees.toFixed(precision);
@@ -174,7 +197,8 @@ export class SvgPathArc extends SvgPathNode {
         return `A ${rx} ${ry} ${rot} ${larc} ${sweep} ${x} ${y}`;
     }
 
-    private _getCentrePoint(): Vector2 {
+    private _getCentrePoint(): Vector2
+    {
         const cos = Math.cos(this.rotationAngleInDegrees);
         const sin = Math.sin(this.rotationAngleInDegrees);
         const rotMatrix = { t0: cos, t1: sin, b0: -sin, b1: cos };
@@ -187,7 +211,8 @@ export class SvgPathArc extends SvgPathNode {
         let rxSq = rx * rx;
         let rySq = ry * ry;
         const lambda = vpxSq / rxSq + vpySq / rySq;
-        if (lambda > 1) {
+        if (lambda > 1)
+        {
             const lambdaSqrt = Math.sqrt(lambda);
             rx *= lambdaSqrt;
             ry *= lambdaSqrt;

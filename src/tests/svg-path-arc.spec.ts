@@ -6,11 +6,13 @@ import { SvgPathArcStyle } from '../core/svg-path-arc-style';
 import { Angle } from '../core/primitives/angle';
 import each from 'jest-each';
 
-function createDefault(prev: SvgPathNode): SvgPathArc {
+function createDefault(prev: SvgPathNode): SvgPathArc
+{
     return new SvgPathArc(0, 0, 0, 0, 0, SvgPathArcStyle.CccwLt180, prev);
 }
 
-function createStart(x: number = 0, y: number = 0): SvgPathStart {
+function createStart(x: number = 0, y: number = 0): SvgPathStart
+{
     return new SvgPathStart(x, y, 0, null);
 }
 
@@ -20,7 +22,8 @@ each([
     [null, null, null, null, null, null, createDefault(createStart())]
 ])
 .test(`ctor should create with provided parameters (%#): x: %f, y: %f, rx: %f, ry: %f, angle: %f, style: %f, prev: %o`,
-    (x, y, rx, ry, angle, style, prev) => {
+    (x, y, rx, ry, angle, style, prev) =>
+    {
         const sut = new SvgPathArc(x, y, rx, ry, angle, style, prev);
         expect(sut.x).toBe(x || 0);
         expect(sut.y).toBe(y || 0);
@@ -33,14 +36,16 @@ each([
 );
 
 test('ctor should throw when prev is not defined',
-    () => {
+    () =>
+    {
         const action = () => new SvgPathArc(0, 0, 0, 0, 0, 0, null as any);
         expect(action).toThrowError();
     }
 );
 
 test('type getter should return arc',
-    () => {
+    () =>
+    {
         const sut = createDefault(createStart());
         expect(sut.type).toBe(SvgPathNodeType.Arc);
     }
@@ -56,7 +61,8 @@ each([
 ])
 .test(`angle in degrees getter should return correct value (%#): x: %f, y: %f, rx: %f, ry: %f, angle: %f, style: %f,
 prev x: %f, prev y: %f, expected: %f`,
-    (x, y, rx, ry, angle, style, prevX, prevY, expected) => {
+    (x, y, rx, ry, angle, style, prevX, prevY, expected) =>
+    {
         const sut = new SvgPathArc(x, y, rx, ry, angle, style, createStart(prevX, prevY));
         expect(sut.angleInDegrees).toBeCloseTo(expected, 8);
     }
@@ -69,7 +75,8 @@ each([
     [null, null]
 ])
 .test('x and y setters should set correct values (%#): x: %f, y: %f',
-    (x, y) => {
+    (x, y) =>
+    {
         const sut = createDefault(createStart());
         sut.x = x;
         sut.y = y;
@@ -85,7 +92,8 @@ each([
     [null, null]
 ])
 .test('rx and ry setters should set correct values (%#): x: %f, y: %f',
-    (x, y) => {
+    (x, y) =>
+    {
         const sut = createDefault(createStart());
         sut.rx = x;
         sut.ry = y;
@@ -102,7 +110,8 @@ each([
     [SvgPathArcStyle.CcwGt180]
 ])
 .test('style setter should set correct values (%#): style: %f',
-    (style) => {
+    (style) =>
+    {
         const sut = createDefault(createStart());
         sut.style = style;
         expect(sut.style).toBe(style || SvgPathArcStyle.CccwLt180);
@@ -117,7 +126,8 @@ each([
     [367.67]
 ])
 .test('rotation angle in degrees setter should set correct values (%#): angle: %f',
-    (angle) => {
+    (angle) =>
+    {
         const sut = createDefault(createStart());
         sut.rotationAngleInDegrees = angle;
         expect(sut.rotationAngleInDegrees).toBe(angle || 0);
@@ -131,7 +141,8 @@ each([
     [SvgPathArcStyle.CcwGt180, true]
 ])
 .test('has large arc flag getter should return correct result (%#): style: %f, expected: %s',
-    (style, expected) => {
+    (style, expected) =>
+    {
         const sut = createDefault(createStart());
         sut.style = style;
         expect(sut.hasLargeArcFlag).toBe(expected);
@@ -145,7 +156,8 @@ each([
     [SvgPathArcStyle.CcwGt180, true]
 ])
 .test('has sweep flag getter should return correct result (%#): style: %f, expected: %s',
-    (style, expected) => {
+    (style, expected) =>
+    {
         const sut = createDefault(createStart());
         sut.style = style;
         expect(sut.hasSweepFlag).toBe(expected);
@@ -162,7 +174,8 @@ each([
 ])
 .test(`centre point getter should return correct result (%#): x: %f, y: %f, rx: %f, ry: %f, angle: %f, style: %f,
 prev x: %f, prev y: %f, expected: %o`,
-    (x, y, rx, ry, angle, style, prevX, prevY, expected) => {
+    (x, y, rx, ry, angle, style, prevX, prevY, expected) =>
+    {
         const sut = new SvgPathArc(x, y, rx, ry, angle, style, createStart(prevX, prevY));
         const result = sut.centrePoint;
         expect(result).toBeDefined();
@@ -177,7 +190,8 @@ each([
     [10, -50, 20, 40, 12, SvgPathArcStyle.CcwLt180, createStart()]
 ])
 .test('copy should return new valid object (%#): x: %f, y: %f, rx: %f, ry: %f, angle: %f, style: %f, prev: %o',
-    (x, y, rx, ry, angle, style, prev) => {
+    (x, y, rx, ry, angle, style, prev) =>
+    {
         const sut = new SvgPathArc(x, y, rx, ry, angle, style, createStart());
         const result = sut.copy(prev);
         expect(result).toBeDefined();
@@ -195,7 +209,8 @@ each([
 );
 
 test('copy should throw when prev is not defined',
-    () => {
+    () =>
+    {
         const sut = new SvgPathArc(0, 0, 0, 0, 0, 0, createStart());
         const action = () => sut.copy(null as any);
         expect(action).toThrowError();
@@ -218,7 +233,8 @@ each([
 ])
 .test(`scale should modify node properly (%#): x: %f, y: %f, rx: %f, ry: %f, angle: %f, style: %f,
 origin: %o, scale: %f, expected point: %o, expected rx: %o, expected ry: %o`,
-    (x, y, rx, ry, angle, style, origin, scale, expected, expectedRx, expectedRy) => {
+    (x, y, rx, ry, angle, style, origin, scale, expected, expectedRx, expectedRy) =>
+    {
         const sut = new SvgPathArc(x, y, rx, ry, angle, style, createStart());
         sut.scale(origin.x, origin.y, scale);
         expect(sut.x).toBeCloseTo(expected.x, 8);
@@ -239,7 +255,8 @@ each([
     [3.3, 22.87, 13.4, 2.231, 2.2222, SvgPathArcStyle.CcwLt180, 12.1, -2.8, { x: 15.4, y: 20.07 }]
 ])
 .test(`translate should modify node properly (%#): x: %f, y: %f, rx: %f, ry: %f, angle: %f, style: %f, dx: %f, dy: %f, expected point: %o`,
-    (x, y, rx, ry, angle, style, dx, dy, expected) => {
+    (x, y, rx, ry, angle, style, dx, dy, expected) =>
+    {
         const sut = new SvgPathArc(x, y, rx, ry, angle, style, createStart());
         sut.translate(dx, dy);
         expect(sut.x).toBeCloseTo(expected.x, 8);
@@ -261,7 +278,8 @@ each([
 ])
 .test(`rotate should modify node properly (%#): x: %f, y: %f, rx: %f, ry: %f, angle: %f, style: %f,
 origin: %o, value: %o, expected point: %o, expected angle: %f`,
-    (x, y, rx, ry, angle, style, origin, value, expected, expectedAngle) => {
+    (x, y, rx, ry, angle, style, origin, value, expected, expectedAngle) =>
+    {
         const sut = new SvgPathArc(x, y, rx, ry, angle, style, createStart());
         sut.rotate(origin.x, origin.y, new Angle(value));
         expect(sut.x).toBeCloseTo(expected.x, 8);
@@ -285,7 +303,8 @@ each([
 ])
 .test(`create svg command should return correct result (%#): x: %f, y: %f, rx: %f, ry: %f, angle: %f, style: %f,
 precision: %f, expected: %s`,
-    (x, y, rx, ry, angle, style, precision, expected) => {
+    (x, y, rx, ry, angle, style, precision, expected) =>
+    {
         const sut = new SvgPathArc(x, y, rx, ry, angle, style, createStart());
         expect(sut.createSvgCommand(precision)).toBe(expected);
     }

@@ -25,7 +25,8 @@ each([
     [{ t0: -0.4, t1: 5.5, b0: 5.5, b1: 1.1 }]
 ])
 .test('copy (%#): matrix: %o',
-    (m) => {
+    (m) =>
+    {
         const result = SqMatrix.copy(m);
         expect(result).toBeDefined();
         expect(result).not.toBeNull();
@@ -61,7 +62,8 @@ each([
     [{ x: -0.4, y: 5.5 }, { x: 5.5, y: 1.1 }]
 ])
 .test('from rows (%#): top: %o, bottom: %o',
-    (v1, v2) => {
+    (v1, v2) =>
+    {
         const result = SqMatrix.fromRows(v1, v2);
         expect(result).toBeDefined();
         expect(result).not.toBeNull();
@@ -96,7 +98,8 @@ each([
     [{ x: -0.4, y: 5.5 }, { x: 5.5, y: 1.1 }]
 ])
 .test('from cols (%#): left: %o, right: %o',
-    (v1, v2) => {
+    (v1, v2) =>
+    {
         const result = SqMatrix.fromCols(v1, v2);
         expect(result).toBeDefined();
         expect(result).not.toBeNull();
@@ -108,7 +111,8 @@ each([
 );
 
 test('identity',
-    () => {
+    () =>
+    {
         const result = SqMatrix.identity();
         expect(result).toBeDefined();
         expect(result).not.toBeNull();
@@ -143,7 +147,8 @@ each([
     [{ t0: -0.4, t1: 5.5, b0: 5.5, b1: 1.1 }, { t0: 0, t1: 5, b0: -5, b1: 0 }]
 ])
 .test('assign (%#): matrix: %o, other: %o',
-    (m1, m2) => {
+    (m1, m2) =>
+    {
         const result = SqMatrix.assign(m1, m2);
         expect(result).toBe(m1);
         expect(result.t0).toBe(m2.t0);
@@ -177,7 +182,8 @@ each([
     [{ t0: -0.4, t1: 5.5, b0: 5.5, b1: 1.1 }, -30.69]
 ])
 .test('det (%#): matrix: %o, expected: %f',
-    (m, expected) => {
+    (m, expected) =>
+    {
         expect(SqMatrix.det(m)).toBeCloseTo(expected, 8);
     }
 );
@@ -206,7 +212,8 @@ each([
     [{ t0: -0.4, t1: 5.5, b0: 5.5, b1: 1.1 }, { t0: 0, t1: 5, b0: -5, b1: 0 }, { t0: -0.4, t1: 10.5, b0: 0.5, b1: 1.1 }]
 ])
 .test('add (%#): matrix: %o, other: %o, expected: %o',
-    (m1, m2, expected) => {
+    (m1, m2, expected) =>
+    {
         const result = SqMatrix.add(m1, m2);
         expect(result).toBe(m1);
         expect(result.t0).toBeCloseTo(expected.t0, 8);
@@ -240,7 +247,8 @@ each([
     [{ t0: -0.4, t1: 5.5, b0: 5.5, b1: 1.1 }, 5, { t0: 4.6, t1: 10.5, b0: 10.5, b1: 6.1 }]
 ])
 .test('add scalar (%#): matrix: %o, scalar: %f, expected: %o',
-    (m, scalar, expected) => {
+    (m, scalar, expected) =>
+    {
         const result = SqMatrix.addScalar(m, scalar);
         expect(result).toBe(m);
         expect(result.t0).toBeCloseTo(expected.t0, 8);
@@ -274,7 +282,8 @@ each([
     [{ t0: -0.4, t1: 5.5, b0: 5.5, b1: 1.1 }, { t0: 0, t1: 5, b0: -5, b1: 0 }, { t0: -0.4, t1: 0.5, b0: 10.5, b1: 1.1 }]
 ])
 .test('sub (%#): matrix: %o, other: %o, expected: %o',
-    (m1, m2, expected) => {
+    (m1, m2, expected) =>
+    {
         const result = SqMatrix.sub(m1, m2);
         expect(result).toBe(m1);
         expect(result.t0).toBeCloseTo(expected.t0, 8);
@@ -308,7 +317,8 @@ each([
     [{ t0: -0.4, t1: 5.5, b0: 5.5, b1: 1.1 }, 5, { t0: -5.4, t1: 0.5, b0: 0.5, b1: -3.9 }]
 ])
 .test('sub scalar (%#): matrix: %o, scalar: %f, expected: %o',
-    (m, scalar, expected) => {
+    (m, scalar, expected) =>
+    {
         const result = SqMatrix.subScalar(m, scalar);
         expect(result).toBe(m);
         expect(result.t0).toBeCloseTo(expected.t0, 8);
@@ -342,7 +352,8 @@ each([
     [{ t0: -0.4, t1: 5.5, b0: 5.5, b1: 1.1 }, 5, { t0: -2, t1: 27.5, b0: 27.5, b1: 5.5 }]
 ])
 .test('scale (%#): matrix: %o, scalar: %f, expected: %o',
-    (m, scalar, expected) => {
+    (m, scalar, expected) =>
+    {
         const result = SqMatrix.scale(m, scalar);
         expect(result).toBe(m);
         expect(result.t0).toBeCloseTo(expected.t0, 8);
@@ -376,11 +387,13 @@ each([
     [{ t0: -0.4, t1: 5.5, b0: 5.5, b1: 1.1 }, { t0: -0.035842293, t1: 0.179211469, b0: 0.179211469, b1: 0.013033561 }]
 ])
 .test('invert (%#): matrix: %o, expected: %o',
-    (m, expected) => {
+    (m, expected) =>
+    {
         const result = SqMatrix.invert(m);
-        if (expected === null) {
+        if (expected === null)
             expect(result).toBeNull();
-        } else {
+        else
+        {
             expect(result).toBe(m);
             expect(result!.t0).toBeCloseTo(expected.t0, 8);
             expect(result!.t1).toBeCloseTo(expected.t1, 8);
@@ -414,7 +427,8 @@ each([
     [{ t0: -0.4, t1: 5.5, b0: 5.5, b1: 1.1 }, { t0: 0, t1: 5, b0: -5, b1: 0 }, { t0: -27.5, t1: -2, b0: -5.5, b1: 27.5 }]
 ])
 .test('mult (%#): matrix: %o, other: %o, expected: %o',
-    (m1, m2, expected) => {
+    (m1, m2, expected) =>
+    {
         const result = SqMatrix.mult(m1, m2);
         expect(result).toBe(m1);
         expect(result.t0).toBeCloseTo(expected.t0, 8);
@@ -448,7 +462,8 @@ each([
     [{ t0: -0.4, t1: 5.5, b0: 5.5, b1: 1.1 }, { x: -2.2, y: -5.5 }, { x: -29.37, y: -18.15 }]
 ])
 .test('mult vec (%#): matrix: %o, vector: %o, expected: %o',
-    (m, v, expected) => {
+    (m, v, expected) =>
+    {
         const result = SqMatrix.multVec(m, v);
         expect(result).toBeDefined();
         expect(result).not.toBeNull();
@@ -481,7 +496,8 @@ each([
     [{ t0: -0.4, t1: 5.5, b0: 5.5, b1: 1.1 }]
 ])
 .test('transpose (%#): matrix: %o, expected: %o',
-    (m) => {
+    (m) =>
+    {
         const t0: number = m.t0;
         const t1: number = m.t1;
         const b0: number = m.b0;
