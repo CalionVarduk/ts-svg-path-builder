@@ -1,7 +1,7 @@
 import { SvgPathStart } from '../core/svg-path-start';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
 import { Angle } from '../core/primitives/angle';
-import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
+import { Nullable } from 'frl-ts-utils/lib/types/nullable';
 import each from 'jest-each';
 
 function createDefault(prev: Nullable<SvgPathStart> = null): SvgPathStart

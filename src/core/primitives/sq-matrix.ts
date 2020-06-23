@@ -1,6 +1,6 @@
 import { Vector2 } from './vector';
-import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
-import { DeepReadonly } from 'frl-ts-utils/lib/core/types/deep-readonly';
+import { Nullable } from 'frl-ts-utils/lib/types/nullable';
+import { DeepReadonly } from 'frl-ts-utils/lib/types/deep-readonly';
 
 /** 2D square matrix literal type alias. */
 export type SqMatrix2 =

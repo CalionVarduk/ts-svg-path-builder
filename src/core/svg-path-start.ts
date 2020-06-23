@@ -1,7 +1,7 @@
 import { SvgPathNode } from './svg-path-node';
 import { SvgPathNodeType } from './svg-path-node-type';
 import { Angle } from './primitives/angle';
-import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
+import { Nullable } from 'frl-ts-utils/lib/types/nullable';
 
 /** Specifies an svg path start node. */
 export class SvgPathStart extends SvgPathNode

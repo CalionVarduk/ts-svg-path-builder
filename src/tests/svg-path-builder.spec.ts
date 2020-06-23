@@ -12,8 +12,8 @@ import { SvgPathArc } from '../core/svg-path-arc';
 import { SvgPathArcStyle } from '../core/svg-path-arc-style';
 import { Angle } from '../core/primitives/angle';
 import { mock, IMockedMethodInfo, IMock, partialMock, IInvocationData } from 'frl-ts-mocking';
-import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
-import { reinterpretCast } from 'frl-ts-utils/lib/core/functions/reinterpret-cast';
+import { Nullable } from 'frl-ts-utils/lib/types/nullable';
+import { reinterpretCast } from 'frl-ts-utils/lib/functions/reinterpret-cast';
 import each from 'jest-each';
 
 function assertMockArgs(data: IInvocationData[], expected: any[][]): void

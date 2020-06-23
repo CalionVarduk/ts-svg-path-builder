@@ -42,10 +42,10 @@
     "jest": "^25.1.0",
     "ts-jest": "^25.2.1",
     "tslint": "^5.16.0",
-    "frl-ts-mocking": "^2.0.0",
+    "frl-ts-mocking": "^2.1.0",
     "typescript": "3.1.6"
   },
   "dependencies": {
-    "frl-ts-utils": "^2.0.0"
+    "frl-ts-utils": "^2.2.1"
   }
 }

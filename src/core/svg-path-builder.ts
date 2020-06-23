@@ -13,8 +13,8 @@ import { SvgPathArc } from './svg-path-arc';
 import { SvgPathSmoothQuadraticCurve } from './svg-path-smooth-quadratic-curve';
 import { SvgPathSmoothCubicCurve } from './svg-path-smooth-cubic-curve';
 import { normalizeAngle } from './primitives/normalize-angle';
-import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
-import { DeepReadonly } from 'frl-ts-utils/lib/core/types/deep-readonly';
+import { Nullable } from 'frl-ts-utils/lib/types/nullable';
+import { DeepReadonly } from 'frl-ts-utils/lib/types/deep-readonly';
 
 /** Specifies rectangle drawing options. */
 export type SvgRectangleOptions =

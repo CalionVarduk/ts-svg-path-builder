@@ -3,8 +3,8 @@ import { SvgPathClose } from '../core/svg-path-close';
 import { SvgPathNodeType } from '../core/svg-path-node-type';
 import { SvgPathNode } from '../core/svg-path-node';
 import { Angle } from '../core/primitives/angle';
-import { mock } from 'frl-ts-mocking/lib/core/mock';
-import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
+import { mock } from 'frl-ts-mocking/lib/mock';
+import { Nullable } from 'frl-ts-utils/lib/types/nullable';
 import each from 'jest-each';
 
 function createStart(x: number = 0, y: number = 0): SvgPathStart

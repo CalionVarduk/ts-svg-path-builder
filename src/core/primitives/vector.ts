@@ -1,5 +1,5 @@
 import { Angle } from './angle';
-import { DeepReadonly } from 'frl-ts-utils/lib/core/types/deep-readonly';
+import { DeepReadonly } from 'frl-ts-utils/lib/types/deep-readonly';
 
 /** 2D vector literal type alias. */
 export type Vector2 =

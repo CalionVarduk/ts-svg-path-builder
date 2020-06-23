@@ -1,7 +1,7 @@
 import { Vector2 } from './primitives/vector';
 import { SvgPathNodeType } from './svg-path-node-type';
 import { Angle } from './primitives/angle';
-import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
+import { Nullable } from 'frl-ts-utils/lib/types/nullable';
 
 /** Specifies an svg path node. */
 export abstract class SvgPathNode
