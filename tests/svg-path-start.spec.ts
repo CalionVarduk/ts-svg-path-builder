@@ -1,6 +1,6 @@
-import { SvgPathStart } from '../core/svg-path-start';
-import { SvgPathNodeType } from '../core/svg-path-node-type';
-import { Angle } from '../core/primitives/angle';
+import { SvgPathStart } from '../src/svg-path-start';
+import { SvgPathNodeType } from '../src/svg-path-node-type';
+import { Angle } from '../src/primitives/angle';
 import { Nullable } from 'frl-ts-utils/lib/types/nullable';
 import each from 'jest-each';
 

@@ -1,5 +1,5 @@
-import { Vector } from '../../core/primitives/vector';
-import { Angle } from '../../core/primitives/angle';
+import { Vector } from '../../src/primitives/vector';
+import { Angle } from '../../src/primitives/angle';
 import each from 'jest-each';
 
 each([

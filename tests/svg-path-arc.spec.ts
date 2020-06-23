@@ -1,9 +1,9 @@
-import { SvgPathNode } from '../core/svg-path-node';
-import { SvgPathStart } from '../core/svg-path-start';
-import { SvgPathArc } from '../core/svg-path-arc';
-import { SvgPathNodeType } from '../core/svg-path-node-type';
-import { SvgPathArcStyle } from '../core/svg-path-arc-style';
-import { Angle } from '../core/primitives/angle';
+import { SvgPathNode } from '../src/svg-path-node';
+import { SvgPathStart } from '../src/svg-path-start';
+import { SvgPathArc } from '../src/svg-path-arc';
+import { SvgPathNodeType } from '../src/svg-path-node-type';
+import { SvgPathArcStyle } from '../src/svg-path-arc-style';
+import { Angle } from '../src/primitives/angle';
 import each from 'jest-each';
 
 function createDefault(prev: SvgPathNode): SvgPathArc

@@ -1,8 +1,8 @@
-import { SvgPathNode } from '../core/svg-path-node';
-import { SvgPathStart } from '../core/svg-path-start';
-import { SvgPathLineOffset } from '../core/svg-path-line-offset';
-import { SvgPathNodeType } from '../core/svg-path-node-type';
-import { Angle } from '../core/primitives/angle';
+import { SvgPathNode } from '../src/svg-path-node';
+import { SvgPathStart } from '../src/svg-path-start';
+import { SvgPathLineOffset } from '../src/svg-path-line-offset';
+import { SvgPathNodeType } from '../src/svg-path-node-type';
+import { Angle } from '../src/primitives/angle';
 import each from 'jest-each';
 
 function createDefault(prev: SvgPathNode): SvgPathLineOffset

@@ -1,8 +1,8 @@
-import { SvgPathStart } from '../core/svg-path-start';
-import { SvgPathClose } from '../core/svg-path-close';
-import { SvgPathNodeType } from '../core/svg-path-node-type';
-import { SvgPathNode } from '../core/svg-path-node';
-import { Angle } from '../core/primitives/angle';
+import { SvgPathStart } from '../src/svg-path-start';
+import { SvgPathClose } from '../src/svg-path-close';
+import { SvgPathNodeType } from '../src/svg-path-node-type';
+import { SvgPathNode } from '../src/svg-path-node';
+import { Angle } from '../src/primitives/angle';
 import { mock } from 'frl-ts-mocking/lib/mock';
 import { Nullable } from 'frl-ts-utils/lib/types/nullable';
 import each from 'jest-each';

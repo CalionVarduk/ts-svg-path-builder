@@ -1,5 +1,5 @@
 import each from 'jest-each';
-import { Angle } from '../../core/primitives/angle';
+import { Angle } from '../../src/primitives/angle';
 
 each([
     [0, 0],

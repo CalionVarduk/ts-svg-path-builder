@@ -1,9 +1,9 @@
-import { SvgPathNode } from '../core/svg-path-node';
-import { SvgPathStart } from '../core/svg-path-start';
-import { SvgPathSmoothCubicCurve } from '../core/svg-path-smooth-cubic-curve';
-import { SvgPathCubicCurve } from '../core/svg-path-cubic-curve';
-import { SvgPathNodeType } from '../core/svg-path-node-type';
-import { Angle } from '../core/primitives/angle';
+import { SvgPathNode } from '../src/svg-path-node';
+import { SvgPathStart } from '../src/svg-path-start';
+import { SvgPathSmoothCubicCurve } from '../src/svg-path-smooth-cubic-curve';
+import { SvgPathCubicCurve } from '../src/svg-path-cubic-curve';
+import { SvgPathNodeType } from '../src/svg-path-node-type';
+import { Angle } from '../src/primitives/angle';
 import each from 'jest-each';
 
 function create(x: number, y: number, bx2: number, by2: number, prev: SvgPathNode): SvgPathSmoothCubicCurve

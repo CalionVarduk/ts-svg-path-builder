@@ -1,4 +1,4 @@
-import { normalizeAngle } from '../../core/primitives/normalize-angle';
+import { normalizeAngle } from '../../src/primitives/normalize-angle';
 import each from 'jest-each';
 
 each([

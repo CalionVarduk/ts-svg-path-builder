@@ -1,5 +1,5 @@
-import { Line } from '../../core/primitives/line';
-import { Vector2 } from '../../core/primitives/vector';
+import { Line } from '../../src/primitives/line';
+import { Vector2 } from '../../src/primitives/vector';
 import each from 'jest-each';
 
 each([

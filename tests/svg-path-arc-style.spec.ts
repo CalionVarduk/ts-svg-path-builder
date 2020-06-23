@@ -1,4 +1,4 @@
-import { SvgPathArcStyle } from '../core/svg-path-arc-style';
+import { SvgPathArcStyle } from '../src/svg-path-arc-style';
 
 test('svg path arc style uniqueness',
     () =>
