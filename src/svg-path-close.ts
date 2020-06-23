@@ -3,7 +3,7 @@ import { SvgPathNodeType } from './svg-path-node-type';
 import { SvgPathStart } from './svg-path-start';
 import { Vector } from './primitives/vector';
 import { Angle } from './primitives/angle';
-import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
+import { Nullable } from 'frl-ts-utils/lib/types/nullable';
 
 function findStart(prev: Nullable<SvgPathNode>): SvgPathStart
 {

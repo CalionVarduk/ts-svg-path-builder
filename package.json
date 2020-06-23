@@ -37,15 +37,15 @@
   },
   "homepage": "https://github.com/CalionVarduk/ts-svg-path-builder#readme",
   "devDependencies": {
-    "@types/jest": "^25.1.3",
-    "coveralls": "^3.0.3",
-    "jest": "^25.1.0",
-    "ts-jest": "^25.2.1",
-    "tslint": "^5.16.0",
-    "frl-ts-mocking": "^2.0.0",
+    "@types/jest": "25.1.3",
+    "coveralls": "3.0.3",
+    "jest": "25.1.0",
+    "ts-jest": "25.2.1",
+    "tslint": "5.16.0",
+    "frl-ts-mocking": "2.1.1",
     "typescript": "3.1.6"
   },
   "dependencies": {
-    "frl-ts-utils": "^2.0.0"
+    "frl-ts-utils": "2.2.2"
   }
 }

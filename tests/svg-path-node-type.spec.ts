@@ -1,4 +1,4 @@
-import { SvgPathNodeType } from '../core/svg-path-node-type';
+import { SvgPathNodeType } from '../src/svg-path-node-type';
 
 test('svg path node type uniqueness',
     () =>

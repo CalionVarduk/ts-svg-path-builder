@@ -1,7 +1,7 @@
 import { Vector2, Vector } from './vector';
 import * as utils from './normalize-angle';
-import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
-import { DeepReadonly } from 'frl-ts-utils/lib/core/types/deep-readonly';
+import { Nullable } from 'frl-ts-utils/lib/types/nullable';
+import { DeepReadonly } from 'frl-ts-utils/lib/types/deep-readonly';
 
 /** 2D line literal type alias. */
 export type Line2 =

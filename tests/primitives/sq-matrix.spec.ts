@@ -1,4 +1,4 @@
-import { SqMatrix } from '../../core/primitives/sq-matrix';
+import { SqMatrix } from '../../src/primitives/sq-matrix';
 import each from 'jest-each';
 
 each([

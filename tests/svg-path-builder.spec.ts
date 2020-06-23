@@ -1,19 +1,19 @@
-import { SvgPathBuilder, SvgPathStarter, SvgPathAfterCornerBuilder, SvgGeometryBuilder } from '../core/svg-path-builder';
-import { SvgPathStart } from '../core/svg-path-start';
-import { SvgPathNode } from '../core/svg-path-node';
-import { SvgPathLineOffset } from '../core/svg-path-line-offset';
-import { SvgPathLine } from '../core/svg-path-line';
-import { SvgPathQuadraticCurve } from '../core/svg-path-quadratic-curve';
-import { SvgPathCubicCurve } from '../core/svg-path-cubic-curve';
-import { SvgPathSmoothQuadraticCurve } from '../core/svg-path-smooth-quadratic-curve';
-import { SvgPathSmoothCubicCurve } from '../core/svg-path-smooth-cubic-curve';
-import { SvgPathClose } from '../core/svg-path-close';
-import { SvgPathArc } from '../core/svg-path-arc';
-import { SvgPathArcStyle } from '../core/svg-path-arc-style';
-import { Angle } from '../core/primitives/angle';
+import { SvgPathBuilder, SvgPathStarter, SvgPathAfterCornerBuilder, SvgGeometryBuilder } from '../src/svg-path-builder';
+import { SvgPathStart } from '../src/svg-path-start';
+import { SvgPathNode } from '../src/svg-path-node';
+import { SvgPathLineOffset } from '../src/svg-path-line-offset';
+import { SvgPathLine } from '../src/svg-path-line';
+import { SvgPathQuadraticCurve } from '../src/svg-path-quadratic-curve';
+import { SvgPathCubicCurve } from '../src/svg-path-cubic-curve';
+import { SvgPathSmoothQuadraticCurve } from '../src/svg-path-smooth-quadratic-curve';
+import { SvgPathSmoothCubicCurve } from '../src/svg-path-smooth-cubic-curve';
+import { SvgPathClose } from '../src/svg-path-close';
+import { SvgPathArc } from '../src/svg-path-arc';
+import { SvgPathArcStyle } from '../src/svg-path-arc-style';
+import { Angle } from '../src/primitives/angle';
 import { mock, IMockedMethodInfo, IMock, partialMock, IInvocationData } from 'frl-ts-mocking';
-import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
-import { reinterpretCast } from 'frl-ts-utils/lib/core/functions/reinterpret-cast';
+import { Nullable } from 'frl-ts-utils/lib/types/nullable';
+import { reinterpretCast } from 'frl-ts-utils/lib/functions/reinterpret-cast';
 import each from 'jest-each';
 
 function assertMockArgs(data: IInvocationData[], expected: any[][]): void

@@ -1,7 +1,7 @@
-import { SvgPathNode } from '../core/svg-path-node';
-import { SvgPathNodeType } from '../core/svg-path-node-type';
-import { Angle } from '../core/primitives/angle';
-import { Nullable } from 'frl-ts-utils/lib/core/types/nullable';
+import { SvgPathNode } from '../src/svg-path-node';
+import { SvgPathNodeType } from '../src/svg-path-node-type';
+import { Angle } from '../src/primitives/angle';
+import { Nullable } from 'frl-ts-utils/lib/types/nullable';
 import each from 'jest-each';
 
 class Mock extends SvgPathNode
